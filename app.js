@@ -9,23 +9,23 @@ This work is published from Taiwan.
 
 <http://creativecommons.org/publicdomain/zero/1.0>
 */
-(function(){
+(function () {
   var slurp, argv, json, port, host, basepath, keyfile, certfile, key, polling, cors, expire, transport, options, replace$ = ''.replace;
-  slurp = function(it){
+  slurp = function (it) {
     return require('fs').readFileSync(it, 'utf8');
   };
-  argv = (function(){
+  argv = (function () {
     try {
       return require('yargs').boolean(['vm', 'polling', 'cors']).argv;
-    } catch (e$) {}
+    } catch (e$) { }
   }()) || {};
-  json = (function(){
+  json = (function () {
     try {
       return JSON.parse(slurp('/home/dotcloud/environment.json'));
-    } catch (e$) {}
+    } catch (e$) { }
   }());
   port = Number(argv.port || (json != null ? json.PORT_NODEJS : void 8) || process.env.PORT || process.env.VCAP_APP_PORT || process.env.OPENSHIFT_NODEJS_PORT) || 1234;
-  host = argv.host || process.env.VCAP_APP_HOST || process.env.OPENSHIFT_NODEJS_IP || '192.168.1.223';
+  host = argv.host || process.env.VCAP_APP_HOST || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
   basepath = replace$.call(argv.basepath || "", /\/$/, '');
   keyfile = argv.keyfile, certfile = argv.certfile, key = argv.key, polling = argv.polling, cors = argv.cors, expire = argv.expire;
   transport = 'http';
@@ -46,7 +46,7 @@ This work is published from Taiwan.
       origin: '*'
     };
   }
-  require('zappajs')(port, host, options, function(){
+  require('zappajs')(port, host, options, function () {
     this.KEY = key;
     this.BASEPATH = basepath;
     this.POLLING = polling;
