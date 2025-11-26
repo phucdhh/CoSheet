@@ -734,7 +734,7 @@
         var logoTd = document.createElement('td');
         logoTd.style.cssText = 'padding: 4px 12px 4px 8px; vertical-align: middle;';
         var logoImg = document.createElement('img');
-        logoImg.src = './static/images/home-logo.png';
+        logoImg.src = './static/images/cosheet_logo.svg';
         logoImg.alt = 'CoSheet';
         logoImg.style.cssText = 'height: 44px; width: auto; display: block;';
         logoTd.appendChild(logoImg);
