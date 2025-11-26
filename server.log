@@ -1,0 +1,240 @@
+Please connect to: http://127.0.0.1:1234/
+Starting backend using webworker-threads
+Falling back to vm.CreateContext backend
+Express server listening on port 1234 in development mode
+Zappa 0.5.0 "You can't do that on stage anymore" orchestrating the show
+Connected to Redis Server: localhost:6379
+(node:166479) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+(Use `node --trace-deprecation ...` to show where the warning was created)
+join [log-test_graph_plot_formdata] [user-0.30351707185647336]
+join [log-test_graph_plot] [user-0.30351707185647336]
+on disconnect
+join [log-test_graph_plot_formdata] [user-0.8238285943893346]
+join [log-test_graph_plot] [user-0.8238285943893346]
+on disconnect
+join [log-test_graph_plot_formdata] [user-0.9677349041641685]
+join [log-test_graph_plot] [user-0.9677349041641685]
+on disconnect
+join [log-test_graph_plot_formdata] [user-0.8245790297048875]
+join [log-test_graph_plot] [user-0.8245790297048875]
+on disconnect
+join [log-test_graph_plot_formdata] [user-0.6777844405480451]
+join [log-test_graph_plot] [user-0.6777844405480451]
+on disconnect
+join [log-test_graph_plot_formdata] [user-0.67844550442314]
+join [log-test_graph_plot] [user-0.67844550442314]
+on disconnect
+join [log-test_graph_plot_formdata] [user-0.6237632535421149]
+join [log-test_graph_plot] [user-0.6237632535421149]
+on disconnect
+join [log-test_histogram_formdata] [user-0.4883519050999575]
+join [log-test_histogram] [user-0.4883519050999575]
+on disconnect
+join [log-test_histogram_formdata] [user-0.06501952000745403]
+join [log-test_histogram] [user-0.06501952000745403]
+on disconnect
+join [log-test_tab_switch_formdata] [user-0.09622600700633854]
+join [log-test_tab_switch] [user-0.09622600700633854]
+on disconnect
+join [log-test_ui_visual_formdata] [user-0.0581778378816008]
+join [log-test_ui_visual] [user-0.0581778378816008]
+on disconnect
+join [log-test_ui_visual_formdata] [user-0.08582716398533718]
+join [log-test_ui_visual] [user-0.08582716398533718]
+on disconnect
+join [log-test_all_graphs_formdata] [user-0.13361470818555177]
+join [log-test_all_graphs] [user-0.13361470818555177]
+on disconnect
+join [log-test_all_graphs_formdata] [user-0.44617513060458813]
+join [log-test_all_graphs] [user-0.44617513060458813]
+on disconnect
+join [log-test_all_graphs_formdata] [user-0.1842610067969902]
+join [log-test_all_graphs] [user-0.1842610067969902]
+on disconnect
+join [log-test_all_graphs_formdata] [user-0.12034760571960368]
+join [log-test_all_graphs] [user-0.12034760571960368]
+on disconnect
+join [log-test_all_graphs_formdata] [user-0.898896455956263]
+join [log-test_all_graphs] [user-0.898896455956263]
+on disconnect
+join [log-test_all_graphs_formdata] [user-0.45405405836450974]
+join [log-test_all_graphs] [user-0.45405405836450974]
+on disconnect
+join [log-test_final_ui_formdata] [user-0.0006061566116771777]
+join [log-test_final_ui] [user-0.0006061566116771777]
+on disconnect
+join [log-aslz84vlu8m0_formdata] [user-0.16266724214038308]
+join [log-aslz84vlu8m0] [user-0.16266724214038308]
+on disconnect
+join [log-aslz84vlu8m0_formdata] [user-0.6372962214026833]
+join [log-aslz84vlu8m0] [user-0.6372962214026833]
+DEBUG: PUT request for room: whinm8kn7x.1
+DEBUG: request-to-save ENTRY. Content-Type: text/x-socialcalc
+DEBUG: RAW Body length: 635, Start: version:1.5\ncell:A1:t:Learn More From Our Free Exc
+DEBUG: Saving snapshot for whinm8kn7x.1, length: 1224
+DEBUG: PUT request for room: whinm8kn7x.2
+DEBUG: request-to-save ENTRY. Content-Type: text/x-socialcalc
+DEBUG: RAW Body length: 1336, Start: version:1.5\ncell:B1:t:Baby Growth \ncell:B2:t:Baby'
+DEBUG: Saving snapshot for whinm8kn7x.2, length: 1925
+DEBUG: PUT request for room: whinm8kn7x.3
+DEBUG: request-to-save ENTRY. Content-Type: text/x-socialcalc
+DEBUG: RAW Body length: 54, Start: version:1.5\ncell:B1:t:Baby Growth  Chart\nsheet:c:1
+DEBUG: Saving snapshot for whinm8kn7x.3, length: 643
+DEBUG: PUT request for room: whinm8kn7x
+DEBUG: request-to-save ENTRY. Content-Type: text/csv
+DEBUG: RAW Body length: 103, Start: #url,#title\n"/whinm8kn7x.1","Learn Excel"\n"/whinm8
+DEBUG: Saving snapshot for whinm8kn7x, length: 583
+on disconnect
+join [log-whinm8kn7x.1_formdata] [user-0.21027741382069087]
+join [log-whinm8kn7x.1] [user-0.21027741382069087]
+join [log-whinm8kn7x.3_formdata] [user-0.8247034173101084]
+join [log-whinm8kn7x.2_formdata] [user-0.5195634146510385]
+join [log-whinm8kn7x.3] [user-0.8247034173101084]
+join [log-whinm8kn7x.2] [user-0.5195634146510385]
+on disconnect
+on disconnect
+on disconnect
+join [log-test_dynamic_graph_formdata] [user-0.0369516720373686]
+join [log-test_dynamic_graph] [user-0.0369516720373686]
+on disconnect
+join [log-demo_final_formdata] [user-0.5699869937992362]
+join [log-demo_final] [user-0.5699869937992362]
+on disconnect
+join [log-demo_final] [user-0.5699869937992362]
+on disconnect
+join [log-demo_final] [user-0.5699869937992362]
+on disconnect
+join [log-test_graph_ui_formdata] [user-0.23623780650498505]
+join [log-test_graph_ui] [user-0.23623780650498505]
+on disconnect
+join [log-test_debug_formdata] [user-0.2582896174994256]
+join [log-test_debug] [user-0.2582896174994256]
+on disconnect
+join [log-test_graph_ui_formdata] [user-0.06494311583087498]
+join [log-test_graph_ui] [user-0.06494311583087498]
+on disconnect
+join [log-test_debug2_formdata] [user-0.4420304173418885]
+join [log-test_debug2] [user-0.4420304173418885]
+on disconnect
+join [log-test_graph_simplified_formdata] [user-0.3228194975198052]
+join [log-test_graph_simplified] [user-0.3228194975198052]
+on disconnect
+join [log-test_layout_fix_formdata] [user-0.7865957872201336]
+join [log-test_layout_fix] [user-0.7865957872201336]
+on disconnect
+join [log-test_colors_formdata] [user-0.004490308267439125]
+join [log-test_colors] [user-0.004490308267439125]
+on disconnect
+join [log-test_colors_formdata] [user-0.04726209767852918]
+join [log-test_colors] [user-0.04726209767852918]
+join [log-test_colors_formdata] [user-0.5111404904697309]
+join [log-test_colors] [user-0.5111404904697309]
+join [log-test_colors_formdata] [user-0.6323325830902473]
+join [log-test_colors] [user-0.6323325830902473]
+join [log-test_colors_formdata] [user-0.13416972976724606]
+join [log-test_colors] [user-0.13416972976724606]
+on disconnect
+on disconnect
+on disconnect
+on disconnect
+join [log-test_autosave_1764067615734_formdata] [user-0.9968174262370655]
+join [log-test_autosave_1764067615734] [user-0.9968174262370655]
+on disconnect
+join [log-test_autosave_1764067690415_formdata] [user-0.19828216796572018]
+join [log-test_autosave_1764067690415] [user-0.19828216796572018]
+on disconnect
+join [log-test_save_1764067736182_formdata] [user-0.6047049988012542]
+join [log-test_save_1764067736182] [user-0.6047049988012542]
+on disconnect
+join [log-test_save_1764067736182_formdata] [user-0.43033161098375705]
+join [log-test_save_1764067736182] [user-0.43033161098375705]
+on disconnect
+join [log-test123_formdata] [user-0.3610619507608531]
+join [log-test123] [user-0.3610619507608531]
+join [log-test123_formdata] [user-0.11427086929752428]
+join [log-test123] [user-0.11427086929752428]
+on disconnect
+join [log-test123_formdata] [user-0.6403138462520732]
+join [log-test123] [user-0.6403138462520732]
+on disconnect
+join [log-test123_formdata] [user-0.5302771763917885]
+join [log-test123] [user-0.5302771763917885]
+on disconnect
+join [log-test123_formdata] [user-0.29541064477025836]
+join [log-test123] [user-0.29541064477025836]
+on disconnect
+join [log-test123_formdata] [user-0.13043856682060406]
+join [log-test123] [user-0.13043856682060406]
+on disconnect
+join [log-test123_formdata] [user-0.4844012640290073]
+join [log-test123] [user-0.4844012640290073]
+on disconnect
+join [log-test123_formdata] [user-0.7594508172487671]
+join [log-test123] [user-0.7594508172487671]
+on disconnect
+on disconnect
+join [log-test_new_123_formdata] [user-0.4942909624097739]
+join [log-test_new_123] [user-0.4942909624097739]
+on disconnect
+join [log-test_new_123_formdata] [user-0.521930964823436]
+join [log-test_new_123] [user-0.521930964823436]
+on disconnect
+join [log-m14se5komgwl_formdata] [user-0.6335317878008697]
+join [log-m14se5komgwl] [user-0.6335317878008697]
+on disconnect
+join [log-m14se5komgwl_formdata] [user-0.6244724273273683]
+join [log-m14se5komgwl] [user-0.6244724273273683]
+on disconnect
+join [log-m14se5komgwl_formdata] [user-0.647825886929155]
+join [log-m14se5komgwl] [user-0.647825886929155]
+on disconnect
+join [log-m14se5komgwl_formdata] [user-0.24438919297073403]
+join [log-m14se5komgwl] [user-0.24438919297073403]
+on disconnect
+join [log-m14se5komgwl_formdata] [user-0.6177351384834039]
+join [log-m14se5komgwl] [user-0.6177351384834039]
+on disconnect
+join [log-m14se5komgwl_formdata] [user-0.23441062375078503]
+join [log-m14se5komgwl] [user-0.23441062375078503]
+join [log-test_csv_1764069161820_formdata] [user-0.4782874447990102]
+join [log-test_csv_1764069161820] [user-0.4782874447990102]
+on disconnect
+join [log-test_csv_1764069309234_formdata] [user-0.8263970399769947]
+join [log-test_csv_1764069309234] [user-0.8263970399769947]
+DEBUG: PUT request for room: test_csv_1764069309234
+DEBUG: request-to-save ENTRY. Content-Type: text/x-socialcalc
+DEBUG: RAW Body length: 982, Start: socialcalc:version:1.0\nMIME-Version: 1.0\nContent-T
+DEBUG: Saving snapshot for test_csv_1764069309234, length: 982
+on disconnect
+on disconnect
+join [log-diya1vuki4f0_formdata] [user-0.9521907312254068]
+join [log-diya1vuki4f0] [user-0.9521907312254068]
+on disconnect
+join [log-diya1vuki4f0_formdata] [user-0.5378863472259061]
+join [log-diya1vuki4f0] [user-0.5378863472259061]
+DEBUG: PUT request for room: diya1vuki4f0
+DEBUG: request-to-save ENTRY. Content-Type: text/x-socialcalc
+DEBUG: RAW Body length: 9509, Start: socialcalc:version:1.0\nMIME-Version: 1.0\nContent-T
+DEBUG: Saving snapshot for diya1vuki4f0, length: 9462
+on disconnect
+join [log-diya1vuki4f0_formdata] [user-0.10896305863377476]
+join [log-diya1vuki4f0] [user-0.10896305863377476]
+e ReferenceError: document is not defined
+/root/ethercalc/node_modules/redis/index.js:602
+                throw err;
+                ^
+
+ReferenceError: document is not defined
+    at Object.SocialCalc.SpreadsheetControlSortLoad [as load] (evalmachine.<anonymous>:25975:4)
+    at Object.SocialCalc.LoadEditorSettings (evalmachine.<anonymous>:8166:50)
+    at SocialCalc.TableEditor.LoadEditorSettings (evalmachine.<anonymous>:7808:95)
+    at Object.self.onmessage (evalmachine.<anonymous>:108:27)
+    at Worker.postMessage (/root/ethercalc/sc.js:181:29)
+    at /root/ethercalc/sc.js:794:18
+    at Object.eval (/root/ethercalc/sc.js:197:46)
+    at Object.SC._init (/root/ethercalc/sc.js:793:16)
+    at /root/ethercalc/main.js:836:27
+    at /root/ethercalc/node_modules/redis/index.js:1170:13
+
+
+Node.js v20.19.5

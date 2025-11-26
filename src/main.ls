@@ -21,7 +21,7 @@
 
   HMAC_CACHE = {}
   hmac = if !KEY then -> it else -> HMAC_CACHE[it] ||= do
-    encoder = require \crypto .createHmac \sha256 (new Buffer KEY)
+    encoder = require \crypto .createHmac \sha256 (Buffer.from KEY)
     encoder.update it.toString!
     encoder.digest \hex
 
@@ -167,13 +167,13 @@
     ods: \application/vnd.oasis.opendocument.spreadsheet
     fods: \application/vnd.oasis.opendocument.spreadsheet
   Export-J = (type) -> api (-> # single
-    rv = J.utils["to_#type"](J.read(new Buffer it))
+    rv = J.utils["to_#type"](J.read(Buffer.from it))
     rv = rv.Sheet1 if rv?Sheet1?
     [J-TypeMap[type], rv]
   ), ((names, saves) -> # multi
     input = [ null, { SheetNames: names, Sheets: {} } ]
     for save, idx in saves
-      [harb, { Sheets: { Sheet1 } }] = J.read(new Buffer save)
+      [harb, { Sheets: { Sheet1 } }] = J.read(Buffer.from save)
       input.0 ||= harb
       input.1.Sheets[names[idx]] = Sheet1
     rv = J.utils["to_#type"](input)
@@ -343,14 +343,29 @@
       return cb "loadclipboard #save"
 
   request-to-save = (request, cb) ->
-    #console.log "request-to-save"
+    console.log "DEBUG: request-to-save ENTRY. Content-Type: #{request.headers['content-type']}"
     if request.is \application/json
       snapshot = request.body?snapshot
+      console.log "DEBUG: JSON snapshot length: #{snapshot?length}"
       return cb snapshot if snapshot
     cs = []; request.on \data (chunk) ~> cs ++= chunk
-    <~ request.on \end
+    <- request.on \end
     buf = Buffer.concat cs
-    return cb buf.toString(\utf8) if request.is \text/x-socialcalc
+    str = buf.toString(\utf8)
+    console.log "DEBUG: RAW Body length: #{buf.length}, Start: #{str.substring(0, 50).replace(/\n/g, '\\n')}"
+    
+    # Robust detection - check if it's raw sheet data (not full control format)
+    if str.indexOf('version:') == 0 or str.indexOf('socialcalc:version:') == 0 or request.is \text/x-socialcalc
+       # Check if it's raw sheet data (needs wrapping) vs full control format
+       if str.indexOf('socialcalc:version:') != 0
+         # It's RAW sheet data, wrap it in control format
+         # Ensure str ends with newline to avoid merging with boundary
+         wrapped = "socialcalc:version:1.0\nMIME-Version: 1.0\nContent-Type: multipart/mixed; boundary=SocialCalcSpreadsheetControlSave\n--SocialCalcSpreadsheetControlSave\nContent-type: text/plain; charset=UTF-8\n\n# SocialCalc Spreadsheet Control Save\nversion:1.0\npart:sheet\npart:edit\npart:audit\n--SocialCalcSpreadsheetControlSave\nContent-type: text/plain; charset=UTF-8\n\n#{str}\n--SocialCalcSpreadsheetControlSave\nContent-type: text/plain; charset=UTF-8\n\nversion:1.0\nrowpane:0:1:14\ncolpane:0:1:16\necell:A1\n--SocialCalcSpreadsheetControlSave\nContent-type: text/plain; charset=UTF-8\n\n--SocialCalcSpreadsheetControlSave--\n"
+         return cb wrapped
+       else
+         # Already in full control format
+         return cb str
+       
     if request.is \text/x-ethercalc-csv-double-encoded
       iconv = require \iconv-lite
       buf = iconv.decode buf, \utf8
@@ -392,10 +407,11 @@
     @response.send 201 \OK
 
   @put '/_/:room': ->
-    #console.log "put /_/:room"
+    console.log "DEBUG: PUT request for room: #{@params.room}"
     room = encodeURI(@params.room)
     @response.type Text
     snapshot <~ request-to-save @request
+    console.log "DEBUG: Saving snapshot for #{room}, length: #{snapshot?length}"
     SC[room]?terminate!
     delete SC[room]
     <~ SC._put room, snapshot

@@ -1,0 +1,212 @@
+(function () {
+  // Build ribbon-style icon buttons for Sheet and Help functions
+  // Matching the existing SocialCalc toolbar interface
+
+  function buildMenu() {
+    // guard: don't run twice
+    if (window.__ec_topmenu_inserted) return;
+
+    function insertIntoToolbar() {
+      if (window.__ec_topmenu_inserted) return true;
+
+      // Find the toolbar container (usually a table with toolbar buttons)
+      var toolbar = document.querySelector('#te_toolbar');
+      if (!toolbar) {
+        // Try alternative selectors
+        var tables = document.querySelectorAll('table');
+        for (var i = 0; i < tables.length; i++) {
+          if (tables[i].querySelector('img[src*="sc_"]')) {
+            toolbar = tables[i];
+            break;
+          }
+        }
+      }
+
+      if (toolbar) {
+        try {
+          // Create a container cell for our buttons
+          var tr = toolbar.querySelector('tr') || toolbar.rows[0];
+          if (!tr) return false;
+
+          // Find a good insertion point (before the first separator or at the start)
+          var firstCell = tr.cells[0];
+
+          // Create New button (using undo icon as placeholder for new)
+          var newCell = document.createElement('td');
+          newCell.innerHTML = '<img src="./images/sc_undo.png" id="ec-ribbon-new" alt="New" title="New spreadsheet" style="cursor:pointer; vertical-align:middle;">';
+          tr.insertBefore(newCell, firstCell);
+
+          // Create Open button (folder/open icon)
+          var openCell = document.createElement('td');
+          openCell.innerHTML = '<img src="./images/sc_paste.png" id="ec-ribbon-open" alt="Open" title="Open file" style="cursor:pointer; vertical-align:middle;">';
+          tr.insertBefore(openCell, firstCell);
+
+          // Create Save button (download icon)
+          var saveCell = document.createElement('td');
+          saveCell.innerHTML = '<img src="./static/download.png" id="ec-ribbon-save" alt="Save" title="Save (CSV)" style="cursor:pointer; vertical-align:middle;">';
+          tr.insertBefore(saveCell, firstCell);
+
+          // Create divider
+          var divCell = document.createElement('td');
+          divCell.innerHTML = '<img src="./images/sc_divider1.png" alt="" style="vertical-align:middle;">';
+          tr.insertBefore(divCell, firstCell);
+
+          // Create Help button (at the end)
+          var helpCell = document.createElement('td');
+          helpCell.innerHTML = '<img src="./images/sc_logo.gif" id="ec-ribbon-help" alt="Help" title="Help & About" style="cursor:pointer; vertical-align:middle;">';
+          tr.appendChild(helpCell);
+
+          // Wire events AFTER elements are inserted into DOM
+          wireMenuEvents();
+
+          window.__ec_topmenu_inserted = true;
+          return true;
+        } catch (e) { console.error('topmenu toolbar-insert failed', e); }
+      }
+      return false;
+    }
+
+    function wireMenuEvents() {
+      // Wire events for ribbon buttons
+      var newBtn = document.getElementById('ec-ribbon-new');
+      var openBtn = document.getElementById('ec-ribbon-open');
+      var saveBtn = document.getElementById('ec-ribbon-save');
+      var helpBtn = document.getElementById('ec-ribbon-help');
+
+      if (newBtn) {
+        newBtn.addEventListener('click', function () {
+          location.href = './_new';
+        });
+        newBtn.addEventListener('mouseover', function () { this.style.opacity = '0.7'; });
+        newBtn.addEventListener('mouseout', function () { this.style.opacity = '1'; });
+      }
+
+      if (openBtn) {
+        var input = document.getElementById('__fileopen_input');
+        openBtn.addEventListener('click', function () {
+          if (input) { input.value = null; input.click(); }
+        });
+        openBtn.addEventListener('mouseover', function () { this.style.opacity = '0.7'; });
+        openBtn.addEventListener('mouseout', function () { this.style.opacity = '1'; });
+
+        if (input) {
+          input.addEventListener('change', function (ev) {
+            var f = ev.target.files && ev.target.files[0];
+            if (!f) return;
+
+            if (typeof FileReader !== 'undefined') {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                var data = e.target.result;
+                try {
+                  if (typeof xlsxworker === 'function') {
+                    var id = (typeof get_id === 'function') ? get_id(f.name, false) : Math.random().toString(36).slice(2, 10);
+                    if (typeof rABS !== 'undefined') {
+                      if (typeof xlsxworker === 'function') xlsxworker(data, process_wb, id);
+                    }
+                  } else if (typeof post_csv === 'function') {
+                    if (!/^PK\u0003\u0004/.test(data) && /^[^\n]+,(?:[^\n]+)*\n/.test(data)) {
+                      post_csv(data, new Date().getTime().toString(36));
+                    } else {
+                      alert('Opening xlsx/ods is supported when opening from the start page.');
+                    }
+                  } else {
+                    alert('Open: please drop a file on the page or use the start page upload flow.');
+                  }
+                } catch (err) {
+                  console.error(err);
+                  alert('Error opening file: ' + err.message);
+                }
+              };
+
+              try {
+                if (typeof FileReader.prototype.readAsBinaryString !== 'undefined') reader.readAsBinaryString(f);
+                else reader.readAsArrayBuffer(f);
+              } catch (err) { reader.readAsArrayBuffer(f); }
+            }
+          });
+        }
+      }
+
+      if (saveBtn) {
+        saveBtn.addEventListener('click', function () {
+          if (window.location.pathname && (window.location.pathname.length > 1 && window.location.pathname !== '/')) {
+            if (typeof Export === 'function' || typeof socialcalc === 'object' || typeof SC !== 'undefined') {
+              try {
+                var evt = new Event('ec-save-request');
+                window.dispatchEvent(evt);
+                return;
+              } catch (e) { console.error(e); }
+            }
+          }
+          alert('Save is available from inside an open spreadsheet. Open a sheet first.');
+        });
+        saveBtn.addEventListener('mouseover', function () { this.style.opacity = '0.7'; });
+        saveBtn.addEventListener('mouseout', function () { this.style.opacity = '1'; });
+      }
+
+      if (helpBtn) {
+        helpBtn.addEventListener('click', function () {
+          // Show help menu
+          var menu = '<div style="position:absolute; background:white; border:1px solid #ccc; padding:8px; z-index:1000; box-shadow:2px 2px 5px rgba(0,0,0,0.2);">' +
+            '<div style="padding:4px 8px; cursor:pointer;" onmouseover="this.style.background=\'#e8f0ff\'" onmouseout="this.style.background=\'white\'" onclick="window.open(\'https://www.ganjingworld.com/s/7DvQ4vKzrp\', \'_blank\'); this.parentElement.remove();">Introduction</div>' +
+            '<div style="padding:4px 8px; cursor:pointer;" onmouseover="this.style.background=\'#e8f0ff\'" onmouseout="this.style.background=\'white\'" onclick="location.href=\'/howtouse.html\'; this.parentElement.remove();">How to use</div>' +
+            '<div style="padding:4px 8px; cursor:pointer;" onmouseover="this.style.background=\'#e8f0ff\'" onmouseout="this.style.background=\'white\'" onclick="window.open(\'https://www.ganjingworld.com/s/A6DWQ0aNQp\', \'_blank\'); this.parentElement.remove();">Video</div>' +
+            '<div style="padding:4px 8px; cursor:pointer;" onmouseover="this.style.background=\'#e8f0ff\'" onmouseout="this.style.background=\'white\'" onclick="location.href=\'/About.html\'; this.parentElement.remove();">About</div>' +
+            '</div>';
+
+          var rect = this.getBoundingClientRect();
+          var div = document.createElement('div');
+          div.innerHTML = menu;
+          div.style.position = 'absolute';
+          div.style.left = rect.left + 'px';
+          div.style.top = (rect.bottom + 2) + 'px';
+          document.body.appendChild(div.firstChild);
+
+          // Close menu when clicking outside
+          setTimeout(function () {
+            document.addEventListener('click', function closeMenu(e) {
+              var menus = document.querySelectorAll('div[style*="z-index:1000"]');
+              menus.forEach(function (m) { if (m) m.remove(); });
+              document.removeEventListener('click', closeMenu);
+            });
+          }, 100);
+        });
+        helpBtn.addEventListener('mouseover', function () { this.style.opacity = '0.7'; });
+        helpBtn.addEventListener('mouseout', function () { this.style.opacity = '1'; });
+      }
+    }
+
+    // Try to insert ribbon buttons
+    if (insertIntoToolbar()) {
+      // success
+    } else {
+      // If toolbar not present yet, observe DOM
+      var observer = new MutationObserver(function (mutations) {
+        if (insertIntoToolbar()) {
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      // Also try timed retries
+      var tries = 0;
+      var retry = setInterval(function () {
+        tries++;
+        if (insertIntoToolbar() || tries > 20) clearInterval(retry);
+      }, 500);
+    }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildMenu);
+  else buildMenu();
+
+  // Extra fallbacks for late-loading toolbar
+  try {
+    window.addEventListener('load', function () {
+      setTimeout(buildMenu, 500);
+      setTimeout(buildMenu, 2000);
+    });
+    setTimeout(buildMenu, 3000);
+  } catch (e) { /* ignore */ }
+})();

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Stacked bar chart -->
+  <g transform="translate(8,40)">
+    <!-- Bar 1 -->
+    <rect x="2" y="-30" width="6" height="10" fill="#4285f4"/>
+    <rect x="2" y="-20" width="6" height="8" fill="#ea4335"/>
+    <rect x="2" y="-12" width="6" height="12" fill="#fbbc04"/>
+    
+    <!-- Bar 2 -->
+    <rect x="12" y="-34" width="6" height="12" fill="#4285f4"/>
+    <rect x="12" y="-22" width="6" height="10" fill="#ea4335"/>
+    <rect x="12" y="-12" width="6" height="12" fill="#fbbc04"/>
+    
+    <!-- Bar 3 -->
+    <rect x="22" y="-28" width="6" height="8" fill="#4285f4"/>
+    <rect x="22" y="-20" width="6" height="9" fill="#ea4335"/>
+    <rect x="22" y="-11" width="6" height="11" fill="#fbbc04"/>
+    
+    <!-- Bar 4 -->
+    <rect x="32" y="-32" width="6" height="11" fill="#4285f4"/>
+    <rect x="32" y="-21" width="6" height="9" fill="#ea4335"/>
+    <rect x="32" y="-12" width="6" height="12" fill="#fbbc04"/>
+  </g>
+</svg>

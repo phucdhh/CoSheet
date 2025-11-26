@@ -276,7 +276,12 @@ Check the activity stream to see the newly edited page!
         <div id="%id.graphtools" style="display:none;"><div style="%tbt."><table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:middle;padding-right:32px;padding-left:16px;"><div style="%tbt.">%loc!Cells to Graph!</div><div id="%id.graphrange" style="font-weight:bold;">%loc!Not Set!</div></td><td style="vertical-align:top;padding-right:32px;"><div style="%tbt.">%loc!Set Cells To Graph!</div><select id="%id.graphlist" size="1" onfocus="%s.CmdGotFocus(this);"><option selected>[select range]</option><option>%loc!Select all!</option></select></td><td style="vertical-align:middle;padding-right:4px;"><div style="%tbt.">%loc!Graph Type!</div><select id="%id.graphtype" size="1" onchange="window.GraphChanged(this);" onfocus="%s.CmdGotFocus(this);"></select><input type="button" value="%loc!OK!" onclick="window.GraphSetCells();" style="font-size:x-small;"></div></td><td style="vertical-align:middle;padding-right:16px;"><div style="%tbt.">&nbsp;</div><input id="%id.graphhelp" type="button" onclick="DoGraph(true);" value="%loc!Help!" style="font-size:x-small;"></div></td><td style="vertical-align:middle;padding-right:16px;">%loc!Min X! <input id="%id.graphMinX" onchange="window.MinMaxChanged(this,0);" onfocus="%s.CmdGotFocus(this);" size=5/>%loc!Max X! <input id="%id.graphMaxX" onchange="window.MinMaxChanged(this,1);" onfocus="%s.CmdGotFocus(this);" size=5/><br/>%loc!Min Y! <input id="%id.graphMinY" onchange="window.MinMaxChanged(this,2);" onfocus="%s.CmdGotFocus(this);" size=5/>%loc!Max Y! <input id="%id.graphMaxY" onchange="window.MinMaxChanged(this,3);" onfocus="%s.CmdGotFocus(this);" size=5/></div></td></tr></table></div></div>
       """
       view: \graph
-      onclick: window.GraphOnClick
+      onclick: !->
+        # Call original GraphOnClick if it exists
+        window.GraphOnClick ...arguments if window.GraphOnClick
+        # Initialize our new graph layout
+        <- setTimeout _, 100ms
+        window.GraphLayout?initOnTabClick!
       onclickFocus: true
 
     ss.views?graph =

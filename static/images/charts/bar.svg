@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="4 10 40 34">
+  <!-- Vertical bar chart with 4 bars -->
+  <rect x="6" y="32" width="6" height="12" fill="#4285f4" rx="1"/>
+  <rect x="15" y="22" width="6" height="22" fill="#4285f4" rx="1"/>
+  <rect x="24" y="16" width="6" height="28" fill="#4285f4" rx="1"/>
+  <rect x="33" y="26" width="6" height="18" fill="#4285f4" rx="1"/>
+</svg>

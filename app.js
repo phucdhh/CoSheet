@@ -16,7 +16,7 @@ This work is published from Taiwan.
   };
   argv = (function(){
     try {
-      return require('optimist').boolean(['vm', 'polling', 'cors']).argv;
+      return require('yargs').boolean(['vm', 'polling', 'cors']).argv;
     } catch (e$) {}
   }()) || {};
   json = (function(){
@@ -24,8 +24,8 @@ This work is published from Taiwan.
       return JSON.parse(slurp('/home/dotcloud/environment.json'));
     } catch (e$) {}
   }());
-  port = Number(argv.port || (json != null ? json.PORT_NODEJS : void 8) || process.env.PORT || process.env.VCAP_APP_PORT || process.env.OPENSHIFT_NODEJS_PORT) || 8000;
-  host = argv.host || process.env.VCAP_APP_HOST || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+  port = Number(argv.port || (json != null ? json.PORT_NODEJS : void 8) || process.env.PORT || process.env.VCAP_APP_PORT || process.env.OPENSHIFT_NODEJS_PORT) || 1234;
+  host = argv.host || process.env.VCAP_APP_HOST || process.env.OPENSHIFT_NODEJS_IP || '192.168.1.223';
   basepath = replace$.call(argv.basepath || "", /\/$/, '');
   keyfile = argv.keyfile, certfile = argv.certfile, key = argv.key, polling = argv.polling, cors = argv.cors, expire = argv.expire;
   transport = 'http';
@@ -40,7 +40,7 @@ This work is published from Taiwan.
   } else {
     options = {};
   }
-  console.log("Please connect to: " + transport + "://" + (host === '0.0.0.0' ? require('os').hostname() : host) + ":" + port + "/");
+  console.log("Please connect to: " + transport + "://" + host + ":" + port + "/");
   if (cors) {
     options.io = {
       origin: '*'

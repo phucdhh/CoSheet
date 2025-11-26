@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Radar/Spider chart -->
+  <g transform="translate(24,24)">
+    <!-- Grid circles -->
+    <circle cx="0" cy="0" r="18" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+    <circle cx="0" cy="0" r="12" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+    <circle cx="0" cy="0" r="6" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+    <!-- Axes -->
+    <line x1="0" y1="0" x2="0" y2="-18" stroke="#ccc" stroke-width="0.8"/>
+    <line x1="0" y1="0" x2="17.1" y2="-5.6" stroke="#ccc" stroke-width="0.8"/>
+    <line x1="0" y1="0" x2="10.6" y2="14.6" stroke="#ccc" stroke-width="0.8"/>
+    <line x1="0" y1="0" x2="-10.6" y2="14.6" stroke="#ccc" stroke-width="0.8"/>
+    <line x1="0" y1="0" x2="-17.1" y2="-5.6" stroke="#ccc" stroke-width="0.8"/>
+    <!-- Data polygon -->
+    <polygon points="0,-14 12.8,-4.2 6.4,10.9 -6.4,10.9 -12.8,-4.2" 
+             fill="rgba(66, 133, 244, 0.3)" stroke="#4285f4" stroke-width="2"/>
+  </g>
+</svg>

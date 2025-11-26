@@ -1,0 +1,183 @@
+/* Format Toolbar Styles - Google Sheets-like Design */
+
+/* Format Toolbar Styles */
+#format-toolbar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 16px !important;
+  background: #f8f9fa !important;
+  border-bottom: 1px solid #dadce0 !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-height: 40px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Make ALL children visible */
+#format-toolbar * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Dropdowns and selects */
+#format-toolbar select {
+  height: 26px;
+  min-width: 80px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 0 24px 0 6px;
+  font-size: 11px;
+  background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  /* Don't allow shrinking */
+}
+
+#format-toolbar select:hover {
+  background-color: #f1f3f4;
+}
+
+#format-toolbar select:focus {
+  outline: none;
+  border-color: #1a73e8;
+}
+
+#format-toolbar button {
+  min-width: 26px;
+  height: 26px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3c4043;
+  flex-shrink: 0;
+  /* Don't allow shrinking */
+}
+
+#format-toolbar button:hover {
+  background: #e8eaed;
+  border-color: #dadce0;
+}
+
+#format-toolbar button.active {
+  background: #d2e3fc;
+  border-color: #1a73e8;
+  color: #1a73e8;
+}
+
+#format-toolbar button:active {
+  background: #c6c6c6;
+}
+
+#format-toolbar .divider {
+  width: 1px;
+  height: 20px;
+  background-color: #dadce0;
+  margin: 0 2px;
+  flex-shrink: 0;
+  /* Don't allow shrinking */
+}
+
+#format-toolbar .color-picker-wrapper {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  /* Don't allow shrinking */
+}
+
+#format-toolbar .color-preview {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #dadce0;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+}
+
+#format-toolbar .color-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: currentColor;
+}
+
+#format-toolbar input[type="color"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Hide the original Format tab */
+.SocialCalc-toplevel #te_settings {
+  display: none !important;
+}
+
+/* Icon styles for buttons */
+#format-toolbar button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Format group labels */
+#format-toolbar .format-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #format-toolbar {
+    flex-wrap: wrap;
+    padding: 4px 8px;
+  }
+
+  #format-toolbar select {
+    font-size: 10px;
+    height: 24px;
+    padding: 0 24px 0 6px;
+  }
+
+  #format-toolbar button {
+    min-width: 24px;
+    height: 24px;
+  }
+}
+
+/* CRITICAL: Force hide old Format UI panels */
+#SocialCalc-settingsview {
+  display: none !important;
+}
+
+/* Show the settings tools container (this is where our toolbar goes) */
+#SocialCalc-settingstools {
+  display: block !important;
+}
+
+/* Force show spreadsheet table editor when Format tab is active */
+.sctab-settings.sctabselected~* #SocialCalc-tableeditor,
+#SocialCalc-tableeditor {
+  display: block !important;
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="2 2 44 44">
+  <!-- Pie chart with 5 slices -->
+  <g transform="translate(24,24)">
+    <path d="M 0,0 L 0,-20 A 20,20 0 0,1 19,-6.2 Z" fill="#4285f4"/>
+    <path d="M 0,0 L 19,-6.2 A 20,20 0 0,1 11.8,16.2 Z" fill="#ea4335"/>
+    <path d="M 0,0 L 11.8,16.2 A 20,20 0 0,1 -11.8,16.2 Z" fill="#fbbc04"/>
+    <path d="M 0,0 L -11.8,16.2 A 20,20 0 0,1 -19,-6.2 Z" fill="#34a853"/>
+    <path d="M 0,0 L -19,-6.2 A 20,20 0 0,1 0,-20 Z" fill="#9c27b0"/>
+  </g>
+</svg>

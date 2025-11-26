@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>How to use — CoSheet</title>
+  <link href="/static/start.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 18px;
+      max-width: 980px;
+      margin: 0 auto;
+      color: #222;
+    }
+
+    h1 {
+      color: #2b7be6
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #f7f7f7;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #eee
+    }
+  </style>
+</head>
+
+<body>
+  <h1>How to use CoSheet</h1>
+  <p>This is a static copy/shortcut to the project's wiki. The original wiki is at: <a
+      href="https://github.com/audreyt/ethercalc/wiki" target="_blank">https://github.com/audreyt/ethercalc/wiki</a></p>
+
+  <p>Below is the raw markdown for the wiki home page (cached). If you want the most up-to-date instructions, click the
+    link above.</p>
+
+  <div id="wiki_render">Loading content…</div>
+
+  <script>
+    (function () {
+      var container = document.getElementById('wiki_render');
+      var url = 'https://raw.githubusercontent.com/wiki/audreyt/ethercalc/Home.md';
+      function escapeHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+      function simpleMarkdown(md) {
+        // very small, pragmatic markdown -> html converter
+        // handle code blocks ```
+        md = md.replace(/```([\s\S]*?)```/g, function (_, code) { return '<pre><code>' + escapeHtml(code) + '</code></pre>'; });
+        // headings
+        md = md.replace(/^######\s*(.*)$/gm, '<h6>$1</h6>');
+        md = md.replace(/^#####\s*(.*)$/gm, '<h5>$1</h5>');
+        md = md.replace(/^####\s*(.*)$/gm, '<h4>$1</h4>');
+        md = md.replace(/^###\s*(.*)$/gm, '<h3>$1</h3>');
+        md = md.replace(/^##\s*(.*)$/gm, '<h2>$1</h2>');
+        md = md.replace(/^#\s*(.*)$/gm, '<h1>$1</h1>');
+        // bold/italic
+        md = md.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        md = md.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        // links
+        md = md.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+        // unordered lists
+        md = md.replace(/^(?:\s*[-\*]\s+.+(?:\n|$))+?/gm, function (block) {
+          if (/^\s*[-\*]\s+/m.test(block)) {
+            var items = block.trim().split(/\n/).map(function (l) { return '<li>' + l.replace(/^\s*[-\*]\s+/, '') + '</li>'; }).join('');
+            return '<ul>' + items + '</ul>';
+          }
+          return block;
+        });
+        // paragraphs: wrap remaining double-newline separated blocks
+        var parts = md.split(/\n\s*\n/);
+        for (var i = 0; i < parts.length; i++) {
+          var p = parts[i].trim();
+          if (!p) continue;
+          if (!/^<(h[1-6]|ul|pre|blockquote|table|p|div)/i.test(p)) parts[i] = '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+        }
+        return parts.join('\n\n');
+      }
+
+      function showError() { container.innerHTML = '<p>Could not fetch the wiki raw content. Use the link above to open the project wiki.</p>'; }
+
+      fetch(url).then(function (r) { if (!r.ok) throw new Error('Network'); return r.text(); }).then(function (md) {
+        try { container.innerHTML = simpleMarkdown(md); }
+        catch (e) { console.error(e); container.textContent = md; }
+      }).catch(function () { showError(); });
+    })();
+  </script>
+</body>
+
+</html>

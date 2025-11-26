@@ -1,0 +1,305 @@
+/* Graph Layout Styles */
+
+/* Ribbon */
+.graph-ribbon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+.graph-ribbon::-webkit-scrollbar {
+    height: 4px;
+}
+
+.graph-ribbon::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
+}
+
+.graph-ribbon::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.graph-ribbon-label {
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.graph-type-btn {
+    padding: 8px 12px;
+    border: 2px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.graph-type-btn:hover {
+    border-color: #999;
+    background: #fafafa;
+}
+
+.graph-type-btn.selected {
+    border-color: #0066cc;
+    background: #e3f2fd;
+    box-shadow: 0 2px 6px rgba(0, 102, 204, 0.3);
+}
+
+.graph-type-btn .material-icons {
+    font-size: 24px;
+    color: #555;
+}
+
+.graph-type-btn.selected .material-icons {
+    color: #0066cc;
+}
+
+/* Chart icon images */
+.chart-icon {
+    width: 36px;
+    height: 36px;
+    display: block;
+    object-fit: contain;
+}
+
+/* 3-Panel Layout Container */
+.graph-3panel-container {
+    display: block;
+    position: fixed;
+    /* Fixed to cover everything */
+    top: 60px;
+    /* Positioned right below tabs */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    min-height: 400px;
+    background: white;
+    /* Ensure it covers underlying content */
+    z-index: 500;
+    /* High z-index to sit on top */
+}
+
+.graph-3panel-container.active {
+    display: block;
+}
+
+/* Panel Grid */
+.graph-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: calc(100% - 60px);
+    /* Subtract ribbon height */
+    gap: 0;
+    background: #fff;
+}
+
+/* Spreadsheet panel (top left, spans 2 rows) */
+.spreadsheet-panel {
+    grid-row: 1 / 3;
+    grid-column: 1;
+    position: relative;
+    overflow: hidden;
+    border-right: 3px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    /* Smooth scrolling for better mobile UX */
+    scroll-behavior: smooth;
+}
+
+/* Reduce scroll speed for spreadsheet content */
+.spreadsheet-panel * {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Graph display panel (top right) */
+.graph-display-panel {
+    grid-row: 1;
+    grid-column: 2;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 3px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+/* Options panel (bottom right) */
+.graph-options-panel {
+    grid-row: 2;
+    grid-column: 2;
+    position: relative;
+    overflow: auto;
+    padding: 15px;
+    background: #fafafa;
+}
+
+/* Resize handles */
+.resize-handle-vertical {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #ddd;
+    cursor: ew-resize;
+    z-index: 10;
+}
+
+.resize-handle-vertical:hover {
+    background: #999;
+}
+
+.resize-handle-horizontal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #ddd;
+    cursor: ns-resize;
+    z-index: 10;
+}
+
+.resize-handle-horizontal:hover {
+    background: #999;
+}
+
+/* Options Panel Styling */
+.graph-options-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.graph-options-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.graph-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.graph-option-section h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.graph-option-row {
+    margin-bottom: 12px;
+}
+
+.graph-option-row label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+}
+
+.graph-option-row input[type="text"],
+.graph-option-row input[type="color"],
+.graph-option-row select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.graph-option-row input[type="text"]:focus,
+.graph-option-row select:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.graph-plot-button {
+    padding: 8px 20px;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.graph-plot-button:hover:not(:disabled) {
+    background: #0052a3;
+}
+
+.graph-plot-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Placeholder styling */
+.graph-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #999;
+    font-size: 14px;
+}
+
+.graph-loading::after {
+    content: ".";
+    animation: dots 1.5s steps(1, end) infinite;
+}
+
+@keyframes dots {
+
+    0%,
+    20% {
+        content: ".";
+    }
+
+    40% {
+        content: "..";
+    }
+
+    60%,
+    100% {
+        content: "...";
+    }
+}
+
+/* CRITICAL: Hide formula bar when Chart tab is active */
+/* ONLY hide when graph-mode-active class is on body */
+body.graph-mode-active [id$="formulabarDiv"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Also hide searchbar when in graph mode */
+body.graph-mode-active #searchbar {
+    display: none !important;
+}

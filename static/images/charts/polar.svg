@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Polar area chart with varying radii -->
+  <g transform="translate(24,24)">
+    <!-- Slice 1 - full radius -->
+    <path d="M 0,0 L 0,-20 A 20,20 0 0,1 19,-6.2 Z" fill="#4285f4"/>
+    <!-- Slice 2 - medium radius -->
+    <path d="M 0,0 L 19,-6.2 A 15,15 0 0,1 8.8,12.1 Z" fill="#ea4335"/>
+    <!-- Slice 3 - large radius -->
+    <path d="M 0,0 L 8.8,12.1 A 18,18 0 0,1 -8.8,12.1 Z" fill="#fbbc04"/>
+    <!-- Slice 4 - small radius -->
+    <path d="M 0,0 L -8.8,12.1 A 13,13 0 0,1 -12.4,-4 Z" fill="#34a853"/>
+    <!-- Slice 5 - medium-large radius -->
+    <path d="M 0,0 L -12.4,-4 A 17,17 0 0,1 0,-17 Z" fill="#9c27b0"/>
+  </g>
+</svg>

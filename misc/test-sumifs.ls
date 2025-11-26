@@ -5,7 +5,7 @@ bootSC = fs.readFileSync "#{
 }/../SocialCalcModule.js" \utf8
 
 global.SC ?= {}
-argv = (try require \optimist .boolean <[ vm polling ]> .argv) || {}
+argv = (try require \yargs .boolean <[ vm polling ]> .argv) || {}
 
 bootSC += """;(#{->
   class Node

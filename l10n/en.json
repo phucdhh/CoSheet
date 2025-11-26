@@ -582,10 +582,9 @@
   "s_fclass_test": "Test",
   "s_fclass_math": "Math",
   "s_fclass_text": "Text",
-  "s_fclass_action": "Email & Copy", 
+  "s_fclass_action": "Email & Copy",
   "s_fclass_gui": "Button & Input",
   "lastone": null,
-
   "s_loc_plain": "Plain",
   "s_loc_graph": "Graph",
   "s_loc_cells_to_graph": "Cells to Graph",
@@ -605,5 +604,17 @@
   "s_loc_max": "Max ",
   "s_loc_min": "Min ",
   "s_loc_ok": " OK ",
-  "s_GraphRangeNotSelected": "Select a range of cells with numeric values to graph and use the OK button above to set the range as the graph range."
+  "s_GraphRangeNotSelected": "Select a range of cells with numeric values to graph and use the OK button above to set the range as the graph range.",
+  "s_loc_select_graph_type": "Select Graph Type:",
+  "s_loc_graph_options": "Graph Options",
+  "s_loc_data_range": "Data Range:",
+  "s_loc_x_axis_label": "X-Axis Label:",
+  "s_loc_y_axis_label": "Y-Axis Label:",
+  "s_loc_graph_title": "Graph Title:",
+  "s_loc_plot_graph": "Plot Graph",
+  "s_loc_loading_graph": "Loading graph",
+  "s_loc_graph_rendering_unavailable": "Graph rendering is not available.",
+  "s_loc_please_enter_data_range": "Please enter a data range",
+  "s_loc_graph_type_not_supported": "Graph type not supported",
+  "s_loc_unknown_error": "Unknown error"
 }

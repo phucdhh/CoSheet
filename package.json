@@ -1,11 +1,11 @@
 {
-  "name": "ethercalc",
-  "description": "Multi-User Spreadsheet Server",
-  "version": "0.20201228.1",
-  "homepage": "http://ethercalc.net/",
+  "name": "cosheet",
+  "description": "CoSheet - Collaborative Spreadsheet Server (based on EtherCalc)",
+  "version": "0.20251126.1",
+  "homepage": "https://github.com/phucdhh/CoSheet",
   "repository": {
     "type": "git",
-    "url": "https://github.com/audreyt/ethercalc"
+    "url": "https://github.com/phucdhh/CoSheet"
   },
   "dependencies": {
     "cors": "*",
@@ -15,7 +15,7 @@
     "j": "0.4.5",
     "livescript": "1.5.x",
     "minimatch": "*",
-    "optimist": "*",
+    "yargs": "^17.7.2",
     "redis": "0.12.x",
     "socialcalc": "^2.3.0",
     "uuid-pure": "*",
@@ -40,9 +40,13 @@
     "ethercalc": "./bin/ethercalc"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "postinstall": "bash scripts/apply-patches.sh"
   },
   "engines": {
-    "node": ">= 0.8.x"
+    "node": ">=16.0.0"
+  },
+  "overrides": {
+    "emitter": "npm:component-emitter@1.1.2"
   }
 }

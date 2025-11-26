@@ -9,7 +9,7 @@ bootSC.=replace(/alert\(/g, '(function(){})(')
 
 global.SC ?= {console}
 
-argv = (try require \optimist .boolean <[ vm polling ]> .argv) || {}
+argv = (try require \yargs .boolean <[ vm polling ]> .argv) || {}
 
 bootSC += """;var navigator = {language: '', userAgent: ''}; var SocialCalc = this.SocialCalc; var window = this;(#{->
   class Node
