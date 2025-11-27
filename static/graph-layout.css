@@ -16,7 +16,7 @@
 
 /* Hide scrollbar but keep functionality */
 .graph-ribbon::-webkit-scrollbar {
-    height: 4px;
+    height: 1px;
 }
 
 .graph-ribbon::-webkit-scrollbar-thumb {

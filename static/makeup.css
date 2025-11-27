@@ -218,6 +218,26 @@ textarea.form-control {
 #SocialCalc-edittools {
   padding: 5px 0 !important;
   margin: 0 -8px 4px -4px;
+  /* Horizontal scrolling for mobile */
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar styling for Edit toolbar */
+#SocialCalc-edittools::-webkit-scrollbar {
+  height: 1px;
+}
+
+#SocialCalc-edittools::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+
+#SocialCalc-edittools::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Toolbar buttons */

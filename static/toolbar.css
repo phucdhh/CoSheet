@@ -17,6 +17,20 @@
   opacity: 1 !important;
 }
 
+/* Scrollbar styling for Format toolbar */
+#format-toolbar::-webkit-scrollbar {
+  height: 1px;
+}
+
+#format-toolbar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+
+#format-toolbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 /* Make ALL children visible */
 #format-toolbar * {
   visibility: visible !important;
