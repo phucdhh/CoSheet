@@ -1,0 +1,45 @@
+# CoSheet Quick Load Test
+# Focused test: 50 concurrent users for 2 minutes
+
+config:
+  target: "http://localhost:1234"
+  phases:
+    # Ramp up to 50 users over 30 seconds
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 50
+      name: "Ramp-up"
+    
+    # Sustain 50 users for 90 seconds
+    - duration: 90
+      arrivalRate: 50
+      name: "Sustained Load"
+
+  defaults:
+    headers:
+      User-Agent: "Artillery/LoadTest"
+
+scenarios:
+  # Homepage visit (weight 40%)
+  - name: "Visit homepage"
+    weight: 40
+    flow:
+      - get:
+          url: "/"
+          capture:
+            - json: "$.status"
+              as: "status"
+
+  # Create new sheet (weight 30%)  
+  - name: "Create new sheet"
+    weight: 30
+    flow:
+      - get:
+          url: "/_new"
+          
+  # Open existing sheet (weight 30%)
+  - name: "Open existing sheet"
+    weight: 30
+    flow:
+      - get:
+          url: "/test-sheet"

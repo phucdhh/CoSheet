@@ -1,13 +1,11 @@
-/**
- * CoSheet Load Testing Script
- * Test performance with 100+ concurrent users
- * 
- * Install: npm install -g artillery
- * Run: artillery run load-test.yml
- */
+# CoSheet Load Testing Script
+# Test performance with 100+ concurrent users
+# 
+# Install: npm install -g artillery
+# Run: artillery run load-test.yml
 
 config:
-  target: "https://dulieu.truyenthong.edu.vn"
+  target: "http://localhost:1234"
   phases:
     # Phase 1: Warm-up (30s)
     - duration: 30

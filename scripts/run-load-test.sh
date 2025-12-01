@@ -27,7 +27,7 @@ echo ""
 
 # Check if CoSheet is running
 echo "Checking if CoSheet is running..."
-if ! curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/health | grep -q "200"; then
+if ! curl -s -o /dev/null -w "%{http_code}" http://localhost:1234/health | grep -q "200"; then
     echo -e "${RED}Error: CoSheet is not running!${NC}"
     echo "Start with: npm start"
     exit 1

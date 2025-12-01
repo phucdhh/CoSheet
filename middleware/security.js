@@ -9,35 +9,52 @@ const cookieParser = require('cookie-parser');
 
 /**
  * Rate limiter for general API requests
- * Limit: 100 requests per 15 minutes per IP
+ * Limit: 60 requests per minute per IP (1 req/s average)
+ * Allows bursts while protecting against abuse
  */
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 60, // limit each IP to 60 requests per minute
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
   legacyHeaders: false, // Disable `X-RateLimit-*` headers
+  skip: (req) => {
+    // Skip rate limiting for localhost in development
+    const testIPs = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+    return testIPs.includes(req.ip) && process.env.NODE_ENV === 'development';
+  }
 });
 
 /**
  * Rate limiter for sheet creation/modification
- * Stricter limits to prevent spam
+ * Limit: 30 requests per minute per IP (0.5 req/s)
+ * Stricter than general API but still usable
  */
 const sheetLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 50, // limit each IP to 50 sheet operations per hour
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 30, // limit each IP to 30 sheet operations per minute
   message: 'Too many sheet operations, please try again later.',
   skipSuccessfulRequests: false,
   skipFailedRequests: true,
+  skip: (req) => {
+    const testIPs = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+    return testIPs.includes(req.ip) && process.env.NODE_ENV === 'development';
+  }
 });
 
 /**
  * Rate limiter for file uploads
+ * Limit: 10 uploads per 5 minutes per IP
+ * Stricter to prevent abuse of expensive operations
  */
 const uploadLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 20, // limit each IP to 20 uploads per hour
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 10, // limit each IP to 10 uploads per 5 minutes
   message: 'Too many file uploads, please try again later.',
+  skip: (req) => {
+    const testIPs = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+    return testIPs.includes(req.ip) && process.env.NODE_ENV === 'development';
+  }
 });
 
 /**
