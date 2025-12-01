@@ -208,27 +208,37 @@ textarea.form-control {
 /* Tools container = div 2 */
 #tableeditor>div:nth-child(1)>div:nth-child(1)>div:nth-child(2) {
   background: transparent !important;
-  padding: 10px 0px !important;
-  height: 40px !important;
+  padding: 0px 0px !important;
+  height: auto !important;
+  min-height: 70px;
+  /* Ensure enough space for new ribbon */
   /* border-top:1px solid #ccc; */
   /* Removed for CoSheet logo integration */
 }
 
 /* Toolbar */
+/* Toolbar */
 #SocialCalc-edittools {
-  padding: 5px 0 !important;
-  margin: 0 -8px 4px -4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0px !important;
+  margin: 0;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
   /* Horizontal scrolling for mobile */
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  height: auto !important;
 }
 
 /* Scrollbar styling for Edit toolbar */
 #SocialCalc-edittools::-webkit-scrollbar {
   height: 1px;
+  /* Slightly visible for usability */
 }
 
 #SocialCalc-edittools::-webkit-scrollbar-thumb {
@@ -241,23 +251,31 @@ textarea.form-control {
 }
 
 /* Toolbar buttons */
-/* .btn.btn-link.btn-xs */
 #SocialCalc-edittools img[id] {
-  border: none !important;
-  background-color: transparent !important;
-  padding: 1px 3px;
+  border: 1px solid #ccc !important;
+  background-color: white !important;
+  padding: 6px;
   margin: 0;
-  width: 26px;
-  height: 26px;
-  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-sizing: content-box;
+  /* Ensure padding adds to size */
 }
 
-#SocialCalc-edittools img[id]:hover,
-#SocialCalc-formulafunctions:hover,
-#SocialCalc-multilineinput:hover,
-#SocialCalc-link:hover,
-#SocialCalc-sum:hover,
-#SocialCalc-last:hover,
+#SocialCalc-edittools img[id]:hover {
+  background-color: #e3f2fd !important;
+  border-color: #2196F3 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide dividers as we use gap */
+#SocialCalc-edittools img[src*="divider"] {
+  display: none !important;
+}
+
 #SocialCalc-next:hover {
   -webkit-box-shadow: 0px 0px 10px 1px rgba(102, 175, 233, .4);
   box-shadow: 0px 0px 10px 1px rgba(102, 175, 233, .4);
@@ -378,9 +396,31 @@ SocialCalc-clipboardtext {
 }
 
 #tableeditor>div:nth-child(1)>div:nth-child(2) {
-  margin-bottom: 3px;
+  margin-bottom: 0px;
 }
 
-.te_download tr:nth-child(2) td:nth-child(1):hover {
-  border: none;
+/* Force tool containers to be compact */
+[id$="sheettools"],
+[id$="edittools"],
+[id$="settingstools"] {
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible !important;
+}
+
+/* Ensure ribbon container is the only thing taking space */
+.ribbon-container {
+  margin-bottom: 0 !important;
+}
+
+.te_download tr:nth-child(2) td:nth-child(1) {
+  visibility: hidden !important;
+}
+
+/* Ensure Settings tab container has auto height to fit the ribbon */
+#SocialCalc-settingstools {
+  height: auto !important;
+  min-height: 70px;
 }

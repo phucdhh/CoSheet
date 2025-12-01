@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-  <rect fill="#F4B400" x="9" y="9" width="14" height="18" rx="1"/>
-  <path fill="#5f6368" d="M20 12l7 7-7 7v-4h-5v-6h5v-4z"/>
+  <!-- Paintbrush handle -->
+  <path d="M24 8 L28 12 L16 24 L12 20 Z" fill="#8D6E63" stroke="#5D4037" stroke-width="1.5"/>
+  <!-- Brush bristles -->
+  <ellipse cx="14" cy="22" rx="4" ry="3" fill="#FFD54F" stroke="#FFA000" stroke-width="1.5" transform="rotate(-45 14 22)"/>
+  <!-- Paint stroke -->
+  <path d="M8 26 Q12 28 16 26 Q20 24 22 28" stroke="#4CAF50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 </svg>

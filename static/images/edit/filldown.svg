@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- Top cells -->
+  <rect x="10" y="10" width="8" height="6" fill="#E3F2FD" stroke="#1976D2" stroke-width="1.5"/>
+  <rect x="18" y="10" width="8" height="6" fill="#E3F2FD" stroke="#1976D2" stroke-width="1.5"/>
+  <!-- Arrow down -->
+  <path d="M18 18 L18 22 M15 20 L18 23 L21 20" stroke="#388E3C" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom cells (filled) -->
+  <rect x="10" y="24" width="8" height="6" fill="#C8E6C9" stroke="#388E3C" stroke-width="1.5"/>
+  <rect x="18" y="24" width="8" height="6" fill="#C8E6C9" stroke="#388E3C" stroke-width="1.5"/>
+</svg>

@@ -1,0 +1,23 @@
+
+=== Testing Copy/Paste with New Code ===
+
+1. Entering "TEST" in A1...
+/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/common/QueryHandler.js:214
+                const waitForSelectorError = new (error instanceof Errors_js_1.TimeoutError ? Errors_js_1.TimeoutError : Error)(`Waiting for selector \`${selector}\` failed`);
+                                             ^
+
+TimeoutError: Waiting for selector `input[id$="inputbox"]` failed
+    at CSSQueryHandler.waitFor (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/common/QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Frame.js:544:21)
+    at async CdpPage.waitForSelector (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Page.js:1377:20)
+    at async /root/ethercalc/chrome_test/test_headless_copypaste.js:21:5 {
+  cause: TimeoutError: Waiting failed: 5000ms exceeded
+      at new WaitTask (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/common/WaitTask.js:49:34)
+      at IsolatedWorld.waitForFunction (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Realm.js:25:26)
+      at CSSQueryHandler.waitFor (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/common/QueryHandler.js:179:95)
+      at async CdpFrame.waitForSelector (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Frame.js:544:21)
+      at async CdpPage.waitForSelector (/root/ethercalc/chrome_test/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Page.js:1377:20)
+      at async /root/ethercalc/chrome_test/test_headless_copypaste.js:21:5
+}
+
+Node.js v20.19.5

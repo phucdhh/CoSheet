@@ -65,7 +65,7 @@
         getRibbonHTML: function () {
             return `
         <div id="graph-ribbon" class="graph-ribbon">
-          <span class="graph-ribbon-label">${this.localize('Select Chart Type')}:</span>
+          
           <button class="graph-type-btn ${this.selectedType === 'bar' ? 'selected' : ''}" 
                   data-type="bar" 
                   onclick="GraphLayout.selectGraphType('bar')"
@@ -1089,7 +1089,7 @@
         };
 
         SocialCalc.SetTab.isGraphHooked = true;
-        console.log('[GraphLayout] SocialCalc.SetTab hooked successfully');
+        //console.log('[GraphLayout] SocialCalc.SetTab hooked successfully');
         return true;
     }
 

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- Target Cell -->
+  <rect x="20" y="10" width="10" height="10" fill="#E3F2FD" stroke="#1976D2" stroke-width="1.5"/>
+  <!-- Arrow incoming -->
+  <path d="M12 15 L18 15 M16 12 L19 15 L16 18" stroke="#1976D2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

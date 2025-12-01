@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-  <path fill="#5f6368" d="M18 7.5c5.79 0 10.5 4.71 10.5 10.5 0 2.27-.73 4.37-1.96 6.08l2.38 2.38-2.38 2.38-2.38-2.38C22.45 27.69 20.35 28.42 18 28.42c-5.79 0-10.5-4.71-10.5-10.5S12.21 7.5 18 7.5zm0 18c4.14 0 7.5-3.36 7.5-7.5s-3.36-7.5-7.5-7.5-7.5 3.36-7.5 7.5 3.36 7.5 7.5 7.5z"/>
-  <path fill="#5f6368" d="M18 15l4.5 4.5h-3v4.5h-3v-4.5h-3z"/>
+  <!-- Background circle -->
+  <circle cx="18" cy="18" r="16" fill="#E3F2FD"/>
+  <!-- Curved arrow - thicker and rounder -->
+  <path d="M11 14 Q18 14 22 18 Q25 22 25 27" stroke="#1565C0" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Arrow head - large and solid -->
+  <path d="M28 24 L25 28 L21 24" stroke="#1565C0" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Start dot -->
+  <circle cx="11" cy="14" r="2.5" fill="#1565C0"/>
 </svg>

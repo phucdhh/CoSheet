@@ -40,27 +40,11 @@
         var iconStyle = 'vertical-align: middle; font-size: 24px; margin-right: 5px;';
         var btnStyle = 'font-size:14px; padding: 5px 10px; margin-right:5px; display:inline-flex; align-items:center; text-decoration:none; color:#333;';
 
-        // Define Sheet Tab
+        // Define Sheet Tab (using sheet-layout.js for UI)
         var sheetTab = {
             name: 'sheet',
             text: 'Sheet',
-            html: '<div id="' + idPrefix + 'sheettools" style="display:none;">' +
-                '<div style="padding:8px 0;">' +
-                '  <button type="button" class="btn btn-link" style="' + btnStyle + '" onclick="window.location=\'./_new\'" title="New Spreadsheet">' +
-                '    <i class="material-icons" style="' + iconStyle + ' color: #4CAF50;">note_add</i> New' +
-                '  </button>' +
-                '  <button type="button" class="btn btn-link" style="' + btnStyle + '" onclick="document.getElementById(\'custom-upload-input\').click();" title="Open">' +
-                '    <i class="material-icons" style="' + iconStyle + ' color: #FFC107;">folder_open</i> Open' +
-                '  </button>' +
-                '  <button type="button" class="btn btn-link" style="' + btnStyle + '" onclick="window.dispatchEvent(new Event(\'ec-save-request\'));" title="Save">' +
-                '    <i class="material-icons" style="' + iconStyle + ' color: #2196F3;">save</i> Save' +
-                '  </button>' +
-                '  <button type="button" class="btn btn-link" style="' + btnStyle + '" onclick="window.dispatchEvent(new Event(\'ec-save-xlsx-request\'));" title="Save as XLSX">' +
-                '    <i class="material-icons" style="' + iconStyle + ' color: #4CAF50;">grid_on</i> Save as XLSX' +
-                '  </button>' +
-                '  <input type="file" id="custom-upload-input" style="display:none;" accept=".csv,.xlsx,.ods">' +
-                '</div>' +
-                '</div>',
+            html: '<div id="' + idPrefix + 'sheettools"></div>',
             onclick: function (s, t) { }
         };
 
@@ -69,26 +53,34 @@
             name: 'help',
             text: 'Help',
             html: '<div id="' + idPrefix + 'helptools" style="display:none;">' +
-                '<div style="padding:8px 0;">' +
-                '  <a href="https://ganjingworld.com" target="_blank" class="btn btn-link" style="' + btnStyle + '"><i class="material-icons" style="' + iconStyle + ' color: #9C27B0;">info</i> Introduction</a>' +
-                '  <a href="/howtouse.html" target="_blank" class="btn btn-link" style="' + btnStyle + '"><i class="material-icons" style="' + iconStyle + ' color: #E91E63;">help_outline</i> How to use</a>' +
-                '  <a href="#" class="btn btn-link" style="' + btnStyle + '"><i class="material-icons" style="' + iconStyle + ' color: #F44336;">ondemand_video</i> Video</a>' +
-                '  <a href="/About.html" target="_blank" class="btn btn-link" style="' + btnStyle + '"><i class="material-icons" style="' + iconStyle + ' color: #3F51B5;">contacts</i> About</a>' +
+                '<div class="ribbon-container">' +
+                '  <a href="https://ganjingworld.com" target="_blank" class="tab-icon-btn" title="Introduction">' +
+                '    <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>' +
+                '  </a>' +
+                '  <a href="/howtouse.html" target="_blank" class="tab-icon-btn" title="How to use">' +
+                '    <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>' +
+                '  </a>' +
+                '  <a href="#" class="tab-icon-btn" title="Video">' +
+                '    <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-5-6l-7 4V7z"/></svg>' +
+                '  </a>' +
+                '  <a href="/About.html" target="_blank" class="tab-icon-btn" title="About">' +
+                '    <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>' +
+                '  </a>' +
                 '</div>' +
                 '</div>',
             onclick: function (s, t) { }
         };
 
         // --- Tab Management: Reorder and Filter ---
-        console.log('[CoSheet] Starting tab reorganization...');
-        console.log('[CoSheet] Current tabs:', spreadsheet.tabs.map(function (t) { return t.name; }));
+        // console.log('[CoSheet] Starting tab reorganization...');
+        //console.log('[CoSheet] Current tabs:', spreadsheet.tabs.map(function (t) { return t.name; }));
 
         // Override tab CSS to remove borders
         spreadsheet.tabplainCSS = spreadsheet.tabplainCSS.replace(/border-right:[^;]+;/g, '');
         spreadsheet.tabselectedCSS = spreadsheet.tabselectedCSS.replace(/border-right:[^;]+;/g, '');
 
-        // 1. Remove unwanted tabs (Audit, Comment, Names, Clipboard, Form)
-        var tabsToRemove = ['audit', 'comment', 'names', 'clipboard', 'form'];
+        // 1. Remove unwanted tabs (Audit, Comment, Names, Clipboard, Form, Sort, Settings/Format)
+        var tabsToRemove = ['audit', 'comment', 'names', 'clipboard', 'form', 'sort', 'settings'];
         var filteredTabs = [];
 
         for (var i = 0; i < spreadsheet.tabs.length; i++) {
@@ -99,7 +91,7 @@
                 }
                 filteredTabs.push(tab);
             } else {
-                console.log('[CoSheet] Removing tab:', tab.name);
+                // console.log('[CoSheet] Removing tab:', tab.name);
             }
         }
 
@@ -107,10 +99,10 @@
         filteredTabs.unshift(sheetTab); // Add Sheet at beginning
         filteredTabs.push(helpTab);     // Add Help at end
 
-        console.log('[CoSheet] After adding Sheet/Help:', filteredTabs.map(function (t) { return t.name; }));
+        // console.log('[CoSheet] After adding Sheet/Help:', filteredTabs.map(function (t) { return t.name; }));
 
-        // 3. Reorder tabs: Sheet - Edit - Settings (Format) - Sort - Graph - Help
-        var desiredOrder = ['sheet', 'edit', 'settings', 'sort', 'graph', 'help'];
+        // 3. Reorder tabs: Sheet - Edit - Graph - Help
+        var desiredOrder = ['sheet', 'edit', 'graph', 'help'];
         filteredTabs.sort(function (a, b) {
             var indexA = desiredOrder.indexOf(a.name);
             var indexB = desiredOrder.indexOf(b.name);
@@ -122,7 +114,7 @@
             return indexA - indexB;
         });
 
-        console.log('[CoSheet] Final tab order:', filteredTabs.map(function (t) { return t.name; }));
+        // console.log('[CoSheet] Final tab order:', filteredTabs.map(function (t) { return t.name; }));
 
         // 4. Update spreadsheet tabs
         spreadsheet.tabs = filteredTabs;
@@ -135,22 +127,6 @@
 
         // Rebuild the UI
         rebuildTabsUI(spreadsheet);
-
-        // Remove alignment buttons from Edit tab after UI is built
-        setTimeout(function () {
-            console.log('[CoSheet] Removing alignment buttons from Edit tab...');
-            var buttonsToRemove = ['button_alignleft', 'button_aligncenter', 'button_alignright'];
-            buttonsToRemove.forEach(function (buttonId) {
-                var fullId = spreadsheet.idPrefix + buttonId;
-                var button = document.getElementById(fullId);
-                if (button) {
-                    console.log('[CoSheet] Removing button:', fullId);
-                    button.parentNode.removeChild(button);
-                } else {
-                    console.log('[CoSheet] Button not found:', fullId);
-                }
-            });
-        }, 500);
 
         // Attach File Input Handler
         setTimeout(attachCustomFileInputHandler, 1000);
@@ -484,9 +460,10 @@
                 var wb = XLSX.read(data, { type: 'array' });
 
                 if (wb.SheetNames.length > 1) {
-                    // Show selection dialog with inline metadata
-                    showSheetSelectionDialogSync(wb);
+                    // Multi-sheet: Auto-convert to multi-view mode
+                    convertMultiSheetSync(wb);
                 } else {
+                    // Single sheet: Load directly
                     try {
                         var csv = XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]);
                         loadCSV(csv);
@@ -501,6 +478,84 @@
             }
         };
         reader.readAsArrayBuffer(f);
+    }
+
+    function convertMultiSheetSync(wb) {
+        // Show loading indicator
+        var loadingDialog = null;
+        if (typeof vex !== 'undefined') {
+            loadingDialog = vex.dialog.open({
+                message: 'Đang chuyển đổi ' + wb.SheetNames.length + ' sheets...',
+                buttons: [],
+                closeAllOnPopState: false,
+                escapeButtonCloses: false,
+                overlayClosesOnClick: false
+            });
+        }
+
+        // Generate unique room ID for multi-sheet
+        var currentRoom = Math.random().toString(36).substring(2, 15);
+        var toc = '#url,#title\n';
+
+        // Convert all sheets to SocialCalc format
+        var sheets = [];
+        for (var i = 0; i < wb.SheetNames.length; i++) {
+            var sheetName = wb.SheetNames[i];
+            try {
+                var csv = XLSX.utils.sheet_to_csv(wb.Sheets[sheetName]);
+                var save = SocialCalc.ConvertOtherFormatToSave(csv, 'csv');
+                sheets.push({
+                    name: sheetName,
+                    save: save
+                });
+            } catch (err) {
+                console.error('Error converting sheet:', sheetName, err);
+                if (loadingDialog) closeDialog(loadingDialog);
+                alert('Error converting sheet "' + sheetName + '": ' + err.message);
+                return;
+            }
+        }
+
+        // Upload sheets sequentially
+        var uploadSequence = Promise.resolve();
+
+        sheets.forEach(function (sheet, index) {
+            uploadSequence = uploadSequence.then(function () {
+                var sheetId = currentRoom + '.' + (index + 1);
+                toc += '"/' + sheetId + '","' + sheet.name.replace(/"/g, '""') + '"\n';
+
+                // Update loading message
+                if (loadingDialog && typeof vex !== 'undefined') {
+                    var content = loadingDialog.data.$vexContent;
+                    if (content) {
+                        var msgDiv = content.find('.vex-dialog-message');
+                        if (msgDiv.length) {
+                            msgDiv.text('Đang tải lên sheet ' + (index + 1) + '/' + sheets.length + ': ' + sheet.name);
+                        }
+                    }
+                }
+
+                return uploadSheetData(sheetId, sheet.save, 'text/x-socialcalc').catch(function (err) {
+                    console.error('Failed to upload sheet ' + (index + 1) + ':', err);
+                    throw err;
+                });
+            });
+        });
+
+        uploadSequence.then(function () {
+            // Upload TOC
+            return uploadSheetData(currentRoom, toc, 'text/csv');
+        }).then(function () {
+            if (loadingDialog) closeDialog(loadingDialog);
+            // Redirect to multi-view
+            setTimeout(function () {
+                window.location.href = '/=' + currentRoom;
+            }, 500);
+        }).catch(function (err) {
+            console.error('Error uploading multi-sheet data:', err);
+            if (loadingDialog) closeDialog(loadingDialog);
+            alert('Error uploading sheets: ' + err.message);
+        });
     }
 
     function showSheetSelectionDialog(metadata) {
@@ -711,7 +766,7 @@
     }
 
     function rebuildTabsUI(spreadsheet) {
-        console.log('[CoSheet] Rebuilding tabs UI...');
+        // console.log('[CoSheet] Rebuilding tabs UI...');
         var tabsDiv = spreadsheet.spreadsheetDiv.querySelector('div > table[cellpadding="0"]');
         if (!tabsDiv) {
             console.log('[CoSheet] ERROR: tabsDiv not found');
@@ -725,7 +780,7 @@
         }
 
         // CRITICAL: Remove ALL existing tab TDs first to avoid stale tabs
-        console.log('[CoSheet] Clearing old tabs from DOM...');
+        //console.log('[CoSheet] Clearing old tabs from DOM...');
         while (tabRow.firstChild) {
             tabRow.removeChild(tabRow.firstChild);
         }
@@ -741,7 +796,7 @@
         tabRow.appendChild(logoTd);
 
         // Iterate through tabs in the correct order and append them to the row
-        console.log('[CoSheet] Adding new tabs to DOM...');
+        // console.log('[CoSheet] Adding new tabs to DOM...');
         for (var i = 0; i < spreadsheet.tabs.length; i++) {
             var tab = spreadsheet.tabs[i];
             var tabId = spreadsheet.idPrefix + tab.name + 'tab';
@@ -755,7 +810,7 @@
             td.style.cursor = 'pointer';
 
             tabRow.appendChild(td);
-            console.log('[CoSheet] Added tab to DOM:', tab.name);
+            // console.log('[CoSheet] Added tab to DOM:', tab.name);
 
             var toolId = spreadsheet.idPrefix + tab.name + 'tools';
             if (!document.getElementById(toolId) && tab.html) {
@@ -771,7 +826,7 @@
             }
         }
 
-        console.log('[CoSheet] Tab UI rebuild complete. Final tabs:', spreadsheet.tabs.map(function (t) { return t.name; }));
+        // console.log('[CoSheet] Tab UI rebuild complete. Final tabs:', spreadsheet.tabs.map(function (t) { return t.name; }));
 
         // Force remove borders from all tabs after UI build
         setTimeout(function () {
@@ -780,7 +835,7 @@
                 allTabs[i].style.borderRight = 'none';
                 allTabs[i].style.borderLeft = 'none';
             }
-            console.log('[CoSheet] Removed borders from', allTabs.length, 'tabs');
+            // console.log('[CoSheet] Removed borders from', allTabs.length, 'tabs');
         }, 100);
 
         if (spreadsheet.currentTab >= 0 && spreadsheet.tabs[spreadsheet.currentTab]) {
@@ -868,4 +923,8 @@
             // Force re-render if needed, though usually called before render
         }
     }
+
+    // Export functions to global scope for sheet-layout.js
+    window.loadCSVContent = loadCSV;
+    window.handleXLSXFile = handleXLSXSync;
 })();

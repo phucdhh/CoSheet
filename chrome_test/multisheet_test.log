@@ -1,0 +1,124 @@
+Loading EtherCalc...
+[CONSOLE] [GraphLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [SheetLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [EditLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [FormatLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [CoSheet] Starting tab reorganization...
+[CONSOLE] [CoSheet] Current tabs: JSHandle@array
+[CONSOLE] [CoSheet] Removing tab: sort
+[CONSOLE] [CoSheet] Removing tab: audit
+[CONSOLE] [CoSheet] Removing tab: comment
+[CONSOLE] [CoSheet] Removing tab: names
+[CONSOLE] [CoSheet] Removing tab: clipboard
+[CONSOLE] [CoSheet] Removing tab: form
+[CONSOLE] [CoSheet] After adding Sheet/Help: JSHandle@array
+[CONSOLE] [CoSheet] Final tab order: JSHandle@array
+[CONSOLE] [CoSheet] Rebuilding tabs UI...
+[CONSOLE] [CoSheet] Clearing old tabs from DOM...
+[CONSOLE] [CoSheet] Adding new tabs to DOM...
+[CONSOLE] [CoSheet] Added tab to DOM: sheet
+[CONSOLE] [CoSheet] Added tab to DOM: edit
+[CONSOLE] [CoSheet] Added tab to DOM: settings
+[CONSOLE] [CoSheet] Added tab to DOM: graph
+[CONSOLE] [CoSheet] Added tab to DOM: help
+[CONSOLE] [CoSheet] Tab UI rebuild complete. Final tabs: JSHandle@array
+[CONSOLE] [CoSheet] Removed borders from 6 tabs
+[CONSOLE] Manifest: Line: 1, column: 1, Syntax error.
+[CONSOLE] [CoSheet] Removing alignment buttons from Edit tab...
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignleft
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_aligncenter
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignright
+Waiting for page to stabilize...
+Looking for file input...
+Found file input, uploading multi-sheet XLSX...
+File uploaded, waiting for processing...
+[NAVIGATION] Redirected to: http://localhost:1234/=jikdkq7ijs
+[CONSOLE] Download the React DevTools for a better development experience: http://fb.me/react-devtools
+[CONSOLE] Warning: Something is calling a React component directly. Use a factory or JSX instead. See: http://fb.me/react-legacyfactory
+[CONSOLE] [GraphLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [SheetLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [EditLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [FormatLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [CoSheet] Starting tab reorganization...
+[CONSOLE] [CoSheet] Current tabs: JSHandle@array
+[CONSOLE] [CoSheet] Removing tab: sort
+[CONSOLE] [CoSheet] Removing tab: audit
+[CONSOLE] [CoSheet] Removing tab: comment
+[CONSOLE] [CoSheet] Removing tab: names
+[CONSOLE] [CoSheet] Removing tab: clipboard
+[CONSOLE] [CoSheet] Removing tab: form
+[CONSOLE] [CoSheet] After adding Sheet/Help: JSHandle@array
+[CONSOLE] [CoSheet] Final tab order: JSHandle@array
+[CONSOLE] [CoSheet] Rebuilding tabs UI...
+[CONSOLE] [CoSheet] Clearing old tabs from DOM...
+[CONSOLE] [CoSheet] Adding new tabs to DOM...
+[CONSOLE] [CoSheet] Added tab to DOM: sheet
+[CONSOLE] [CoSheet] Added tab to DOM: edit
+[CONSOLE] [CoSheet] Added tab to DOM: settings
+[CONSOLE] [CoSheet] Added tab to DOM: graph
+[CONSOLE] [CoSheet] Added tab to DOM: help
+[CONSOLE] [CoSheet] Tab UI rebuild complete. Final tabs: JSHandle@array
+[CONSOLE] [GraphLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [SheetLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [EditLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [FormatLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [GraphLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [SheetLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [EditLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [FormatLayout] SocialCalc.SetTab hooked successfully
+[CONSOLE] [CoSheet] Removed borders from 6 tabs
+[CONSOLE] [CoSheet] Starting tab reorganization...
+[CONSOLE] [CoSheet] Current tabs: JSHandle@array
+[CONSOLE] [CoSheet] Removing tab: sort
+[CONSOLE] [CoSheet] Removing tab: audit
+[CONSOLE] [CoSheet] Removing tab: comment
+[CONSOLE] [CoSheet] Removing tab: names
+[CONSOLE] [CoSheet] Removing tab: clipboard
+[CONSOLE] [CoSheet] Removing tab: form
+[CONSOLE] [CoSheet] After adding Sheet/Help: JSHandle@array
+[CONSOLE] [CoSheet] Final tab order: JSHandle@array
+[CONSOLE] [CoSheet] Rebuilding tabs UI...
+[CONSOLE] [CoSheet] Clearing old tabs from DOM...
+[CONSOLE] [CoSheet] Adding new tabs to DOM...
+[CONSOLE] [CoSheet] Added tab to DOM: sheet
+[CONSOLE] [CoSheet] Added tab to DOM: edit
+[CONSOLE] [CoSheet] Added tab to DOM: settings
+[CONSOLE] [CoSheet] Added tab to DOM: graph
+[CONSOLE] [CoSheet] Added tab to DOM: help
+[CONSOLE] [CoSheet] Tab UI rebuild complete. Final tabs: JSHandle@array
+[CONSOLE] [CoSheet] Starting tab reorganization...
+[CONSOLE] [CoSheet] Current tabs: JSHandle@array
+[CONSOLE] [CoSheet] Removing tab: sort
+[CONSOLE] [CoSheet] Removing tab: audit
+[CONSOLE] [CoSheet] Removing tab: comment
+[CONSOLE] [CoSheet] Removing tab: names
+[CONSOLE] [CoSheet] Removing tab: clipboard
+[CONSOLE] [CoSheet] Removing tab: form
+[CONSOLE] [CoSheet] After adding Sheet/Help: JSHandle@array
+[CONSOLE] [CoSheet] Final tab order: JSHandle@array
+[CONSOLE] [CoSheet] Rebuilding tabs UI...
+[CONSOLE] [CoSheet] Clearing old tabs from DOM...
+[CONSOLE] [CoSheet] Adding new tabs to DOM...
+[CONSOLE] [CoSheet] Added tab to DOM: sheet
+[CONSOLE] [CoSheet] Added tab to DOM: edit
+[CONSOLE] [CoSheet] Added tab to DOM: settings
+[CONSOLE] [CoSheet] Added tab to DOM: graph
+[CONSOLE] [CoSheet] Added tab to DOM: help
+[CONSOLE] [CoSheet] Tab UI rebuild complete. Final tabs: JSHandle@array
+[CONSOLE] [CoSheet] Removed borders from 6 tabs
+[CONSOLE] [CoSheet] Removing alignment buttons from Edit tab...
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignleft
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_aligncenter
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignright
+[CONSOLE] [CoSheet] Removed borders from 6 tabs
+[CONSOLE] [CoSheet] Removing alignment buttons from Edit tab...
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignleft
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_aligncenter
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignright
+[CONSOLE] [CoSheet] Removing alignment buttons from Edit tab...
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignleft
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_aligncenter
+[CONSOLE] [CoSheet] Button not found: SocialCalc-button_alignright
+✅ SUCCESS: Redirected to multi-view URL: http://localhost:1234/=jikdkq7ijs
+✅ Screenshot saved: multisheet_upload_result.png
+Test completed!

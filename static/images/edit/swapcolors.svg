@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- Top square (foreground color) -->
+  <rect x="8" y="8" width="10" height="10" fill="#4CAF50" stroke="#388E3C" stroke-width="1.5" rx="1"/>
+  <!-- Bottom square (background color) -->
+  <rect x="18" y="18" width="10" height="10" fill="#2196F3" stroke="#1976D2" stroke-width="1.5" rx="1"/>
+  <!-- Curved swap arrows -->
+  <path d="M16 13 Q21 13 23 18 L21 17 M21 19 L23 18" stroke="#FF9800" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 23 Q15 23 13 18 L15 19 M15 17 L13 18" stroke="#FF9800" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-  <path fill="#5f6368" d="M9 12h8v6H9zm10 0h8v6h-8zM9 20h18v6H9z"/>
-  <path fill="none" stroke="#5f6368" stroke-width="2" x="8" y="11" width="20" height="16"/>
+  <!-- Merged cell background -->
+  <rect x="8" y="12" width="20" height="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" rx="2"/>
+  <!-- Merge arrows -->
+  <path d="M12 10 L12 14" stroke="#388E3C" stroke-width="2" stroke-linecap="round"/>
+  <path d="M18 10 L18 14" stroke="#388E3C" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24 10 L24 14" stroke="#388E3C" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 26 L12 22" stroke="#388E3C" stroke-width="2" stroke-linecap="round"/>
+  <path d="M18 26 L18 22" stroke="#388E3C" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24 26 L24 22" stroke="#388E3C" stroke-width="2" stroke-linecap="round"/>
+  <!-- Text -->
+  <text x="18" y="20" font-size="8" fill="#2E7D32" text-anchor="middle" font-weight="bold">MERGE</text>
 </svg>

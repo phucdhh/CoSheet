@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- Background -->
+  <rect x="6" y="8" width="24" height="20" fill="#E8F5E9" rx="2"/>
+  <!-- Existing rows -->
+  <line x1="6" y1="14" x2="30" y2="14" stroke="#A5D6A7" stroke-width="1"/>
+  <line x1="6" y1="22" x2="30" y2="22" stroke="#A5D6A7" stroke-width="1"/>
+  <!-- New Row Highlight -->
+  <rect x="6" y="16" width="24" height="4" fill="#4CAF50" opacity="0.3"/>
+  <!-- Plus Sign -->
+  <circle cx="18" cy="18" r="6" fill="#4CAF50"/>
+  <path d="M18 14 L18 22 M14 18 L22 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Arrow indicating insertion -->
+  <path d="M2 18 L6 18 M4 16 L6 18 L4 20" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,361 @@
+/**
+ * Format Layout Manager for CoSheet
+ * Handles the Format tab ribbon UI - similar to graph-layout.js structure
+ */
+
+(function () {
+    'use strict';
+
+    window.FormatLayout = {
+        container: null,
+
+        /**
+         * Initialize the format layout system
+         */
+        init: function (containerId) {
+            this.container = document.getElementById(containerId);
+            if (!this.container) {
+                // Try to find it by ID suffix if exact match fails
+                this.container = document.querySelector('[id$="' + containerId + '"]');
+            }
+
+            if (!this.container) {
+                console.error('Format container not found:', containerId);
+                return;
+            }
+
+            // Render ribbon HTML
+            this.container.innerHTML = this.getRibbonHTML();
+            this.container.style.display = 'block';
+        },
+
+        /**
+         * Get ribbon HTML with Format icons
+         */
+        getRibbonHTML: function () {
+            return `
+                <div style="display:flex; align-items:center; gap:8px; padding:4px 16px; background:#f5f5f5; border-bottom:1px solid #ddd; overflow-x:auto; flex-wrap:wrap;">
+                    <!-- Font Family -->
+                    <select id="format-font-family" 
+                            onchange="FormatLayout.applyFont()"
+                            style="padding:6px; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:13px;">
+                        <option value="Arial">Arial</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Calibri">Calibri</option>
+                    </select>
+                    
+                    <!-- Font Size -->
+                    <select id="format-font-size" 
+                            onchange="FormatLayout.applyFontSize()"
+                            style="padding:6px; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:13px; width:60px;">
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12" selected>12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                        <option value="24">24</option>
+                    </select>
+                    
+                    <div style="width:1px; height:30px; background:#ccc; margin:0 4px;"></div>
+                    
+                    <!-- Bold -->
+                    <button id="format-bold" 
+                            title="Bold" 
+                            onclick="FormatLayout.applyStyle('bold')"
+                            style="width:32px;height:32px;padding:4px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;font-weight:bold;font-size:14px;">
+                        B
+                    </button>
+                    
+                    <!-- Italic -->
+                    <button id="format-italic" 
+                            title="Italic" 
+                            onclick="FormatLayout.applyStyle('italic')"
+                            style="width:32px;height:32px;padding:4px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;font-style:italic;font-size:14px;">
+                        I
+                    </button>
+                    
+                    <!-- Underline -->
+                    <button id="format-underline" 
+                            title="Underline" 
+                            onclick="FormatLayout.applyStyle('underline')"
+                            style="width:32px;height:32px;padding:4px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;text-decoration:underline;font-size:14px;">
+                        U
+                    </button>
+                    
+                    <div style="width:1px; height:30px; background:#ccc; margin:0 4px;"></div>
+                    
+                    <!-- Align Left -->
+                    <button id="format-align-left" 
+                            title="Align Left" 
+                            onclick="FormatLayout.applyAlignment('left')"
+                            style="width:32px;height:32px;padding:4px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;font-size:14px;">
+                        ‹
+                    </button>
+                    
+                    <!-- Align Center -->
+                    <button id="format-align-center" 
+                            title="Align Center" 
+                            onclick="FormatLayout.applyAlignment('center')"
+                            style="width:32px;height:32px;padding:4px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;font-size:14px;">
+                        =
+                    </button>
+                    
+                    <!-- Align Right -->
+                    <button id="format-align-right" 
+                            title="Align Right" 
+                            onclick="FormatLayout.applyAlignment('right')"
+                            style="width:32px;height:32px;padding:4px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;font-size:14px;">
+                        ›
+                    </button>
+                    
+                    <div style="width:1px; height:30px; background:#ccc; margin:0 4px;"></div>
+                    
+                    <!-- Text Color -->
+                    <div style="position:relative; display:inline-block;">
+                        <input type="color" 
+                               id="format-text-color" 
+                               value="#000000"
+                               onchange="FormatLayout.applyTextColor()"
+                               title="Text Color"
+                               style="width:32px;height:32px;padding:2px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;">
+                        <div style="position:absolute; bottom:2px; left:2px; right:2px; height:4px; background:#000; pointer-events:none;"></div>
+                    </div>
+                    
+                    <!-- Background Color -->
+                    <div style="position:relative; display:inline-block;">
+                        <input type="color" 
+                               id="format-bg-color" 
+                               value="#FFFFFF"
+                               onchange="FormatLayout.applyBackgroundColor()"
+                               title="Background Color"
+                               style="width:32px;height:32px;padding:2px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;">
+                        <div style="position:absolute; bottom:2px; left:2px; right:2px; height:4px; background:#FFFF00; pointer-events:none;"></div>
+                    </div>
+                    
+                    <div style="width:1px; height:30px; background:#ccc; margin:0 4px;"></div>
+                    
+                    <!-- Cell Format -->
+                    <button id="format-cell-format" 
+                            title="Cell Format" 
+                            onclick="FormatLayout.toggleCellFormatRibbon()"
+                            style="padding:6px 12px;border:1px solid #ccc;background:white;border-radius:4px;cursor:pointer;font-size:13px;">
+                        123 ▼
+                    </button>
+                </div>
+                
+                <!-- Secondary Ribbon for Cell Format Options -->
+                <div id="format-cell-format-ribbon" style="display:none; padding:4px 16px; background:#f9f9f9; border-bottom:1px solid #ddd; gap:8px; flex-wrap:wrap;">
+                    <button onclick="FormatLayout.applyCellFormat('text')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Text</button>
+                    <button onclick="FormatLayout.applyCellFormat('number')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Number</button>
+                    <button onclick="FormatLayout.applyCellFormat('percent')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Percent</button>
+                    <button onclick="FormatLayout.applyCellFormat('currency')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Currency</button>
+                    <button onclick="FormatLayout.applyCellFormat('date')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Date</button>
+                    <button onclick="FormatLayout.applyCellFormat('time')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Time</button>
+                    <button onclick="FormatLayout.applyCellFormat('decimal2')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Decimal (2)</button>
+                    <button onclick="FormatLayout.applyCellFormat('decimal3')" style="padding:6px 12px; border:1px solid #ccc; background:white; border-radius:4px; cursor:pointer; font-size:13px;">Decimal (3)</button>
+                </div>
+            `;
+        },
+
+        /**
+         * Cleanup when leaving Format tab
+         */
+        cleanup: function () {
+            if (this.container) {
+                this.container.innerHTML = '';
+                this.container.style.display = 'none';
+            }
+        },
+
+        /**
+         * Called when the Format tab is clicked
+         */
+        initOnTabClick: function () {
+            // Find the settings tools container
+            // The ID in ethercalc.js is "%id.settingstools", which resolves to "SocialCalc-id-settingstools" usually
+            this.init('settingstools');
+        },
+
+        /**
+         * Toggle Cell Format secondary ribbon
+         */
+        toggleCellFormatRibbon: function () {
+            const ribbon = document.getElementById('format-cell-format-ribbon');
+            if (ribbon) {
+                ribbon.style.display = ribbon.style.display === 'none' ? 'flex' : 'none';
+            }
+        },
+
+        /**
+         * Apply font family
+         */
+        applyFont: function () {
+            if (!window.spreadsheet || !window.spreadsheet.editor) return;
+
+            const fontSelect = document.getElementById('format-font-family');
+            if (!fontSelect) return;
+
+            const font = fontSelect.value;
+            window.spreadsheet.ExecuteCommand('set %C font ' + font, '');
+        },
+
+        /**
+         * Apply font size
+         */
+        applyFontSize: function () {
+            if (!window.spreadsheet || !window.spreadsheet.editor) return;
+
+            const sizeSelect = document.getElementById('format-font-size');
+            if (!sizeSelect) return;
+
+            const size = sizeSelect.value + 'pt';
+            window.spreadsheet.ExecuteCommand('set %C fontsize ' + size, '');
+        },
+
+        /**
+         * Apply text style (bold, italic, underline)
+         */
+        applyStyle: function (style) {
+            if (!window.spreadsheet || !window.spreadsheet.editor) return;
+
+            const commands = {
+                'bold': 'set %C font bold',
+                'italic': 'set %C font italic',
+                'underline': 'set %C font underline'
+            };
+
+            const cmd = commands[style];
+            if (cmd) {
+                window.spreadsheet.ExecuteCommand(cmd, '');
+            }
+        },
+
+        /**
+         * Apply text alignment
+         */
+        applyAlignment: function (align) {
+            if (!window.spreadsheet || !window.spreadsheet.editor) return;
+
+            const commands = {
+                'left': 'set %C alignhoriz left',
+                'center': 'set %C alignhoriz center',
+                'right': 'set %C alignhoriz right'
+            };
+
+            const cmd = commands[align];
+            if (cmd) {
+                window.spreadsheet.ExecuteCommand(cmd, '');
+            }
+        },
+
+        /**
+         * Apply text color
+         */
+        applyTextColor: function () {
+            if (!window.spreadsheet || !window.spreadsheet.editor) return;
+
+            const colorInput = document.getElementById('format-text-color');
+            if (!colorInput) return;
+
+            const color = colorInput.value;
+            window.spreadsheet.ExecuteCommand('set %C color ' + color, '');
+        },
+
+        /**
+         * Apply background color
+         */
+        applyBackgroundColor: function () {
+            if (!window.spreadsheet || !window.spreadsheet.editor) return;
+
+            const colorInput = document.getElementById('format-bg-color');
+            if (!colorInput) return;
+
+            const color = colorInput.value;
+            window.spreadsheet.ExecuteCommand('set %C bgcolor ' + color, '');
+        },
+
+        /**
+         * Apply cell format
+         */
+        applyCellFormat: function (format) {
+            if (!window.spreadsheet || !window.spreadsheet.editor) return;
+
+            const formats = {
+                'text': 'set %C nontextvalueformat text-plain',
+                'number': 'set %C nontextvalueformat #,##0',
+                'percent': 'set %C nontextvalueformat 0.0%',
+                'currency': 'set %C nontextvalueformat $#,##0.00',
+                'date': 'set %C nontextvalueformat yyyy-mm-dd',
+                'time': 'set %C nontextvalueformat hh:mm:ss',
+                'decimal2': 'set %C nontextvalueformat #,##0.00',
+                'decimal3': 'set %C nontextvalueformat #,##0.000'
+            };
+
+            const cmd = formats[format];
+            if (cmd) {
+                window.spreadsheet.ExecuteCommand(cmd, '');
+                this.toggleCellFormatRibbon(); // Hide ribbon after selection
+            }
+        }
+    };
+
+    // Hook into SocialCalc.SetTab to detect when Format tab is activated/deactivated
+    const installSocialCalcHook = function () {
+        if (!window.SocialCalc || !window.SocialCalc.SetTab) {
+            return false;
+        }
+
+        const originalSetTab = SocialCalc.SetTab;
+
+        SocialCalc.SetTab = function (tab) {
+            // Check current tab before switching
+            let tabName = '';
+            if (typeof tab === 'string') {
+                tabName = tab;
+            } else if (tab && tab.id) {
+                // Extract name from id (e.g., "SocialCalc-id-settingstab" -> "settings")
+                const match = tab.id.match(/-([a-z]+)tab$/);
+                if (match) {
+                    tabName = match[1];
+                }
+            }
+
+            // Call original function
+            const ret = originalSetTab.apply(this, arguments);
+
+            // Handle Format tab (named "settings" in ethercalc.js)
+            if (tabName === 'settings') {
+                if (window.FormatLayout) {
+                    window.FormatLayout.initOnTabClick();
+                }
+            } else {
+                // Cleanup if leaving settings tab
+                if (window.FormatLayout) {
+                    window.FormatLayout.cleanup();
+                }
+            }
+
+            return ret;
+        };
+
+        console.log('[FormatLayout] SocialCalc.SetTab hooked successfully');
+        return true;
+    };
+
+    // Try to install hook immediately
+    if (!installSocialCalcHook()) {
+        // If not ready, poll until ready
+        const checkInterval = setInterval(() => {
+            if (installSocialCalcHook()) {
+                clearInterval(checkInterval);
+            }
+        }, 100);
+    }
+
+})();

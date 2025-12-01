@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- Circular arrows (recalculate) -->
+  <circle cx="18" cy="18" r="12" fill="none" stroke="#4CAF50" stroke-width="3"/>
+  <!-- Top arrow -->
+  <path d="M18 6 L18 10 M18 6 L15 9 M18 6 L21 9" stroke="#4CAF50" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom arrow -->
+  <path d="M18 30 L18 26 M18 30 L15 27 M18 30 L21 27" stroke="#4CAF50" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Refresh symbol in center -->
+  <path d="M15 18 Q15 15 18 15 Q21 15 21 18" stroke="#66BB6A" stroke-width="2" fill="none"/>
+  <path d="M21 18 Q21 21 18 21 Q15 21 15 18" stroke="#66BB6A" stroke-width="2" fill="none"/>
+</svg>
