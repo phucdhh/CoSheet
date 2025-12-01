@@ -213,9 +213,9 @@
     flex-wrap: wrap;
 }
 
-/* Unified Tab Button Style (matching Chart tab) */
+/* Unified Tab Button Style (matching Chart tab with colorful icons) */
 .tab-icon-btn {
-    padding: 8px 12px;
+    padding: 2px 6px;  /* Reduced from 8px 12px to 2px 6px */
     border: 2px solid #ccc;
     background: white;
     cursor: pointer;
@@ -223,7 +223,6 @@
     transition: all 0.2s;
     flex-shrink: 0;
     color: #555;
-    /* Default icon color */
 }
 
 .tab-icon-btn:hover {
@@ -238,14 +237,45 @@
     box-shadow: 0 2px 6px rgba(0, 102, 204, 0.3);
 }
 
+/* Icon size increased from 36x36 to 48x48 */
 .tab-icon {
-    width: 36px;
-    height: 36px;
+    width: 48px;   /* Increased from 36px */
+    height: 48px;  /* Increased from 36px */
     display: block;
     object-fit: contain;
-    fill: currentColor;
-    /* Ensure SVGs use the button text color */
 }
+
+/* Colorful icon styles - matching Chart tab aesthetic */
+.tab-icon-btn[title*="Save"],
+.tab-icon-btn[title*="Lưu"] {
+    color: #4CAF50;  /* Green for save actions */
+}
+
+.tab-icon-btn[title*="Download"],
+.tab-icon-btn[title*="Export"],
+.tab-icon-btn[title*="Tải"] {
+    color: #2196F3;  /* Blue for download/export */
+}
+
+.tab-icon-btn[title*="Upload"],
+.tab-icon-btn[title*="Import"],
+.tab-icon-btn[title*="Tải lên"] {
+    color: #FF9800;  /* Orange for upload/import */
+}
+
+.tab-icon-btn[title*="Share"],
+.tab-icon-btn[title*="Chia sẻ"] {
+    color: #9C27B0;  /* Purple for sharing */
+}
+
+.tab-icon-btn.active {
+    color: #0066cc;  /* Active state keeps blue */
+}
+
+.tab-icon-btn:hover {
+    filter: brightness(1.1);  /* Slight brightness on hover */
+}
+
 
 .ribbon-secondary.visible {
     display: flex;
