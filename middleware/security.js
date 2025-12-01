@@ -15,7 +15,7 @@ const logger = require('./logger');
  */
 const apiLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 60, // limit each IP to 60 requests per minute
+  max: 600, // TEMPORARILY INCREASED: limit each IP to 600 requests per minute
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
   legacyHeaders: false, // Disable `X-RateLimit-*` headers

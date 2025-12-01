@@ -136,7 +136,7 @@
     var xlsxWorker;
 
     function attachCustomFileInputHandler() {
-        var input = document.getElementById('custom-upload-input');
+        var input = document.getElementById('sheet-file-input');
         if (!input) return;
 
         input.addEventListener('change', function (ev) {
@@ -284,9 +284,8 @@
                         // closeDialog(loadingDialog);
 
                         if (msg.metadata.SheetNames.length > 1) {
-                            // Multiple sheets detected - Auto-switch to multi-view
-                            updateProgress('Đang chuyển đổi ' + msg.metadata.SheetNames.length + ' sheet cho chế độ xem nhiều sheet...');
-                            xlsxWorker.postMessage({ action: 'convert_multi' });
+                            // Multiple sheets detected - Auto convert to multi-view
+                            convertMultiSheet(msg.metadata, msg.workbook);
                         } else {
                             // Single sheet
                             requestSheetConversion(null);
@@ -460,7 +459,7 @@
                 var wb = XLSX.read(data, { type: 'array' });
 
                 if (wb.SheetNames.length > 1) {
-                    // Multi-sheet: Auto-convert to multi-view mode
+                    // Multi-sheet: Auto convert to multi-view
                     convertMultiSheetSync(wb);
                 } else {
                     // Single sheet: Load directly

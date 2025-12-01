@@ -1,5 +1,8 @@
 @include = -> @client '/player/broadcast.js': ->
-  SocialCalc = window.SocialCalc || alert 'Cannot find window.SocialCalc'
+  # Ensure SocialCalc is loaded before proceeding
+  return unless window.SocialCalc?
+  
+  SocialCalc = window.SocialCalc
 
   return if SocialCalc?OrigDoPositionCalculations
 

@@ -223,6 +223,8 @@
   // Listen for XLSX save request
   window.addEventListener('ec-save-xlsx-request', function () { exportSaveXLSX(); }, false);
 
+  // Note: HTML, PDF, TSV, ODS export handlers are now in cosheet-export.js
+
   // Provide a Save As UI on clicking the Save As menu item (if present)
   function attachSaveAs() {
     var el = document.getElementById('ec-saveas');

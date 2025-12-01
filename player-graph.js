@@ -8,7 +8,11 @@
         if (!$) {
           return location.reload();
         }
-        SocialCalc = window.SocialCalc || alert('Cannot find window.SocialCalc');
+        // Ensure SocialCalc is loaded before proceeding
+        if (!window.SocialCalc) {
+          return;
+        }
+        SocialCalc = window.SocialCalc;
         SocialCalc.Constants.s_loc_horizontal_bar = "Horizontal Bar";
         SocialCalc.Constants.s_loc_vertical_bar = "Vertical Bar";
         SocialCalc.Constants.s_loc_pie_chart = "Pie Chart";

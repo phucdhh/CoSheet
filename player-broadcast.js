@@ -4,7 +4,17 @@
     return this.client({
       '/player/broadcast.js': function(){
         var SocialCalc, parseQuery, md5;
-        SocialCalc = window.SocialCalc || alert('Cannot find window.SocialCalc');
+        // Ensure SocialCalc is loaded before proceeding
+        if (!window.SocialCalc) {
+          return;
+        }
+        SocialCalc = window.SocialCalc;
+        
+        // Ensure SocialCalc.Sheet exists before accessing prototype
+        if (!SocialCalc.Sheet) {
+          return;
+        }
+        
         if (SocialCalc != null && SocialCalc.OrigDoPositionCalculations) {
           return;
         }
