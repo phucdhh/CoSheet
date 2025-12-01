@@ -246,30 +246,31 @@
 }
 
 /* Colorful icon styles - matching Chart tab aesthetic */
-.tab-icon-btn[title*="Save"],
-.tab-icon-btn[title*="Lưu"] {
-    color: #4CAF50;  /* Green for save actions */
+/* Target specific buttons by ID for precise color control */
+#sheet-save {
+    color: #4CAF50;  /* Green for save */
 }
 
-.tab-icon-btn[title*="Download"],
-.tab-icon-btn[title*="Export"],
-.tab-icon-btn[title*="Tải"] {
+#sheet-export,
+#sheet-download {
     color: #2196F3;  /* Blue for download/export */
 }
 
-.tab-icon-btn[title*="Upload"],
-.tab-icon-btn[title*="Import"],
-.tab-icon-btn[title*="Tải lên"] {
-    color: #FF9800;  /* Orange for upload/import */
+#sheet-open,
+#sheet-import {
+    color: #FF9800;  /* Orange for open/import */
 }
 
-.tab-icon-btn[title*="Share"],
-.tab-icon-btn[title*="Chia sẻ"] {
+#sheet-share {
     color: #9C27B0;  /* Purple for sharing */
 }
 
+#sheet-new {
+    color: #555;  /* Gray for new/neutral actions */
+}
+
 .tab-icon-btn.active {
-    color: #0066cc;  /* Active state keeps blue */
+    color: #0066cc !important;  /* Active state keeps blue */
 }
 
 .tab-icon-btn:hover {
