@@ -1,0 +1,127 @@
+/**
+ * CoSheet Load Testing Script
+ * Test performance with 100+ concurrent users
+ * 
+ * Install: npm install -g artillery
+ * Run: artillery run load-test.yml
+ */
+
+config:
+  target: "https://dulieu.truyenthong.edu.vn"
+  phases:
+    # Phase 1: Warm-up (30s)
+    - duration: 30
+      arrivalRate: 5
+      name: "Warm-up"
+    
+    # Phase 2: Ramp-up (2 min)
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 50
+      name: "Ramp-up to 50 users"
+    
+    # Phase 3: Sustained load (5 min) - 100 concurrent users
+    - duration: 300
+      arrivalRate: 100
+      name: "Sustained 100 concurrent users"
+    
+    # Phase 4: Spike test (1 min) - 200 concurrent users
+    - duration: 60
+      arrivalRate: 200
+      name: "Spike to 200 users"
+    
+    # Phase 5: Cool-down (30s)
+    - duration: 30
+      arrivalRate: 10
+      name: "Cool-down"
+  
+  # Performance thresholds
+  ensure:
+    maxErrorRate: 1  # Max 1% error rate
+    p95: 500         # 95th percentile < 500ms
+    p99: 1000        # 99th percentile < 1s
+  
+  # Connection settings
+  http:
+    timeout: 10
+    pool: 100  # Connection pool size
+  
+  # Custom variables
+  variables:
+    sheetId:
+      - "test-load-{{$randomString()}}"
+  
+  # Plugins
+  plugins:
+    metrics-by-endpoint:
+      # Group metrics by endpoint
+      stripQueryString: true
+
+scenarios:
+  # Scenario 1: Homepage visit (40% of traffic)
+  - name: "Visit homepage"
+    weight: 40
+    flow:
+      - get:
+          url: "/"
+          capture:
+            - json: "$.csrf_token"
+              as: "csrfToken"
+      - think: 2  # User reads page for 2s
+
+  # Scenario 2: Create new sheet (20% of traffic)
+  - name: "Create new sheet"
+    weight: 20
+    flow:
+      - get:
+          url: "/"
+      - think: 1
+      - get:
+          url: "/_new"
+          capture:
+            - regexp: "/([a-zA-Z0-9]+)$"
+              as: "sheetId"
+      - think: 3
+      - post:
+          url: "/_/{{ sheetId }}/cells"
+          json:
+            A1: "Test {{ $randomNumber(1, 1000) }}"
+            B1: "={{ A1 }} * 2"
+
+  # Scenario 3: Open existing sheet (30% of traffic)
+  - name: "Open existing sheet"
+    weight: 30
+    flow:
+      - get:
+          url: "/{{ sheetId }}"
+      - think: 2
+      - get:
+          url: "/socket.io/?transport=websocket"
+          ws:
+            - send: '{"type":"join","room":"{{ sheetId }}"}'
+            - think: 5
+            - send: '{"type":"edit","cell":"A1","value":"Updated"}'
+            - think: 2
+
+  # Scenario 4: Upload CSV (5% of traffic)
+  - name: "Upload CSV file"
+    weight: 5
+    flow:
+      - get:
+          url: "/"
+      - think: 1
+      - post:
+          url: "/_upload"
+          formData:
+            file: "@test-data.csv"
+          headers:
+            Content-Type: "multipart/form-data"
+      - think: 2
+
+  # Scenario 5: Export to CSV (5% of traffic)
+  - name: "Export sheet to CSV"
+    weight: 5
+    flow:
+      - get:
+          url: "/{{ sheetId }}.csv"
+      - think: 1

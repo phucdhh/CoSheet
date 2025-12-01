@@ -1,0 +1,161 @@
+# CoSheet Production Docker Compose Stack
+# Includes: CoSheet app, Redis, Nginx reverse proxy, Monitoring (Prometheus + Grafana)
+
+version: '3.8'
+
+services:
+  # Main CoSheet application
+  cosheet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cosheet-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=info
+    volumes:
+      - ./logs:/app/logs
+      - redis-data:/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    networks:
+      - cosheet-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for data storage
+  redis:
+    image: redis:7-alpine
+    container_name: cosheet-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - cosheet-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx reverse proxy + SSL termination
+  nginx:
+    image: nginx:alpine
+    container_name: cosheet-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./static:/usr/share/nginx/html/static:ro
+      - nginx-cache:/var/cache/nginx
+    depends_on:
+      - cosheet
+    networks:
+      - cosheet-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: cosheet-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - cosheet-network
+    depends_on:
+      - cosheet
+
+  # Grafana for monitoring dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cosheet-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=redis-datasource
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - cosheet-network
+    depends_on:
+      - prometheus
+
+  # Redis Exporter for Prometheus
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: cosheet-redis-exporter
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis://redis:6379
+    ports:
+      - "9121:9121"
+    networks:
+      - cosheet-network
+    depends_on:
+      - redis
+
+  # Optional: Backup service (daily Redis snapshots)
+  backup:
+    image: alpine:latest
+    container_name: cosheet-backup
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data:ro
+      - ./backups:/backups
+    command: >
+      sh -c "while true; do
+        tar czf /backups/redis-backup-$$(date +%Y%m%d-%H%M%S).tar.gz -C /data .;
+        find /backups -name 'redis-backup-*.tar.gz' -mtime +7 -delete;
+        sleep 86400;
+      done"
+    networks:
+      - cosheet-network
+    depends_on:
+      - redis
+
+networks:
+  cosheet-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  nginx-cache:
+    driver: local

@@ -1,6 +1,8 @@
-# CoSheet
+# CoSheet v1.0
 
-**CoSheet** là một nền tảng bảng tính trực tuyến hỗ trợ cộng tác thời gian thực, được phát triển dựa trên mã nguồn mở [EtherCalc](https://ethercalc.net/). Dự án này tập trung vào việc cải thiện trải nghiệm người dùng, đặc biệt là trên thiết bị di động, và bổ sung các tính năng trực quan hóa dữ liệu mạnh mẽ.
+**CoSheet** là một nền tảng bảng tính trực tuyến hỗ trợ cộng tác thời gian thực, được phát triển dựa trên mã nguồn mở [EtherCalc](https://ethercalc.net/). Dự án này tập trung vào việc cải thiện trải nghiệm người học (học sinh, sinh viên), đặc biệt là trên thiết bị di động, và bổ sung các tính năng trực quan hóa dữ liệu mạnh mẽ.
+
+🎉 **Phiên bản 1.0** - Production-ready với security hardening, performance optimization và mobile-first UX.
 
 ## Tính năng nổi bật
 
@@ -15,7 +17,14 @@
     *   Cơ chế "Smart Scrolling": Ưu tiên cuộn nội dung bảng tính trước khi cuộn trang.
 *   **Nhập liệu & Xuất dữ liệu**: Hỗ trợ CSV, XLSX, ODS.
 *   **Công thức & Hàm**: Hỗ trợ đầy đủ các hàm tính toán thông dụng của OpenOffice/Excel.
-
+*   **Bảo mật & Hiệu suất (v1.0)**:
+    *   Rate limiting (đề kháng spam/DDoS)
+    *   CSRF protection
+    *   Security headers (Helmet)
+    *   Centralized logging (Winston)
+    *   Health check endpoints (/health, /metrics)
+    *   Cloudflare CDN optimization
+*   **Giảm các tính năng không cần thiết đối với học sinh trung học**: Một số tính năng định dạng và cần cho người dùng làm việc được giảm bớt.
 ## Hướng dẫn Cài đặt & Triển khai
 
 CoSheet chạy trên nền tảng Node.js. Bạn có thể triển khai trên VPS, LXC container hoặc Server vật lý.
@@ -60,7 +69,7 @@ pm2 start app.js --name cosheet
 pm2 save
 pm2 startup
 ```
-Mặc định CoSheet sẽ chạy ở cổng `8000`. Truy cập: `http://<IP-Cua-Ban>:8000`
+Mặc định CoSheet sẽ chạy ở cổng `1234`. Truy cập: `http://<IP-Cua-Ban>:1234`
 
 ### 2. Triển khai trên LXC (Linux Containers)
 
@@ -73,15 +82,15 @@ Nếu bạn sử dụng Proxmox hoặc LXC thuần:
 
 ### 3. Cấu hình Nginx Reverse Proxy (Tùy chọn)
 
-Để chạy CoSheet dưới tên miền (ví dụ `sheet.example.com`) và SSL:
+Để chạy CoSheet dưới tên miền (ví dụ `cosheet.example.com`) và SSL:
 
 ```nginx
 server {
     listen 80;
-    server_name sheet.example.com;
+    server_name cosheet.example.com;
 
     location / {
-        proxy_pass http://localhost:8000;
+        proxy_pass http://localhost:1234;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
@@ -98,6 +107,31 @@ Dự án này được phát triển bởi **phucdhh**. Mọi đóng góp đều
 2.  Tạo nhánh tính năng (`git checkout -b feature/TinhNangMoi`).
 3.  Commit thay đổi (`git commit -m 'Thêm tính năng mới'`).
 4.  Push lên branch (`git push origin feature/TinhNangMoi`).
+5.  Tạo Pull Request.
+
+### Tài liệu bổ sung
+
+- [ROADMAP.md](./ROADMAP.md) - Lộ trình phát triển 4 giai đoạn
+- [ENHANCEMENT.md](./ENHANCEMENT.md) - Danh sách tính năng tương lai
+- [docs/CLOUDFLARE-OPTIMIZATION.md](./docs/CLOUDFLARE-OPTIMIZATION.md) - Hướng dẫn tối ưu Cloudflare
+
+### Monitoring & Health Checks
+
+CoSheet v1.0 cung cấp các endpoint monitoring:
+
+```bash
+# Health check cơ bản
+curl http://localhost:1234/health
+
+# Métrics chi tiết
+curl http://localhost:1234/metrics
+
+# Kubernetes readiness probe
+curl http://localhost:1234/health/ready
+
+# Kubernetes liveness probe
+curl http://localhost:1234/health/alive
+```
 5.  Tạo Pull Request.
 
 ## Bản quyền

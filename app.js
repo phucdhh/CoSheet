@@ -41,12 +41,26 @@ This work is published from Taiwan.
     options = {};
   }
   console.log("Please connect to: " + transport + "://" + host + ":" + port + "/");
+  
+  // CoSheet v1.0 Security Integration
+  const logger = require('./middleware/logger');
+  const wrapZappaApp = require('./security-wrapper');
+  logger.info('CoSheet v1.0 starting...', { port, host, transport });
+  
   if (cors) {
     options.io = {
       origin: '*'
     };
   }
   require('zappajs')(port, host, options, function(){
+    // Inject security middleware
+    try {
+      wrapZappaApp(this.app);
+      logger.info('Security middleware enabled');
+    } catch (err) {
+      logger.error('Failed to initialize security middleware', { error: err.message });
+    }
+    
     this.KEY = key;
     this.BASEPATH = basepath;
     this.POLLING = polling;
