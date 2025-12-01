@@ -6,6 +6,7 @@
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const logger = require('./logger');
 
 /**
  * Rate limiter for general API requests
@@ -115,6 +116,20 @@ function csrfProtection(req, res, next) {
   
   if (req.headers.upgrade === 'websocket') {
     return next();
+  }
+
+  // Skip CSRF for internal API routes (used by auto-save)
+  if (req.path.startsWith('/_/') || req.path.startsWith('/_save')) {
+    return next();
+  }
+
+  // Check if cookies are available
+  if (!req.cookies) {
+    logger.warn('CSRF check failed: req.cookies is undefined', {
+      path: req.path,
+      method: req.method
+    });
+    return next(); // Allow request to proceed
   }
 
   // Check if CSRF token matches
