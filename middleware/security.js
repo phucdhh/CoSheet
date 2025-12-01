@@ -71,8 +71,10 @@ function configureHelmet(app) {
           "'unsafe-eval'", // Required for SocialCalc
           "https://fonts.googleapis.com",
           "https://cdnjs.cloudflare.com",
-          "https://cdn.jsdelivr.net"
+          "https://cdn.jsdelivr.net",
+          "https://static.cloudflareinsights.com" // Cloudflare Analytics
         ],
+        scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers
         styleSrc: [
           "'self'", 
           "'unsafe-inline'",
@@ -83,7 +85,7 @@ function configureHelmet(app) {
           "https://fonts.gstatic.com"
         ],
         imgSrc: ["'self'", "data:", "https:"],
-        connectSrc: ["'self'", "wss:", "ws:"],
+        connectSrc: ["'self'", "wss:", "ws:", "https://cloudflareinsights.com"],
         frameSrc: ["'self'"],
         objectSrc: ["'none'"],
         upgradeInsecureRequests: [],

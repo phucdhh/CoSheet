@@ -29,8 +29,16 @@ function wrapZappaApp(zappaApp) {
   // CSRF token generation
   zappaApp.use(security.generateCsrfToken);
   
-  // Apply rate limiting to all routes
-  zappaApp.use(security.apiLimiter);
+  // Apply rate limiting (skip for static files)
+  zappaApp.use((req, res, next) => {
+    // Skip rate limiting for static assets
+    if (req.path.startsWith('/static/') || 
+        req.path.startsWith('/images/') ||
+        req.path.match(/\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+      return next();
+    }
+    security.apiLimiter(req, res, next);
+  });
   
   // Specific rate limits for sheet operations
   zappaApp.use('/_new', security.sheetLimiter);
