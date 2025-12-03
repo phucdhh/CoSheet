@@ -111,6 +111,13 @@ logger.httpLogger = (req, res, next) => {
 
 // Error logging middleware
 logger.errorLogger = (err, req, res, next) => {
+  // Skip error logging for static files - let them be handled by static middleware
+  if (req.path.startsWith('/static/') || 
+      req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+    // Pass to next error handler or default handler
+    return next(err);
+  }
+  
   logger.error('Unhandled Error', {
     error: err.message,
     stack: err.stack,
