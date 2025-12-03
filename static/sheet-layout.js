@@ -389,7 +389,7 @@
 
             // List of available examples
             const examples = [
-                { name: 'Bar Chart', file: 'barchart', desc: 'Categorical data (100 categories)' },
+                { name: 'Bar Chart', file: 'barchart', desc: 'Categorical data (100)' },
                 { name: 'Histogram', file: 'histogram', desc: 'Continuous data distribution' },
                 { name: 'Scatter Plot', file: 'scatterplot', desc: 'Correlation analysis' },
                 { name: 'Line Chart', file: 'linechart', desc: 'Time series trends' },
@@ -407,12 +407,12 @@
                 callback: function () { },
                 afterOpen: function ($vexContent) {
                     const html = '\u003cstyle\u003e' +
-                        '.vex.vex-theme-flat-attack .vex-content{padding:0!important;width:auto!important;max-width:580px!important;}' +
+                        '.vex.vex-theme-flat-attack .vex-content{padding:0!important;width:auto!important;max-width:500px!important;}' +
                         '.vex .vex-dialog-message{padding:0!important;margin:0!important;}' +
-                        '.examples-container{width:580px;margin:0;background:#fff;font-family:system-ui,-apple-system,sans-serif;}' +
+                        '.examples-container{width:500px;margin:0;background:#fff;font-family:system-ui,-apple-system,sans-serif;}' +
                         '.examples-header{padding:8px 12px;background:#f8f9fa;border-bottom:1px solid #dee2e6;}' +
                         '.examples-title{font-size:14px;font-weight:600;color:#212529;}' +
-                        '.examples-body{padding:10px;display:grid;grid-template-columns:200px 1fr;gap:10px;height:350px;}' +
+                        '.examples-body{padding:10px;display:grid;grid-template-columns:170px 1fr;gap:10px;height:350px;}' +
                         '.examples-list{border:1px solid #dee2e6;border-radius:6px;overflow-y:auto;background:#f8f9fa;}' +
                         '.example-item{padding:8px 10px;cursor:pointer;border-bottom:1px solid #dee2e6;transition:background 0.2s;line-height:1.2;}' +
                         '.example-item:hover{background:#e9ecef;}' +
@@ -424,13 +424,15 @@
                         '.examples-footer{padding:8px 12px;background:#f8f9fa;border-top:1px solid #dee2e6;display:flex;justify-content:space-between;align-items:center;}' +
                         '.examples-footer-info{font-size:11px;color:#6c757d;}' +
                         '.examples-footer-buttons{display:flex;gap:8px;}' +
-                        '.examples-preview h1{font-size:18px;margin:0 0 10px 0;line-height:1.3;}' +
-                        '.examples-preview h2{font-size:15px;margin:16px 0 8px 0;padding-bottom:6px;border-bottom:2px solid #e9ecef;line-height:1.3;}' +
-                        '.examples-preview h3{font-size:13px;margin:12px 0 6px 0;color:#495057;line-height:1.3;}' +
+                        '.examples-preview h1{font-size:14px;margin:0 0 10px 0;line-height:1.3;}' +
+                        '.examples-preview h2{font-size:13px;margin:16px 0 8px 0;padding-bottom:6px;border-bottom:2px solid #e9ecef;line-height:1.3;}' +
+                        '.examples-preview h3{font-size:12px;margin:12px 0 6px 0;color:#495057;line-height:1.3;}' +
                         '.examples-preview h4{font-size:12px;margin:10px 0 4px 0;color:#6c757d;line-height:1.3;}' +
                         '.examples-preview p{margin:6px 0;line-height:1.5;}' +
-                        '.examples-preview ul{margin:6px 0;padding-left:20px;line-height:1.4;}' +
+                        '.examples-preview ul,.examples-preview ol{margin:6px 0;padding-left:20px;line-height:1.4;}' +
                         '.examples-preview li{margin:3px 0;}' +
+                        '.examples-preview ol{list-style-type:decimal;}' +
+                        '.examples-preview ul{list-style-type:disc;}' +
                         '.examples-preview code{background:#f8f9fa;padding:1px 4px;border-radius:3px;font-family:monospace;font-size:11px;}' +
                         '.examples-preview pre{background:#f8f9fa;padding:8px;border-radius:6px;overflow-x:auto;margin:8px 0;font-size:11px;}' +
                         '.examples-preview table{border-collapse:collapse;width:100%;margin:8px 0;font-size:11px;}' +
@@ -599,9 +601,21 @@
             // Code blocks (```)
             html = html.replace(/```([\s\S]*?)```/g, '\u003cpre\u003e\u003ccode\u003e$1\u003c/code\u003e\u003c/pre\u003e');
 
-            // Lists (simple)
-            html = html.replace(/^- (.+)$/gm, '\u003cli\u003e$1\u003c/li\u003e');
-            html = html.replace(/((\u003cli\u003e.+\u003c\/li\u003e\n?)+)/g, '\u003cul\u003e$1\u003c/ul\u003e');
+            // Numbered lists (1. 2. 3. etc.) - use marker to distinguish from bullet lists
+            html = html.replace(/^(\d+)\.\s+(.+)$/gm, '\u003cli class="numbered"\u003e$2\u003c/li\u003e');
+            
+            // Unordered lists (- bullet points)
+            html = html.replace(/^- (.+)$/gm, '\u003cli class="bullet"\u003e$1\u003c/li\u003e');
+            
+            // Wrap numbered list items in <ol>
+            html = html.replace(/((\u003cli class="numbered"\u003e.+?\u003c\/li\u003e\n?)+)/g, function(match) {
+                return '\u003col\u003e' + match.replace(/ class="numbered"/g, '') + '\u003c/ol\u003e';
+            });
+            
+            // Wrap bullet list items in <ul>
+            html = html.replace(/((\u003cli class="bullet"\u003e.+?\u003c\/li\u003e\n?)+)/g, function(match) {
+                return '\u003cul\u003e' + match.replace(/ class="bullet"/g, '') + '\u003c/ul\u003e';
+            });
 
             // Line breaks
             html = html.replace(/\n\n/g, '\u003c/p\u003e\u003cp\u003e');
@@ -612,6 +626,8 @@
             html = html.replace(/\u003c\/h([1-6])\u003e\u003c\/p\u003e/g, '\u003c/h$1\u003e');
             html = html.replace(/\u003cp\u003e\u003cul\u003e/g, '\u003cul\u003e');
             html = html.replace(/\u003c\/ul\u003e\u003c\/p\u003e/g, '\u003c/ul\u003e');
+            html = html.replace(/\u003cp\u003e\u003col\u003e/g, '\u003col\u003e');
+            html = html.replace(/\u003c\/ol\u003e\u003c\/p\u003e/g, '\u003c/ol\u003e');
             html = html.replace(/\u003cp\u003e\u003cpre\u003e/g, '\u003cpre\u003e');
             html = html.replace(/\u003c\/pre\u003e\u003c\/p\u003e/g, '\u003c/pre\u003e');
             html = html.replace(/\u003cp\u003e\u003c\/p\u003e/g, '');

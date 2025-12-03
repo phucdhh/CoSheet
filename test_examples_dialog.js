@@ -43,7 +43,7 @@ const puppeteer = require('puppeteer');
             };
         });
         console.log('   Dialog size: ' + (dialogSize ? `${dialogSize.width} (height: ${dialogSize.height}px)` : 'N/A'));
-        console.log('   Size check: ' + (dialogSize && dialogSize.width === '580px' ? '✅ COMPACT' : '⚠️  TOO LARGE'));
+        console.log('   Size check: ' + (dialogSize && dialogSize.width === '500px' ? '✅ COMPACT' : '⚠️  TOO LARGE'));
         
         console.log('\n3️⃣  Selecting first example (Bar Chart)...');
         await page.waitForSelector('.example-item', { timeout: 5000 });
@@ -97,7 +97,7 @@ const puppeteer = require('puppeteer');
         console.log('   ✅ Issue #2 (MD loading): ' + (hasMDContent ? 'FIXED' : 'FAILED'));
         console.log('   ✅ Issue #3 (CSV loading): ' + (csvLoaded ? 'FIXED' : 'FAILED'));
         
-        const allPassed = dialogSize && dialogSize.width === '580px' && hasMDContent && csvLoaded;
+        const allPassed = dialogSize && dialogSize.width === '500px' && hasMDContent && csvLoaded;
         console.log('\n🎯 Overall: ' + (allPassed ? '✅ ALL TESTS PASSED' : '⚠️  SOME TESTS FAILED'));
         
     } catch (error) {
