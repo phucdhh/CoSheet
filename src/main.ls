@@ -1,8 +1,15 @@
 @include = ->
-  @use \json, @app.router, @express.static __dirname
+  # Serve static files FIRST (before router)
+  @app.use @express.static __dirname
   @app.use \/edit @express.static __dirname
   @app.use \/view @express.static __dirname
   @app.use \/app @express.static __dirname
+  
+  # Enable JSON body parsing for POST requests
+  @app.use @express.json()
+  
+  # Then enable router
+  @use \json, @app.router
 
   @include \dotcloud
   @include \player-broadcast
@@ -310,8 +317,51 @@
     (sc, cb) -> sc.exportCells cb
   ]
   @get "#BASEPATH/_/:room/html": ExportHTML
-  @get "#BASEPATH/_/:room/csv": ExportCSV
-  @get "#BASEPATH/_/:room/csv.json": ExportCSV-JSON
+  @get "#BASEPATH/_/:room/csv": ExportCSV  
+  @get "#BASEPATH/_/:room/csv.json": ->
+    room = encodeURI(@params.room)
+    @response.type Json
+    
+    # Try to get from memory cache first (sync!)
+    if SC[room]?_snapshot
+      snapshot = SC[room]._snapshot
+      # Parse synchronously
+      lines = snapshot.split '\n'
+      result = [['\#url', '\#title']]
+      for line in lines when line.match(/^cell:A(\d+):t:/)
+        rowNum = parseInt(RegExp.$1)
+        if rowNum > 1
+          urlMatch = line.match(/^cell:A\d+:t:([^\\n]+)/)
+          titleLine = lines.find((l) -> l.match("cell:B#{rowNum}:t:"))
+          if urlMatch and titleLine
+            url = urlMatch[1]
+            titleMatch = titleLine.match(/^cell:B\d+:t:([^\\n]+)/)
+            title = if titleMatch then titleMatch[1] else "Sheet#{rowNum-1}"
+            result.push [url, title]
+      return @response.send 200 JSON.stringify result
+    
+    # Not in cache - load from DB and parse (async but handled)
+    SC._get room, IO, ({snapshot}) ~>
+      unless snapshot
+        return @response.send 404 ''
+      
+      # Parse synchronously now that we have snapshot
+      lines = snapshot.split '\n'
+      result = [['\#url', '\#title']]
+      for line in lines when line.match(/^cell:A(\d+):t:/)
+        rowNum = parseInt(RegExp.$1)
+        if rowNum > 1
+          urlMatch = line.match(/^cell:A\d+:t:([^\\n]+)/)
+          titleLine = lines.find((l) -> l.match("cell:B#{rowNum}:t:"))
+          if urlMatch and titleLine
+            url = urlMatch[1]
+            titleMatch = titleLine.match(/^cell:B\d+:t:([^\\n]+)/)
+            title = if titleMatch then titleMatch[1] else "Sheet#{rowNum-1}"
+            result.push [url, title]
+      @response.send 200 JSON.stringify result
+    
+    # Return undefined to prevent Zappa's default response
+    return undefined
   @get "#BASEPATH/_/:room/ods": Export-J \ods
   @get "#BASEPATH/_/:room/fods": Export-J \fods
   @get "#BASEPATH/_/:room/xlsx": Export-J \xlsx
@@ -404,7 +454,41 @@
           sheets-to-idx[ref.replace(/''/g, "'")] }'!"
       todo.=set("snapshot-#room.#idx", save)
     todo.bgsave!.exec!
+    
+    # Write TOC as static JSON file for frontend access
+    tocArray = [['#url', '#title']]
+    idx = 0
+    for k of parsed
+      idx++
+      tocArray.push ["/#{@params.room}.#{idx}", k]
+    
+    tocFilePath = "#RealBin/static/toc-#{room}.json"
+    fs.writeFileSync tocFilePath, JSON.stringify(tocArray), \utf8
+    console.log "Written TOC file: #{tocFilePath}"
+    
     @response.send 201 \OK
+
+  # Endpoint to create TOC JSON file from frontend
+  @post '/_/create-toc/:room': ->
+    room = encodeURI(@params.room)
+    
+    # Manual body parsing for JSON array
+    chunks = []
+    @request.on \data (chunk) ~> chunks.push chunk
+    <~ @request.on \end
+    
+    try
+      body-str = Buffer.concat(chunks).toString(\utf8)
+      toc-data = JSON.parse(body-str)
+      
+      if toc-data and Array.isArray(toc-data)
+        toc-file-path = "#RealBin/static/toc-#{room}.json"
+        fs.writeFileSync toc-file-path, JSON.stringify(toc-data), \utf8
+        @response.send 201, \OK
+      else
+        @response.send 400, 'Invalid TOC data - must be array'
+    catch e
+      @response.send 400, 'JSON parse error'
 
   @put '/_/:room': ->
     console.log "DEBUG: PUT request for room: #{@params.room}"
