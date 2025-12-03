@@ -7,6 +7,7 @@
     this.app.use('/edit', this.express['static'](__dirname));
     this.app.use('/view', this.express['static'](__dirname));
     this.app.use('/app', this.express['static'](__dirname));
+    this.app.use('/examples', this.express['static'](__dirname + '/CoSheet-examples'));
     this.app.use(this.express.json());
     this.use('json', this.app.router);
     this.include('dotcloud');

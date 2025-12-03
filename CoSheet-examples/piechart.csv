@@ -1,0 +1,80 @@
+Category,Percentage
+Housing,30
+Food,25
+Transportation,15
+Entertainment,10
+Healthcare,8
+Education,7
+Savings,5
+Total,100
+A,35
+B,28
+C,18
+D,12
+E,7
+Sum,100
+Product A,42
+Product B,31
+Product C,18
+Product D,9
+Total,100
+North,28
+South,24
+East,23
+West,25
+Total,100
+Q1,22
+Q2,26
+Q3,27
+Q4,25
+Year,100
+Mobile,45
+Desktop,35
+Tablet,20
+Total,100
+Direct,32
+Organic Search,28
+Social Media,22
+Email,12
+Referral,6
+Total,100
+Beginner,15
+Intermediate,35
+Advanced,30
+Expert,20
+Total,100
+18-24,18
+25-34,32
+35-44,26
+45-54,16
+55+,8
+Total,100
+Male,52
+Female,48
+Total,100
+Yes,68
+No,32
+Total,100
+Very Satisfied,42
+Satisfied,35
+Neutral,15
+Dissatisfied,6
+Very Dissatisfied,2
+Total,100
+Strongly Agree,38
+Agree,41
+Neutral,14
+Disagree,5
+Strongly Disagree,2
+Total,100
+Excellent,25
+Good,45
+Average,22
+Poor,6
+Very Poor,2
+Total,100
+Daily,55
+Weekly,28
+Monthly,12
+Rarely,5
+Total,100
