@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CoSheet Drag-Drop Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .demo-area {
+            border: 3px dashed #0c3159;
+            padding: 60px;
+            text-align: center;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .demo-area.dragover {
+            background: #e3f2fd;
+            border-color: #1976d2;
+        }
+        h1 {
+            color: #0c3159;
+        }
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        .instructions {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #0c3159;
+        }
+        .success {
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 CoSheet Drag-Drop Feature Demo</h1>
+    
+    <div class="instructions">
+        <h3>✨ Tính năng mới: Kéo thả file!</h3>
+        <p>Bây giờ bạn có thể kéo thả file trực tiếp vào CoSheet:</p>
+        <ul>
+            <li>📊 Hỗ trợ: <code>.csv</code>, <code>.xlsx</code>, <code>.ods</code></li>
+            <li>🎯 Multi-sheet XLSX tự động tạo tabs</li>
+            <li>⚡ Xử lý nhanh với Web Workers</li>
+            <li>🎨 Overlay trực quan khi kéo file</li>
+        </ul>
+    </div>
+
+    <div class="demo-area" id="demoArea">
+        <div class="icon">📁</div>
+        <h2>Thả file CSV hoặc XLSX vào đây</h2>
+        <p>Hoặc click để mở trong tab mới</p>
+        <br>
+        <button onclick="window.open('/_new', '_blank')" style="padding: 15px 30px; font-size: 16px; cursor: pointer; background: #0c3159; color: white; border: none; border-radius: 5px;">
+            🚀 Mở CoSheet
+        </button>
+    </div>
+
+    <div class="success" id="successMsg">
+        ✓ File đã được thả! Đang xử lý...
+    </div>
+
+    <div class="instructions">
+        <h3>📋 Code Implementation:</h3>
+        <p><strong>Files modified:</strong></p>
+        <ul>
+            <li><code>/static/drag-drop.js</code> - Event handlers & overlay</li>
+            <li><code>/static/topmenu.js</code> - Exported functions</li>
+            <li><code>/index.html</code> - Script inclusion</li>
+        </ul>
+        <p><strong>Features:</strong></p>
+        <ul>
+            <li>Drag counter to handle nested elements</li>
+            <li>Visual feedback with full-screen overlay</li>
+            <li>Direct function calls (no file input emulation)</li>
+            <li>Automatic file type detection</li>
+        </ul>
+    </div>
+
+    <script>
+        const demoArea = document.getElementById('demoArea');
+        const successMsg = document.getElementById('successMsg');
+        let dragCounter = 0;
+
+        document.addEventListener('dragenter', function(e) {
+            dragCounter++;
+            if (dragCounter === 1) {
+                demoArea.classList.add('dragover');
+            }
+        });
+
+        document.addEventListener('dragleave', function(e) {
+            dragCounter--;
+            if (dragCounter === 0) {
+                demoArea.classList.remove('dragover');
+            }
+        });
+
+        document.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dragCounter = 0;
+            demoArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+                successMsg.style.display = 'block';
+                setTimeout(function() {
+                    alert('File dropped: ' + files[0].name + '\n\nOpen /_new page to test actual upload!');
+                    successMsg.style.display = 'none';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

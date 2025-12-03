@@ -428,10 +428,10 @@
         SocialCalc.Constants.defaultInputEchoHintStyle = "display:none;";
         SocialCalc.Constants.defaultUpperLeftClass = "upper-left-cell-indicator";
 
-        console.log('[SheetLayout] Constants initialized:', {
-            hint: SocialCalc.Constants.defaultInputEchoHintStyle,
-            upperLeft: SocialCalc.Constants.defaultUpperLeftClass
-        });
+        // console.log('[SheetLayout] Constants initialized:', {
+        //             hint: SocialCalc.Constants.defaultInputEchoHintStyle,
+        //             upperLeft: SocialCalc.Constants.defaultUpperLeftClass
+        //         });
 
         return true;
     }
@@ -452,13 +452,13 @@
                 var indicator = document.querySelector('.upper-left-cell-indicator');
                 if (indicator) {
                     indicator.innerHTML = spreadsheet.editor.ecell.coord;
-                    console.log('[SheetLayout] Active cell indicator updated:', spreadsheet.editor.ecell.coord);
+                   // console.log('[SheetLayout] Active cell indicator updated:', spreadsheet.editor.ecell.coord);
                 } else {
                     console.log('[SheetLayout] Indicator element not found yet');
                 }
             }
         } else {
-            console.log('[SheetLayout] Editor not ready, will retry');
+            // console.log('[SheetLayout] Editor not ready, will retry');
             // Retry after another second
             setTimeout(setupActiveCellCallback, 1000);
         }

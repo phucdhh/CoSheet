@@ -136,13 +136,22 @@ function sheet_to_socialcalc(ws) {
 
       // Value and Type handling
       if (cell.t === 'n') {
+        // Number
         cellParts.push('v', cell.v);
       } else if (cell.t === 'b') {
+        // Boolean
         cellParts.push('v', cell.v ? 1 : 0, 'vt', 'logical');
       } else if (cell.t === 'e') {
+        // Error
         cellParts.push('e', SocialCalc_encodeForSave(cell.v));
+      } else if (cell.t === 's' || cell.t === 'str') {
+        // String (shared string or inline string)
+        var textValue = cell.v !== undefined ? cell.v : (cell.w || '');
+        cellParts.push('t', SocialCalc_encodeForSave(String(textValue)));
       } else {
-        cellParts.push('t', SocialCalc_encodeForSave(cell.v));
+        // Default: treat as text with fallback
+        var defaultValue = cell.v !== undefined ? cell.v : (cell.w || '');
+        cellParts.push('t', SocialCalc_encodeForSave(String(defaultValue)));
       }
 
       // Style handling
@@ -229,13 +238,22 @@ function workbook_to_socialcalc(wb, sheetNames) {
 
         // Value and Type handling
         if (cell.t === 'n') {
+          // Number
           cellParts.push('v', cell.v);
         } else if (cell.t === 'b') {
+          // Boolean
           cellParts.push('v', cell.v ? 1 : 0, 'vt', 'logical');
         } else if (cell.t === 'e') {
+          // Error
           cellParts.push('e', SocialCalc_encodeForSave(cell.v));
+        } else if (cell.t === 's' || cell.t === 'str') {
+          // String (shared string or inline string)
+          var textValue = cell.v !== undefined ? cell.v : (cell.w || '');
+          cellParts.push('t', SocialCalc_encodeForSave(String(textValue)));
         } else {
-          cellParts.push('t', SocialCalc_encodeForSave(cell.v));
+          // Default: treat as text with fallback
+          var defaultValue = cell.v !== undefined ? cell.v : (cell.w || '');
+          cellParts.push('t', SocialCalc_encodeForSave(String(defaultValue)));
         }
 
         // Style handling

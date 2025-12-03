@@ -184,6 +184,9 @@
     }
 
     function handleXLSXWithWorker(file) {
+        // Store file reference for later use
+        window.__currentXLSXFile = file;
+        
         // Show loading spinner
         var loadingDialog;
         var workerTimeout;
@@ -243,9 +246,9 @@
         }, 10000);
 
         if (!xlsxWorker) {
-            // Use relative path for worker
+            // Use relative path for worker with fixed version to bust cache
             try {
-                xlsxWorker = new Worker('./static/xlsxworker.js');
+                xlsxWorker = new Worker('./static/xlsxworker.js?v=20241203v2');
             } catch (e) {
                 console.error('Failed to create worker:', e);
                 clearTimeout(workerTimeout);
@@ -284,8 +287,28 @@
                         // closeDialog(loadingDialog);
 
                         if (msg.metadata.SheetNames.length > 1) {
-                            // Multiple sheets detected - Auto convert to multi-view
-                            convertMultiSheetSync(msg.workbook);
+                            // Multiple sheets detected - Need to read file in main thread
+                            // Close worker loading dialog first
+                            closeDialog(loadingDialog);
+                            
+                            var storedFile = window.__currentXLSXFile;
+                            if (storedFile) {
+                                var reader = new FileReader();
+                                reader.onload = function(e) {
+                                    try {
+                                        var data = new Uint8Array(e.target.result);
+                                        var workbook = XLSX.read(data, {type: 'array'});
+                                        convertMultiSheetSync(workbook);
+                                    } catch (err) {
+                                        console.error('Error reading workbook:', err);
+                                        alert('Error processing multi-sheet file: ' + err.message);
+                                    }
+                                };
+                                reader.readAsArrayBuffer(storedFile);
+                            } else {
+                                console.error('File reference lost');
+                                alert('Error: File reference lost. Please try again.');
+                            }
                         } else {
                             // Single sheet
                             requestSheetConversion(null);
@@ -432,31 +455,9 @@
     }
 
     function requestSheetConversion(sheetName) {
-        // Show loading again
-        // loadingDialog is now declared in the outer scope
-        if (typeof vex !== 'undefined') {
-            // If loadingDialog is already open, update its message. Otherwise, open a new one.
-            if (!loadingDialog) {
-                loadingDialog = vex.dialog.open({
-                    message: 'Converting Sheet...',
-                    buttons: [],
-                    closeAllOnPopState: false,
-                    escapeButtonCloses: false,
-                    overlayClosesOnClick: false
-                });
-            } else {
-                var content = loadingDialog.data.$vexContent;
-                if (content) {
-                    var msgDiv = content.find('.vex-dialog-message');
-                    if (msgDiv.length) msgDiv.text('Converting Sheet...');
-                }
-            }
-        }
-
-        // We need to handle the close in the onmessage handler, 
-        // but we can't easily pass the dialog object if it was created here.
-        // However, loadingDialog is in closure scope, so it should be fine.
-
+        // Note: This function is not used in multi-sheet drag-drop flow
+        // convertMultiSheetSync handles its own loading dialog
+        // Just send the conversion request to worker
         xlsxWorker.postMessage({
             action: 'convert',
             sheetName: sheetName
@@ -492,6 +493,117 @@
         reader.readAsArrayBuffer(f);
     }
 
+    // Helper functions for XLSX to SocialCalc conversion (from xlsxworker.js)
+    function SocialCalc_crToCoord(c, r) {
+        return SocialCalc_rcColname(c) + r;
+    }
+
+    function SocialCalc_rcColname(c) {
+        var s = '';
+        c--;
+        do {
+            s = String.fromCharCode(65 + (c % 26)) + s;
+            c = Math.floor(c / 26) - 1;
+        } while (c >= 0);
+        return s;
+    }
+
+    function SocialCalc_encodeForSave(val) {
+        if (typeof val !== 'string') return val;
+        return val
+            .replace(/\\/g, '\\b')
+            .replace(/:/g, '\\c')
+            .replace(/\n/g, '\\n');
+    }
+
+    function sheet_to_socialcalc(ws) {
+        var parts = [];
+        parts.push('version:1.5');
+
+        if (!ws || !ws['!ref']) {
+            return parts.join('\n');
+        }
+
+        var range = XLSX.utils.decode_range(ws['!ref']);
+        var styles = {};
+        var styleIndex = 1;
+
+        for (var R = range.s.r; R <= range.e.r; ++R) {
+            for (var C = range.s.c; C <= range.e.c; ++C) {
+                var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
+                var cell = ws[cell_ref];
+                if (!cell) continue;
+
+                var coord = SocialCalc_crToCoord(C + 1, R + 1);
+                var cellParts = ['cell', coord];
+
+                // Value and Type handling
+                if (cell.t === 'n') {
+                    // Number
+                    cellParts.push('v', cell.v);
+                } else if (cell.t === 'b') {
+                    // Boolean
+                    cellParts.push('v', cell.v ? 1 : 0, 'vt', 'logical');
+                } else if (cell.t === 'e') {
+                    // Error
+                    cellParts.push('e', SocialCalc_encodeForSave(cell.v));
+                } else if (cell.t === 's' || cell.t === 'str') {
+                    // String (shared string or inline string)
+                    // XLSX library already resolves shared strings to cell.v
+                    var textValue = cell.v !== undefined ? cell.v : (cell.w || '');
+                    cellParts.push('t', SocialCalc_encodeForSave(String(textValue)));
+                } else {
+                    // Default: treat as text
+                    var defaultValue = cell.v !== undefined ? cell.v : (cell.w || '');
+                    cellParts.push('t', SocialCalc_encodeForSave(String(defaultValue)));
+                }
+
+                // Style handling
+                if (cell.s) {
+                    var styleStr = '';
+                    if (cell.s.font) {
+                        if (cell.s.font.bold) styleStr += 'font-weight:bold;';
+                        if (cell.s.font.italic) styleStr += 'font-style:italic;';
+                        if (cell.s.font.color && cell.s.font.color.rgb) styleStr += 'color:#' + cell.s.font.color.rgb + ';';
+                    }
+                    if (cell.s.fill && cell.s.fill.fgColor && cell.s.fill.fgColor.rgb) {
+                        styleStr += 'background-color:#' + cell.s.fill.fgColor.rgb + ';';
+                    }
+                    if (cell.s.alignment && cell.s.alignment.horizontal) {
+                        styleStr += 'text-align:' + cell.s.alignment.horizontal + ';';
+                    }
+
+                    if (styleStr) {
+                        var foundIndex = -1;
+                        for (var id in styles) {
+                            if (styles[id] === styleStr) {
+                                foundIndex = id;
+                                break;
+                            }
+                        }
+                        if (foundIndex === -1) {
+                            foundIndex = styleIndex++;
+                            styles[foundIndex] = styleStr;
+                        }
+                        cellParts.push('s', foundIndex);
+                    }
+                }
+
+                parts.push(cellParts.join(':'));
+            }
+        }
+
+        // Append styles
+        for (var id in styles) {
+            parts.push('style:' + id + ':' + styles[id]);
+        }
+
+        // Sheet dimensions
+        parts.push('sheet:c:' + (range.e.c - range.s.c + 1) + ':r:' + (range.e.r - range.s.r + 1));
+
+        return parts.join('\n');
+    }
+
     function convertMultiSheetSync(wb) {
         // Show loading indicator
         var loadingDialog = null;
@@ -509,13 +621,13 @@
         var currentRoom = Math.random().toString(36).substring(2, 15);
         var toc = '#url,#title\n';
 
-        // Convert all sheets to SocialCalc format
+        // Convert all sheets to SocialCalc format using proper cell type handling
         var sheets = [];
         for (var i = 0; i < wb.SheetNames.length; i++) {
             var sheetName = wb.SheetNames[i];
             try {
-                var csv = XLSX.utils.sheet_to_csv(wb.Sheets[sheetName]);
-                var save = SocialCalc.ConvertOtherFormatToSave(csv, 'csv');
+                // Use proper XLSX to SocialCalc conversion (not CSV)
+                var save = sheet_to_socialcalc(wb.Sheets[sheetName]);
                 sheets.push({
                     name: sheetName,
                     save: save
@@ -951,7 +1063,9 @@
         }
     }
 
-    // Export functions to global scope for sheet-layout.js
+    // Export functions to global scope for sheet-layout.js and drag-drop.js
     window.loadCSVContent = loadCSV;
+    window.loadCSV = loadCSV;
     window.handleXLSXFile = handleXLSXSync;
+    window.handleXLSXWithWorker = handleXLSXWithWorker;
 })();

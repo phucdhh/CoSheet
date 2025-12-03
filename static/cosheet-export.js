@@ -356,6 +356,6 @@
     CoSheetExport.exportODS();
   }, false);
   
-  console.log('[CoSheetExport] Module loaded');
+  // console.log('[CoSheetExport] Module loaded');
   
 })(window);
