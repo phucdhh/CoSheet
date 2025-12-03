@@ -118,8 +118,18 @@
                     title="Examples"
                     onclick="SheetLayout.showExamples()"
                     class="tab-icon-btn">
-                <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h12v16zM9 10h6v2H9v-2zm0 4h6v2H9v-2z"/>
+                <svg class="tab-icon" viewBox="0 0 24 24" style="overflow:visible;">
+                    <defs>
+                        <linearGradient id="exampleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#2196F3;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#9C27B0;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="2" y="3" width="20" height="18" rx="2" fill="url(#exampleGrad)" />
+                    <path d="M7 7h10M7 11h10M7 15h6" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                    <circle cx="17" cy="15" r="2.5" fill="#FF9800" />
+                    <text x="12" y="21" font-size="5" fill="#FF5722" font-weight="bold" text-anchor="middle">Ex</text>
                 </svg>
             </button>
                     
@@ -397,34 +407,34 @@
                 callback: function () { },
                 afterOpen: function ($vexContent) {
                     const html = '\u003cstyle\u003e' +
-                        '.vex.vex-theme-flat-attack .vex-content{padding:0!important;width:auto!important;max-width:650px!important;}' +
+                        '.vex.vex-theme-flat-attack .vex-content{padding:0!important;width:auto!important;max-width:580px!important;}' +
                         '.vex .vex-dialog-message{padding:0!important;margin:0!important;}' +
-                        '.examples-container{width:650px;margin:0;background:#fff;font-family:system-ui,-apple-system,sans-serif;}' +
-                        '.examples-header{padding:12px 16px;background:#f8f9fa;border-bottom:1px solid #dee2e6;}' +
-                        '.examples-title{font-size:16px;font-weight:600;color:#212529;}' +
-                        '.examples-body{padding:15px;display:grid;grid-template-columns:240px 1fr;gap:15px;height:400px;}' +
+                        '.examples-container{width:580px;margin:0;background:#fff;font-family:system-ui,-apple-system,sans-serif;}' +
+                        '.examples-header{padding:8px 12px;background:#f8f9fa;border-bottom:1px solid #dee2e6;}' +
+                        '.examples-title{font-size:14px;font-weight:600;color:#212529;}' +
+                        '.examples-body{padding:10px;display:grid;grid-template-columns:200px 1fr;gap:10px;height:350px;}' +
                         '.examples-list{border:1px solid #dee2e6;border-radius:6px;overflow-y:auto;background:#f8f9fa;}' +
-                        '.example-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid #dee2e6;transition:background 0.2s;}' +
+                        '.example-item{padding:8px 10px;cursor:pointer;border-bottom:1px solid #dee2e6;transition:background 0.2s;line-height:1.2;}' +
                         '.example-item:hover{background:#e9ecef;}' +
                         '.example-item.selected{background:#007bff;color:white;}' +
-                        '.example-item-name{font-weight:600;margin-bottom:4px;}' +
-                        '.example-item-desc{font-size:12px;color:#6c757d;}' +
+                        '.example-item-name{font-weight:600;margin-bottom:2px;font-size:12px;}' +
+                        '.example-item-desc{font-size:10px;color:#6c757d;line-height:1.2;}' +
                         '.example-item.selected .example-item-desc{color:#e3f2fd;}' +
-                        '.examples-preview{border:1px solid #dee2e6;border-radius:6px;overflow-y:auto;padding:20px;background:#fff;}' +
-                        '.examples-footer{padding:12px 20px;background:#f8f9fa;border-top:1px solid #dee2e6;display:flex;justify-content:space-between;align-items:center;}' +
-                        '.examples-footer-info{font-size:13px;color:#6c757d;}' +
-                        '.examples-footer-buttons{display:flex;gap:10px;}' +
-                        '.examples-preview h1{font-size:24px;margin:0 0 16px 0;}' +
-                        '.examples-preview h2{font-size:20px;margin:24px 0 12px 0;padding-bottom:8px;border-bottom:2px solid #e9ecef;}' +
-                        '.examples-preview h3{font-size:16px;margin:16px 0 8px 0;color:#495057;}' +
-                        '.examples-preview h4{font-size:14px;margin:12px 0 6px 0;color:#6c757d;}' +
-                        '.examples-preview p{margin:8px 0;line-height:1.6;}' +
-                        '.examples-preview ul{margin:8px 0;padding-left:24px;}' +
-                        '.examples-preview li{margin:4px 0;}' +
-                        '.examples-preview code{background:#f8f9fa;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:13px;}' +
-                        '.examples-preview pre{background:#f8f9fa;padding:12px;border-radius:6px;overflow-x:auto;margin:12px 0;}' +
-                        '.examples-preview table{border-collapse:collapse;width:100%;margin:12px 0;}' +
-                        '.examples-preview th,.examples-preview td{border:1px solid #dee2e6;padding:8px;text-align:left;}' +
+                        '.examples-preview{border:1px solid #dee2e6;border-radius:6px;overflow-y:auto;padding:12px;background:#fff;font-size:12px;}' +
+                        '.examples-footer{padding:8px 12px;background:#f8f9fa;border-top:1px solid #dee2e6;display:flex;justify-content:space-between;align-items:center;}' +
+                        '.examples-footer-info{font-size:11px;color:#6c757d;}' +
+                        '.examples-footer-buttons{display:flex;gap:8px;}' +
+                        '.examples-preview h1{font-size:18px;margin:0 0 10px 0;line-height:1.3;}' +
+                        '.examples-preview h2{font-size:15px;margin:16px 0 8px 0;padding-bottom:6px;border-bottom:2px solid #e9ecef;line-height:1.3;}' +
+                        '.examples-preview h3{font-size:13px;margin:12px 0 6px 0;color:#495057;line-height:1.3;}' +
+                        '.examples-preview h4{font-size:12px;margin:10px 0 4px 0;color:#6c757d;line-height:1.3;}' +
+                        '.examples-preview p{margin:6px 0;line-height:1.5;}' +
+                        '.examples-preview ul{margin:6px 0;padding-left:20px;line-height:1.4;}' +
+                        '.examples-preview li{margin:3px 0;}' +
+                        '.examples-preview code{background:#f8f9fa;padding:1px 4px;border-radius:3px;font-family:monospace;font-size:11px;}' +
+                        '.examples-preview pre{background:#f8f9fa;padding:8px;border-radius:6px;overflow-x:auto;margin:8px 0;font-size:11px;}' +
+                        '.examples-preview table{border-collapse:collapse;width:100%;margin:8px 0;font-size:11px;}' +
+                        '.examples-preview th,.examples-preview td{border:1px solid #dee2e6;padding:6px;text-align:left;}' +
                         '.examples-preview th{background:#f8f9fa;font-weight:600;}' +
                         '.examples-preview strong{font-weight:600;color:#212529;}' +
                         '.examples-preview em{font-style:italic;}' +
@@ -442,8 +452,8 @@
                         '  \u003cdiv class=\"examples-footer\"\u003e' +
                         '    \u003cdiv class=\"examples-footer-info\" id=\"examples-info\"\u003e10 examples available\u003c/div\u003e' +
                         '    \u003cdiv class=\"examples-footer-buttons\"\u003e' +
-                        '      \u003cbutton type=\"button\" id=\"examples-load-btn\" class=\"examples-load-btn\" disabled style=\"padding:8px 24px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;\"\u003eLoad\u003c/button\u003e' +
-                        '      \u003cbutton type=\"button\" class=\"examples-cancel-btn\" style=\"padding:8px 24px;background:#fff;color:#495057;border:1px solid #ced4da;border-radius:4px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;\"\u003eCancel\u003c/button\u003e' +
+                        '      \u003cbutton type="button" id="examples-load-btn" class="examples-load-btn" disabled style="padding:6px 18px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:500;transition:all 0.2s;"\u003eLoad\u003c/button\u003e' +
+                        '      \u003cbutton type="button" class="examples-cancel-btn" style="padding:6px 18px;background:#fff;color:#495057;border:1px solid #ced4da;border-radius:4px;cursor:pointer;font-size:12px;font-weight:500;transition:all 0.2s;"\u003eCancel\u003c/button\u003e'
                         '    \u003c/div\u003e' +
                         '  \u003c/div\u003e' +
                         '\u003c/div\u003e';
