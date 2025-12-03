@@ -112,6 +112,16 @@
                     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
                 </svg>
             </button>
+
+            <!-- Examples -->
+            <button id="sheet-examples"
+                    title="Examples"
+                    onclick="SheetLayout.showExamples()"
+                    class="tab-icon-btn">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h12v16zM9 10h6v2H9v-2zm0 4h6v2H9v-2z"/>
+                </svg>
+            </button>
                     
                     <input type="file" id="sheet-file-input" style="display:none;" accept=".csv,.xlsx,.ods">
                 </div>
@@ -203,7 +213,7 @@
             vex.dialog.open({
                 message: ' ',
                 buttons: [],
-                callback: function () {},
+                callback: function () { },
                 afterOpen: function ($vexContent) {
                     const html = '<style>.vex.vex-theme-flat-attack .vex-content{padding:0!important;width:auto!important;max-width:300px!important;}.vex .vex-dialog-message{padding:0!important;margin:0!important;}</style>' +
                         '<div style="width:300px; margin:0; background:#fff; font-family:system-ui,-apple-system,sans-serif;">' +
@@ -226,33 +236,33 @@
                         '<button type="button" class="save-cancel-btn" style="padding:8px 24px; background:#fff; color:#495057; border:1px solid #ced4da; border-radius:4px; cursor:pointer; font-size:14px; font-weight:500; transition:all 0.2s;">Cancel</button>' +
                         '</div>' +
                         '</div>';
-                    
+
                     $vexContent.find('.vex-dialog-form').html(html);
-                    
+
                     // Attach event handlers
                     var csvBtn = $vexContent.find('.save-csv-btn')[0];
                     var xlsxBtn = $vexContent.find('.save-xlsx-btn')[0];
                     var cancelBtn = $vexContent.find('.save-cancel-btn')[0];
-                    
+
                     if (csvBtn) {
-                        csvBtn.onmouseover = function() { this.style.background='#218838'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.15)'; };
-                        csvBtn.onmouseout = function() { this.style.background='#28a745'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; };
+                        csvBtn.onmouseover = function () { this.style.background = '#218838'; this.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'; };
+                        csvBtn.onmouseout = function () { this.style.background = '#28a745'; this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)'; };
                         csvBtn.onclick = function () {
                             vex.closeAll();
                             window.dispatchEvent(new Event('ec-save-request'));
                         };
                     }
                     if (xlsxBtn) {
-                        xlsxBtn.onmouseover = function() { this.style.background='#0056b3'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.15)'; };
-                        xlsxBtn.onmouseout = function() { this.style.background='#007bff'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; };
+                        xlsxBtn.onmouseover = function () { this.style.background = '#0056b3'; this.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'; };
+                        xlsxBtn.onmouseout = function () { this.style.background = '#007bff'; this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)'; };
                         xlsxBtn.onclick = function () {
                             vex.closeAll();
                             window.dispatchEvent(new Event('ec-save-xlsx-request'));
                         };
                     }
                     if (cancelBtn) {
-                        cancelBtn.onmouseover = function() { this.style.background='#e9ecef'; this.style.borderColor='#adb5bd'; };
-                        cancelBtn.onmouseout = function() { this.style.background='#fff'; this.style.borderColor='#ced4da'; };
+                        cancelBtn.onmouseover = function () { this.style.background = '#e9ecef'; this.style.borderColor = '#adb5bd'; };
+                        cancelBtn.onmouseout = function () { this.style.background = '#fff'; this.style.borderColor = '#ced4da'; };
                         cancelBtn.onclick = function () {
                             vex.closeAll();
                         };
@@ -274,7 +284,7 @@
             vex.dialog.open({
                 message: ' ',
                 buttons: [],
-                callback: function () {},
+                callback: function () { },
                 afterOpen: function ($vexContent) {
                     const html = '<style>.vex.vex-theme-flat-attack .vex-content{padding:0!important;width:auto!important;max-width:300px!important;}.vex .vex-dialog-message{padding:0!important;margin:0!important;}</style>' +
                         '<div style="width:300px; margin:0; background:#fff; font-family:system-ui,-apple-system,sans-serif;">' +
@@ -305,57 +315,298 @@
                         '<button type="button" class="export-cancel-btn" style="padding:8px 24px; background:#fff; color:#495057; border:1px solid #ced4da; border-radius:4px; cursor:pointer; font-size:14px; font-weight:500; transition:all 0.2s;">Cancel</button>' +
                         '</div>' +
                         '</div>';
-                    
+
                     $vexContent.find('.vex-dialog-form').html(html);
-                    
+
                     // Attach event handlers
                     var odsBtn = $vexContent.find('.export-ods-btn')[0];
                     var htmlBtn = $vexContent.find('.export-html-btn')[0];
                     var tsvBtn = $vexContent.find('.export-tsv-btn')[0];
                     var pdfBtn = $vexContent.find('.export-pdf-btn')[0];
                     var cancelBtn = $vexContent.find('.export-cancel-btn')[0];
-                    
+
                     if (odsBtn) {
-                        odsBtn.onmouseover = function() { this.style.background='#e8590c'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.15)'; };
-                        odsBtn.onmouseout = function() { this.style.background='#fd7e14'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; };
+                        odsBtn.onmouseover = function () { this.style.background = '#e8590c'; this.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'; };
+                        odsBtn.onmouseout = function () { this.style.background = '#fd7e14'; this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)'; };
                         odsBtn.onclick = function () {
                             vex.closeAll();
                             window.dispatchEvent(new Event('ec-export-ods-request'));
                         };
                     }
                     if (htmlBtn) {
-                        htmlBtn.onmouseover = function() { this.style.background='#5a32a3'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.15)'; };
-                        htmlBtn.onmouseout = function() { this.style.background='#6f42c1'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; };
+                        htmlBtn.onmouseover = function () { this.style.background = '#5a32a3'; this.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'; };
+                        htmlBtn.onmouseout = function () { this.style.background = '#6f42c1'; this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)'; };
                         htmlBtn.onclick = function () {
                             vex.closeAll();
                             window.dispatchEvent(new Event('ec-export-html-request'));
                         };
                     }
                     if (tsvBtn) {
-                        tsvBtn.onmouseover = function() { this.style.background='#117a8b'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.15)'; };
-                        tsvBtn.onmouseout = function() { this.style.background='#17a2b8'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; };
+                        tsvBtn.onmouseover = function () { this.style.background = '#117a8b'; this.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'; };
+                        tsvBtn.onmouseout = function () { this.style.background = '#17a2b8'; this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)'; };
                         tsvBtn.onclick = function () {
                             vex.closeAll();
                             window.dispatchEvent(new Event('ec-export-tsv-request'));
                         };
                     }
                     if (pdfBtn) {
-                        pdfBtn.onmouseover = function() { this.style.background='#c82333'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.15)'; };
-                        pdfBtn.onmouseout = function() { this.style.background='#dc3545'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; };
+                        pdfBtn.onmouseover = function () { this.style.background = '#c82333'; this.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'; };
+                        pdfBtn.onmouseout = function () { this.style.background = '#dc3545'; this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)'; };
                         pdfBtn.onclick = function () {
                             vex.closeAll();
                             window.dispatchEvent(new Event('ec-export-pdf-request'));
                         };
                     }
                     if (cancelBtn) {
-                        cancelBtn.onmouseover = function() { this.style.background='#e9ecef'; this.style.borderColor='#adb5bd'; };
-                        cancelBtn.onmouseout = function() { this.style.background='#fff'; this.style.borderColor='#ced4da'; };
+                        cancelBtn.onmouseover = function () { this.style.background = '#e9ecef'; this.style.borderColor = '#adb5bd'; };
+                        cancelBtn.onmouseout = function () { this.style.background = '#fff'; this.style.borderColor = '#ced4da'; };
                         cancelBtn.onclick = function () {
                             vex.closeAll();
                         };
                     }
                 }
             });
+        },
+
+        /**
+          * Show Examples dialog with CSV/MD file pairs
+          */
+        showExamples: function () {
+            if (typeof vex === 'undefined') {
+                alert('Dialog library not available');
+                return;
+            }
+
+            // List of available examples
+            const examples = [
+                { name: 'Bar Chart', file: 'barchart', desc: 'Categorical data (100 categories)' },
+                { name: 'Histogram', file: 'histogram', desc: 'Continuous data distribution' },
+                { name: 'Scatter Plot', file: 'scatterplot', desc: 'Correlation analysis' },
+                { name: 'Line Chart', file: 'linechart', desc: 'Time series trends' },
+                { name: 'Pie Chart', file: 'piechart', desc: 'Percentage distributions' },
+                { name: 'Radar Chart', file: 'radarchart', desc: 'Multi-dimensional comparison' },
+                { name: 'Grouped Bar', file: 'groupedbar', desc: 'Grouped & stacked charts' },
+                { name: 'Central Tendency', file: 'central_tendency', desc: 'Mean, median, mode' },
+                { name: 'Dispersion', file: 'dispersion', desc: 'Variance & std deviation' },
+                { name: 'Quartiles', file: 'quartiles', desc: 'Quartiles & IQR' }
+            ];
+
+            vex.dialog.open({
+                message: ' ',
+                buttons: [],
+                callback: function () { },
+                afterOpen: function ($vexContent) {
+                    const html = '\u003cstyle\u003e' +
+                        '.vex.vex-theme-flat-attack .vex-content{padding:0!important;width:auto!important;max-width:650px!important;}' +
+                        '.vex .vex-dialog-message{padding:0!important;margin:0!important;}' +
+                        '.examples-container{width:650px;margin:0;background:#fff;font-family:system-ui,-apple-system,sans-serif;}' +
+                        '.examples-header{padding:12px 16px;background:#f8f9fa;border-bottom:1px solid #dee2e6;}' +
+                        '.examples-title{font-size:16px;font-weight:600;color:#212529;}' +
+                        '.examples-body{padding:15px;display:grid;grid-template-columns:240px 1fr;gap:15px;height:400px;}' +
+                        '.examples-list{border:1px solid #dee2e6;border-radius:6px;overflow-y:auto;background:#f8f9fa;}' +
+                        '.example-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid #dee2e6;transition:background 0.2s;}' +
+                        '.example-item:hover{background:#e9ecef;}' +
+                        '.example-item.selected{background:#007bff;color:white;}' +
+                        '.example-item-name{font-weight:600;margin-bottom:4px;}' +
+                        '.example-item-desc{font-size:12px;color:#6c757d;}' +
+                        '.example-item.selected .example-item-desc{color:#e3f2fd;}' +
+                        '.examples-preview{border:1px solid #dee2e6;border-radius:6px;overflow-y:auto;padding:20px;background:#fff;}' +
+                        '.examples-footer{padding:12px 20px;background:#f8f9fa;border-top:1px solid #dee2e6;display:flex;justify-content:space-between;align-items:center;}' +
+                        '.examples-footer-info{font-size:13px;color:#6c757d;}' +
+                        '.examples-footer-buttons{display:flex;gap:10px;}' +
+                        '.examples-preview h1{font-size:24px;margin:0 0 16px 0;}' +
+                        '.examples-preview h2{font-size:20px;margin:24px 0 12px 0;padding-bottom:8px;border-bottom:2px solid #e9ecef;}' +
+                        '.examples-preview h3{font-size:16px;margin:16px 0 8px 0;color:#495057;}' +
+                        '.examples-preview h4{font-size:14px;margin:12px 0 6px 0;color:#6c757d;}' +
+                        '.examples-preview p{margin:8px 0;line-height:1.6;}' +
+                        '.examples-preview ul{margin:8px 0;padding-left:24px;}' +
+                        '.examples-preview li{margin:4px 0;}' +
+                        '.examples-preview code{background:#f8f9fa;padding:2px 6px;border-radius:3px;font-family:monospace;font-size:13px;}' +
+                        '.examples-preview pre{background:#f8f9fa;padding:12px;border-radius:6px;overflow-x:auto;margin:12px 0;}' +
+                        '.examples-preview table{border-collapse:collapse;width:100%;margin:12px 0;}' +
+                        '.examples-preview th,.examples-preview td{border:1px solid #dee2e6;padding:8px;text-align:left;}' +
+                        '.examples-preview th{background:#f8f9fa;font-weight:600;}' +
+                        '.examples-preview strong{font-weight:600;color:#212529;}' +
+                        '.examples-preview em{font-style:italic;}' +
+                        '\u003c/style\u003e' +
+                        '\u003cdiv class=\"examples-container\"\u003e' +
+                        '  \u003cdiv class=\"examples-header\"\u003e' +
+                        '    \u003cdiv class=\"examples-title\"\u003eExample Datasets\u003c/div\u003e' +
+                        '  \u003c/div\u003e' +
+                        '  \u003cdiv class=\"examples-body\"\u003e' +
+                        '    \u003cdiv class=\"examples-list\" id=\"examples-list\"\u003e\u003c/div\u003e' +
+                        '    \u003cdiv class=\"examples-preview\" id=\"examples-preview\"\u003e' +
+                        '      \u003cp style=\"color:#999;text-align:center;padding-top:100px;\"\u003eSelect an example to preview\u003c/p\u003e' +
+                        '    \u003c/div\u003e' +
+                        '  \u003c/div\u003e' +
+                        '  \u003cdiv class=\"examples-footer\"\u003e' +
+                        '    \u003cdiv class=\"examples-footer-info\" id=\"examples-info\"\u003e10 examples available\u003c/div\u003e' +
+                        '    \u003cdiv class=\"examples-footer-buttons\"\u003e' +
+                        '      \u003cbutton type=\"button\" id=\"examples-load-btn\" class=\"examples-load-btn\" disabled style=\"padding:8px 24px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;\"\u003eLoad\u003c/button\u003e' +
+                        '      \u003cbutton type=\"button\" class=\"examples-cancel-btn\" style=\"padding:8px 24px;background:#fff;color:#495057;border:1px solid #ced4da;border-radius:4px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;\"\u003eCancel\u003c/button\u003e' +
+                        '    \u003c/div\u003e' +
+                        '  \u003c/div\u003e' +
+                        '\u003c/div\u003e';
+
+                    $vexContent.find('.vex-dialog-form').html(html);
+
+                    // State
+                    let selectedFile = null;
+
+                    // Populate examples list
+                    const listEl = document.getElementById('examples-list');
+                    examples.forEach(function (ex) {
+                        const item = document.createElement('div');
+                        item.className = 'example-item';
+                        item.setAttribute('data-file', ex.file);
+                        item.innerHTML = '\u003cdiv class=\"example-item-name\"\u003e' + ex.name + '\u003c/div\u003e' +
+                            '\u003cdiv class=\"example-item-desc\"\u003e' + ex.desc + '\u003c/div\u003e';
+                        item.onclick = function () {
+                            // Deselect all
+                            listEl.querySelectorAll('.example-item').forEach(function (el) {
+                                el.classList.remove('selected');
+                            });
+                            // Select this one
+                            item.classList.add('selected');
+                            selectedFile = ex.file;
+
+                            // Load and show MD file
+                            SheetLayout.loadExampleMD(ex.file);
+
+                            // Enable load button
+                            const loadBtn = document.getElementById('examples-load-btn');
+                            if (loadBtn) {
+                                loadBtn.disabled = false;
+                                loadBtn.style.opacity = '1';
+                                loadBtn.style.cursor = 'pointer';
+                            }
+                        };
+                        listEl.appendChild(item);
+                    });
+
+                    // Load button handler
+                    const loadBtn = document.getElementById('examples-load-btn');
+                    if (loadBtn) {
+                        loadBtn.onmouseover = function () {
+                            if (!this.disabled) {
+                                this.style.background = '#0056b3';
+                            }
+                        };
+                        loadBtn.onmouseout = function () {
+                            if (!this.disabled) {
+                                this.style.background = '#007bff';
+                            }
+                        };
+                        loadBtn.onclick = function () {
+                            if (selectedFile && !this.disabled) {
+                                vex.closeAll();
+                                SheetLayout.loadExampleCSV(selectedFile);
+                            }
+                        };
+                    }
+
+                    // Cancel button handler
+                    const cancelBtn = $vexContent.find('.examples-cancel-btn')[0];
+                    if (cancelBtn) {
+                        cancelBtn.onmouseover = function () { this.style.background = '#e9ecef'; };
+                        cancelBtn.onmouseout = function () { this.style.background = '#fff'; };
+                        cancelBtn.onclick = function () {
+                            vex.closeAll();
+                        };
+                    }
+                }
+            });
+        },
+
+        /**
+         * Load and display example MD file
+         */
+        loadExampleMD: function (filename) {
+            const previewEl = document.getElementById('examples-preview');
+            if (!previewEl) return;
+
+            previewEl.innerHTML = '\u003cp style="color:#999;text-align:center;"\u003eLoading...\u003c/p\u003e';
+
+            fetch('examples/' + filename + '.md')
+                .then(function (response) {
+                    if (!response.ok) throw new Error('Failed to load');
+                    return response.text();
+                })
+                .then(function (markdown) {
+                    // Simple markdown to HTML conversion
+                    const html = SheetLayout.markdownToHTML(markdown);
+                    previewEl.innerHTML = html;
+                })
+                .catch(function (error) {
+                    previewEl.innerHTML = '\u003cp style=\"color:#dc3545;\"\u003eError loading documentation: ' + error.message + '\u003c/p\u003e';
+                });
+        },
+
+        /**
+         * Load example CSV file into spreadsheet
+         */
+        loadExampleCSV: function (filename) {
+            fetch('examples/' + filename + '.csv')
+                .then(function (response) {
+                    if (!response.ok) throw new Error('Failed to load CSV file');
+                    return response.text();
+                })
+                .then(function (csvContent) {
+                    if (typeof window.loadCSV === 'function') {
+                        window.loadCSV(csvContent);
+                    } else if (typeof window.loadCSVContent === 'function') {
+                        window.loadCSVContent(csvContent);
+                    } else {
+                        alert('CSV loader function not available. Please refresh the page.');
+                    }
+                })
+                .catch(function (error) {
+                    alert('Error loading example: ' + error.message);
+                });
+        },
+
+        /**
+         * Simple markdown to HTML converter
+         */
+        markdownToHTML: function (md) {
+            let html = md;
+
+            // Headers
+            html = html.replace(/^#### (.+)$/gm, '\u003ch4\u003e$1\u003c/h4\u003e');
+            html = html.replace(/^### (.+)$/gm, '\u003ch3\u003e$1\u003c/h3\u003e');
+            html = html.replace(/^## (.+)$/gm, '\u003ch2\u003e$1\u003c/h2\u003e');
+            html = html.replace(/^# (.+)$/gm, '\u003ch1\u003e$1\u003c/h1\u003e');
+
+            // Bold
+            html = html.replace(/\*\*(.+?)\*\*/g, '\u003cstrong\u003e$1\u003c/strong\u003e');
+
+            // Italic
+            html = html.replace(/\*(.+?)\*/g, '\u003cem\u003e$1\u003c/em\u003e');
+
+            // Inline code
+            html = html.replace(/`([^`]+)`/g, '\u003ccode\u003e$1\u003c/code\u003e');
+
+            // Code blocks (```)
+            html = html.replace(/```([\s\S]*?)```/g, '\u003cpre\u003e\u003ccode\u003e$1\u003c/code\u003e\u003c/pre\u003e');
+
+            // Lists (simple)
+            html = html.replace(/^- (.+)$/gm, '\u003cli\u003e$1\u003c/li\u003e');
+            html = html.replace(/((\u003cli\u003e.+\u003c\/li\u003e\n?)+)/g, '\u003cul\u003e$1\u003c/ul\u003e');
+
+            // Line breaks
+            html = html.replace(/\n\n/g, '\u003c/p\u003e\u003cp\u003e');
+            html = '\u003cp\u003e' + html + '\u003c/p\u003e';
+
+            // Clean up
+            html = html.replace(/\u003cp\u003e\u003ch/g, '\u003ch');
+            html = html.replace(/\u003c\/h([1-6])\u003e\u003c\/p\u003e/g, '\u003c/h$1\u003e');
+            html = html.replace(/\u003cp\u003e\u003cul\u003e/g, '\u003cul\u003e');
+            html = html.replace(/\u003c\/ul\u003e\u003c\/p\u003e/g, '\u003c/ul\u003e');
+            html = html.replace(/\u003cp\u003e\u003cpre\u003e/g, '\u003cpre\u003e');
+            html = html.replace(/\u003c\/pre\u003e\u003c\/p\u003e/g, '\u003c/pre\u003e');
+            html = html.replace(/\u003cp\u003e\u003c\/p\u003e/g, '');
+
+            return html;
         }
     };
 
@@ -452,7 +703,7 @@
                 var indicator = document.querySelector('.upper-left-cell-indicator');
                 if (indicator) {
                     indicator.innerHTML = spreadsheet.editor.ecell.coord;
-                   // console.log('[SheetLayout] Active cell indicator updated:', spreadsheet.editor.ecell.coord);
+                    // console.log('[SheetLayout] Active cell indicator updated:', spreadsheet.editor.ecell.coord);
                 } else {
                     console.log('[SheetLayout] Indicator element not found yet');
                 }
