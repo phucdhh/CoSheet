@@ -25,6 +25,9 @@ pids/
 .env.local
 .env.*.local
 
+# AI Configuration (contains API keys)
+static/AI-help/ai.conf
+
 # Editor files
 .idea/
 .vscode/

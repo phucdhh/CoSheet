@@ -1,0 +1,10 @@
+{
+  "provider": "groq",
+  "apiKey": "YOUR_GROQ_API_KEY_HERE",
+  "apiEndpoint": "https://api.groq.com/openai/v1/chat/completions",
+  "model": "llama-3.3-70b-versatile",
+  "temperature": 0.3,
+  "maxTokens": 500,
+  "enabled": true,
+  "_comment": "Copy this file to ai.conf and replace YOUR_GROQ_API_KEY_HERE with your actual Groq API key from https://console.groq.com/"
+}

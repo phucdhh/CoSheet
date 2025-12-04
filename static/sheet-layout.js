@@ -132,6 +132,25 @@
                     <text x="12" y="21" font-size="5" fill="#FF5722" font-weight="bold" text-anchor="middle">Ex</text>
                 </svg>
             </button>
+
+            <!-- AI Formula Assistant -->
+            <button id="sheet-ai-assistant"
+                    title="AI Formula Assistant"
+                    onclick="window.aiAssistant && window.aiAssistant.toggle()"
+                    class="tab-icon-btn">
+                <svg class="tab-icon" viewBox="0 0 24 24" style="overflow:visible;">
+                    <defs>
+                        <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="12" cy="12" r="10" fill="url(#aiGrad)" />
+                    <path d="M12 6l1.5 3h3l-2.5 2 1 3-3-2-3 2 1-3-2.5-2h3z" fill="#FFF" />
+                    <circle cx="8" cy="10" r="1.5" fill="#FFF" opacity="0.8" />
+                    <circle cx="16" cy="10" r="1" fill="#FFF" opacity="0.6" />
+                </svg>
+            </button>
                     
                     <input type="file" id="sheet-file-input" style="display:none;" accept=".csv,.xlsx,.ods">
                 </div>

@@ -1,0 +1,310 @@
+/* AI Formula Assistant Styles */
+
+.ai-assistant-sidebar {
+    position: fixed;
+    right: -420px;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-assistant-sidebar.open {
+    right: 0;
+}
+
+.ai-assistant-header {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.ai-assistant-title {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai-assistant-title::before {
+    content: "✨";
+    font-size: 20px;
+}
+
+.ai-assistant-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.ai-assistant-close:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.ai-assistant-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ai-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ai-input-label {
+    font-size: 14px;
+    color: #5f6368;
+    font-weight: 500;
+}
+
+.ai-input-box {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+}
+
+.ai-input-box:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.ai-send-button {
+    align-self: flex-end;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ai-send-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.ai-send-button:active {
+    transform: translateY(0);
+}
+
+.ai-send-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.ai-response-section {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 16px;
+    display: none;
+}
+
+.ai-response-section.visible {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ai-prompt-echo {
+    font-size: 13px;
+    color: #5f6368;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+}
+
+.ai-formula-box {
+    background: #f1f3f4;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #dadce0;
+}
+
+.ai-formula-label {
+    font-size: 12px;
+    color: #5f6368;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.ai-formula-code {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: #1a73e8;
+    font-weight: 600;
+}
+
+.ai-explanation-box {
+    padding: 10px;
+    background: #e8f0fe;
+    border-radius: 6px;
+    border-left: 3px solid #1a73e8;
+}
+
+.ai-explanation-text {
+    font-size: 14px;
+    color: #202124;
+    line-height: 1.6;
+}
+
+.ai-action-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.ai-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ai-button-secondary {
+    background: #f1f3f4;
+    color: #5f6368;
+}
+
+.ai-button-secondary:hover {
+    background: #e8eaed;
+}
+
+.ai-button-primary {
+    background: #1a73e8;
+    color: white;
+}
+
+.ai-button-primary:hover {
+    background: #1557b0;
+    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+}
+
+.ai-loading {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.ai-loading.visible {
+    display: flex;
+}
+
+.ai-loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #e8eaed;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.ai-error {
+    display: none;
+    padding: 12px;
+    background: #fce8e6;
+    border-left: 3px solid #ea4335;
+    border-radius: 6px;
+    color: #c5221f;
+    font-size: 14px;
+}
+
+.ai-error.visible {
+    display: block;
+}
+
+/* AI Icon Button in Toolbar */
+.ai-icon-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.ai-icon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+.ai-icon-button::before {
+    content: "✨";
+}
+
+.ai-icon-button:hover::after {
+    content: "AI Assistant";
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .ai-assistant-sidebar {
+        right: -100%;
+        width: 100%;
+    }
+    
+    .ai-assistant-sidebar.open {
+        right: 0;
+    }
+}

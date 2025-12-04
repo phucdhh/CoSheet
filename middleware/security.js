@@ -86,7 +86,7 @@ function configureHelmet(app) {
           "https://fonts.gstatic.com"
         ],
         imgSrc: ["'self'", "data:", "https:"],
-        connectSrc: ["'self'", "wss:", "ws:", "https://cloudflareinsights.com"],
+        connectSrc: ["'self'", "wss:", "ws:", "https://cloudflareinsights.com", "https://api.groq.com"], // Updated 2024-12-04
         frameSrc: ["'self'"],
         objectSrc: ["'none'"],
         upgradeInsecureRequests: [],

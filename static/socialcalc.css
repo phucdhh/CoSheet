@@ -59,10 +59,14 @@ body:last-child .defaultPeer {
 .TCmain {background-color:#f8f9fa;}
 .TCendcap {background-color:#fff;}
 .TCpaneslider {background-color:#dee2e6;}
-.TClessbutton {background-color:#6c757d;}
-.TCmorebutton {background-color:#6c757d;}
-.TCscrollarea {background-color:#e9ecef;}
-.TCthumb {background-color:#adb5bd;}
+.TClessbutton {background-color:#dadce0 !important;background-image:none !important;border-radius:3px !important;width:14px !important;height:14px !important;cursor:pointer !important;border:none !important;padding:0 !important;}
+.TClessbutton:hover {background-color:#bdc1c6 !important;}
+.TCmorebutton {background-color:#dadce0 !important;background-image:none !important;border-radius:3px !important;width:14px !important;height:14px !important;cursor:pointer !important;border:none !important;padding:0 !important;}
+.TCmorebutton:hover {background-color:#bdc1c6 !important;}
+.TCscrollarea {background-color:#f8f9fa !important;border:1px solid #e0e0e0 !important;background-image:none !important;}
+.TCthumb {background-color:#dadce0 !important;border-radius:6px !important;transition:background-color 0.2s !important;cursor:grab !important;background-image:none !important;min-height:40px !important;user-select:none !important;-webkit-user-select:none !important;-moz-user-select:none !important;}
+.TCthumb:hover {background-color:#bdc1c6 !important;}
+.TCthumb:active {background-color:#9aa0a6 !important;cursor:grabbing !important;}
 .TCPStrackingline {overflow:hidden;position:absolute;z-index:100;}
 .TCTDFSthumbstatus {height:20px;width:auto;border:1px solid black;padding:2px;
  background-color:#FFF;font-size:small;position:absolute;z-index:100;}
@@ -125,4 +129,80 @@ body:last-child .defaultPeer {
 
 #te_panesliderv {
     cursor: row-resize;
+}
+
+/* Google Sheets Style Scrollbars */
+
+/* Horizontal Scrollbar */
+.TCscrollarea[id*="scrollhor"] {
+    height: 16px !important;
+    background-color: #fff;
+    border-top: 1px solid #e0e0e0;
+}
+
+.TCscrollarea[id*="scrollhor"] .TCthumb {
+    height: 12px !important;
+    margin: 2px;
+    min-width: 30px;
+}
+
+/* Vertical Scrollbar */
+.TCscrollarea[id*="scrollvert"] {
+    width: 16px !important;
+    background-color: #fff;
+    border-left: 1px solid #e0e0e0;
+}
+
+.TCscrollarea[id*="scrollvert"] .TCthumb {
+    width: 12px !important;
+    margin: 2px;
+    min-height: 30px;
+}
+
+/* Scroll buttons - Modern minimal style */
+.TClessbutton, .TCmorebutton {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    user-select: none;
+}
+
+/* Hide scroll buttons on mobile for cleaner UI */
+@media (max-width: 768px) {
+    .TClessbutton, .TCmorebutton {
+        display: none;
+    }
+    
+    .TCscrollarea[id*="scrollhor"] {
+        height: 12px !important;
+    }
+    
+    .TCscrollarea[id*="scrollvert"] {
+        width: 12px !important;
+    }
+    
+    .TCthumb {
+        background-color: #bdc1c6 !important;
+        border-radius: 6px !important;
+    }
+}
+
+/* Smooth scrolling */
+.TCscrollarea {
+    transition: background-color 0.2s;
+}
+
+.TCscrollarea:hover {
+    background-color: #f8f9fa;
+}
+
+/* Corner between scrollbars */
+.TCendcap {
+    background-color: #fff;
+    border-top: 1px solid #e0e0e0;
+    border-left: 1px solid #e0e0e0;
 }

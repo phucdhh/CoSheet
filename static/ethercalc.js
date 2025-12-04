@@ -945,25 +945,37 @@ SocialCalc.ResetSheet = function(sheet, reload) {
 // Methods:
 
 SocialCalc.Sheet.prototype.ResetSheet = function() {SocialCalc.ResetSheet(this);};
-SocialCalc.Sheet.prototype.AddCell = function(newcell) {return this.cells[newcell.coord]=newcell;};
+SocialCalc.Sheet.prototype.AddCell = function(newcell) {
+    this._lastColCache = null; // Invalidate cache
+    this._lastRowCache = null;
+    return this.cells[newcell.coord]=newcell;
+};
 SocialCalc.Sheet.prototype.LastCol = function() {
+    if (this._lastColCache !== null && this._lastColCache !== undefined) {
+        return this._lastColCache;
+    }
     var last_col = 1;
-    for (var cell_id  in this.cells) {
+    for (var cell_id in this.cells) {
         var cr = SocialCalc.coordToCr(cell_id);
         if (cr.col > last_col) {
             last_col = cr.col;
         }
     }
+    this._lastColCache = last_col;
     return last_col;
 }
 SocialCalc.Sheet.prototype.LastRow = function() {
+    if (this._lastRowCache !== null && this._lastRowCache !== undefined) {
+        return this._lastRowCache;
+    }
     var last_row = 1;
-    for (var cell_id  in this.cells) {
+    for (var cell_id in this.cells) {
         var cr = SocialCalc.coordToCr(cell_id);
         if (cr.row > last_row) {
             last_row = cr.row;
         }
     }
+    this._lastRowCache = last_row;
     return last_row;
 }
 SocialCalc.Sheet.prototype.GetAssuredCell = function(coord) {
@@ -10507,19 +10519,19 @@ SocialCalc.EditorProcessMouseWheel = function(event, delta, deltaX, mousewheelin
 
    if (deltaX && deltaX !== 0) {
       if (deltaX > 0) {
-         wobj.functionobj.editor.ScrollRelative(false, Math.floor(-deltaX * 1.5));
+         wobj.functionobj.editor.ScrollRelative(false, Math.floor(-deltaX * 0.2));
          }
       else {
-         wobj.functionobj.editor.ScrollRelative(false, Math.ceil(-deltaX * 1.5));
+         wobj.functionobj.editor.ScrollRelative(false, Math.ceil(-deltaX * 0.2));
          }
       }
 
    if (delta && delta !== 0) {
       if (delta > 0) {
-         wobj.functionobj.editor.ScrollRelative(true, Math.floor(-delta * 1.5));
+         wobj.functionobj.editor.ScrollRelative(true, Math.floor(-delta * 0.3));
          }
       else {
-         wobj.functionobj.editor.ScrollRelative(true, Math.ceil(-delta * 1.5));
+         wobj.functionobj.editor.ScrollRelative(true, Math.ceil(-delta * 0.3));
          }
       }
 
@@ -11314,7 +11326,7 @@ SocialCalc.FitToEditTable = function(editor) {
          }
       }
 
-   for (colnum=context.colpanes[colpane].first; colnum<=10000; colnum++) { //!!! max for safety, but makes that col max!!!
+   for (colnum=context.colpanes[colpane].first; colnum<=52; colnum++) { // Max AZ (52 cols) like Google Sheets
       colname=SocialCalc.rcColname(colnum);
       if (sheetobj.colattribs.hide[colname] != "yes") {
          colwidth = sheetobj.colattribs.width[colname] || sheetobj.attribs.defaultcolwidth || SocialCalc.Constants.defaultColWidth;
@@ -11324,7 +11336,24 @@ SocialCalc.FitToEditTable = function(editor) {
       if (totalwidth > editor.tablewidth) break;
       }
 
+   // Limit to max AZ (52 columns) like Google Sheets, but ensure minimum visible columns
+   var actualLastCol = 1;
+   try {
+      actualLastCol = sheetobj.LastCol() || 1;
+   } catch(e) {
+      actualLastCol = Math.min(sheetobj.attribs.lastcol || 1, 52);
+   }
+   var minDisplayCol = Math.max(26, actualLastCol + 5); // Show at least A-Z or data + 5 buffer
+   var maxDisplayCol = 52; // Hard limit at AZ like Google Sheets
+   if (colnum < minDisplayCol) colnum = minDisplayCol; // Ensure minimum columns visible
+   if (colnum > maxDisplayCol) colnum = maxDisplayCol; // Never exceed AZ
+
    context.colpanes[colpane].last = context.sheetobj.attribs.usermaxcol || colnum;
+   
+   // Update attribs.lastcol for scrollbar thumb calculation (limit to AZ)
+   if (!context.sheetobj.attribs.usermaxcol) {
+      context.sheetobj.attribs.lastcol = Math.min(colnum, maxDisplayCol);
+   }
 
    // Calculate row height data
 
@@ -11348,6 +11377,18 @@ SocialCalc.FitToEditTable = function(editor) {
    needed = editor.tableheight - totalrows * context.pixelsPerRow; // estimate amount needed
 
    context.rowpanes[rowpane].last = context.sheetobj.attribs.usermaxrow || context.rowpanes[rowpane].first + Math.floor(needed / context.pixelsPerRow) + 1;
+
+   // Update attribs.lastrow for scrollbar thumb calculation
+   var actualLastRow = 1;
+   try {
+      actualLastRow = sheetobj.LastRow() || 1;
+   } catch(e) {
+      actualLastRow = sheetobj.attribs.lastrow || 1;
+   }
+   var calculatedLastRow = context.rowpanes[rowpane].last;
+   if (!context.sheetobj.attribs.usermaxrow) {
+      context.sheetobj.attribs.lastrow = Math.max(actualLastRow + 10, calculatedLastRow); // Actual data + 10 buffer or calculated
+   }
 
    }
 
@@ -13115,7 +13156,7 @@ SocialCalc.CreateTableControl = function(control) {
    s.width = (control.vertical ? control.controlthickness : control.size)+"px";
    s.zIndex = 0;
    setStyles(control.main, scc.TCmainStyle);
-   s.backgroundImage="url("+imageprefix+"main-"+vh+".gif)";
+   // s.backgroundImage="url("+imageprefix+"main-"+vh+".gif)"; // Disabled for CSS styling
    if (scc.TCmainClass) control.main.className = scc.TCmainClass;
 
    control.main.style.display="none"; // wait for layout
@@ -13128,7 +13169,7 @@ SocialCalc.CreateTableControl = function(control) {
    s.overflow = "hidden"; // IE will make the DIV at least font-size height...so use this
    s.position = "absolute";
    setStyles(control.endcap, scc.TCendcapStyle);
-   s.backgroundImage="url("+imageprefix+"endcap-"+vh+".gif)";
+   // s.backgroundImage="url("+imageprefix+"endcap-"+vh+".gif)"; // Disabled for CSS styling
    if (scc.TCendcapClass) control.endcap.className = scc.TCendcapClass;
    AssignID(control.editor, control.endcap, "endcap"+vh);
 
@@ -13142,7 +13183,7 @@ SocialCalc.CreateTableControl = function(control) {
    s.position = "absolute";
    s[control.vertical?"top":"left"] = "4px";
    s.zIndex = 3;
-   s.backgroundImage="url("+imageprefix+"paneslider-"+vh+".gif)";
+   // s.backgroundImage="url("+imageprefix+"paneslider-"+vh+".gif)"; // Disabled for CSS styling
    if (scc.TCpanesliderClass) control.paneslider.className = scc.TCpanesliderClass;
    AssignID(control.editor, control.paneslider, "paneslider"+vh);
    control.paneslider.title = SCLoc(control.vertical ? "Drag to lock pane horizontally" : "Drag to lock pane vertically");
@@ -13167,14 +13208,14 @@ SocialCalc.CreateTableControl = function(control) {
    s.overflow = "hidden"; // IE will make the DIV at least font-size height...so use this
    s.position = "absolute";
    setStyles(control.lessbutton, scc.TClessbuttonStyle);
-   s.backgroundImage="url("+imageprefix+"less-"+vh+"n.gif)"
+   // s.backgroundImage="url("+imageprefix+"less-"+vh+"n.gif)" // Disabled for CSS styling
    if (scc.TClessbuttonClass) control.lessbutton.className = scc.TClessbuttonClass;
    AssignID(control.editor, control.lessbutton, "lessbutton"+vh);
 
-   params = {repeatwait:scc.TClessbuttonRepeatWait, repeatinterval:scc.TClessbuttonRepeatInterval,
-             normalstyle: "backgroundImage:url("+imageprefix+"less-"+vh+"n.gif);",
-             downstyle: "backgroundImage:url("+imageprefix+"less-"+vh+"d.gif);",
-             hoverstyle: "backgroundImage:url("+imageprefix+"less-"+vh+"h.gif);"};
+   params = {repeatwait:scc.TClessbuttonRepeatWait, repeatinterval:scc.TClessbuttonRepeatInterval};
+             // normalstyle: "backgroundImage:url("+imageprefix+"less-"+vh+"n.gif);",
+             // downstyle: "backgroundImage:url("+imageprefix+"less-"+vh+"d.gif);",
+             // hoverstyle: "backgroundImage:url("+imageprefix+"less-"+vh+"h.gif);"};
    functions = {MouseDown:function(){if(!control.editor.busy) control.editor.ScrollRelative(control.vertical, -1);},
                 Repeat:function(){if(!control.editor.busy) control.editor.ScrollRelative(control.vertical, -1);},
                 Disabled: function() {return control.editor.busy;}};
@@ -13191,14 +13232,14 @@ SocialCalc.CreateTableControl = function(control) {
    s.overflow = "hidden"; // IE will make the DIV at least font-size height...so use this
    s.position = "absolute";
    setStyles(control.morebutton, scc.TCmorebuttonStyle);
-   s.backgroundImage="url("+imageprefix+"more-"+vh+"n.gif)"
+   // s.backgroundImage="url("+imageprefix+"more-"+vh+"n.gif)" // Disabled for CSS styling
    if (scc.TCmorebuttonClass) control.morebutton.className = scc.TCmorebuttonClass;
    AssignID(control.editor, control.morebutton, "morebutton"+vh);
 
-   params = {repeatwait:scc.TCmorebuttonRepeatWait, repeatinterval:scc.TCmorebuttonRepeatInterval,
-             normalstyle: "backgroundImage:url("+imageprefix+"more-"+vh+"n.gif);",
-             downstyle: "backgroundImage:url("+imageprefix+"more-"+vh+"d.gif);",
-             hoverstyle: "backgroundImage:url("+imageprefix+"more-"+vh+"h.gif);"};
+   params = {repeatwait:scc.TCmorebuttonRepeatWait, repeatinterval:scc.TCmorebuttonRepeatInterval};
+             // normalstyle: "backgroundImage:url("+imageprefix+"more-"+vh+"n.gif);",
+             // downstyle: "backgroundImage:url("+imageprefix+"more-"+vh+"d.gif);",
+             // hoverstyle: "backgroundImage:url("+imageprefix+"more-"+vh+"h.gif);"};
    functions = {MouseDown:function(){if(!control.editor.busy) control.editor.ScrollRelative(control.vertical, +1);},
                 Repeat:function(){if(!control.editor.busy) control.editor.ScrollRelative(control.vertical, +1);},
                 Disabled: function() {return control.editor.busy;}};
@@ -13215,7 +13256,7 @@ SocialCalc.CreateTableControl = function(control) {
    s.overflow = "hidden"; // IE will make the DIV at least font-size height...so use this
    s.position = "absolute";
    setStyles(control.scrollarea, scc.TCscrollareaStyle);
-   s.backgroundImage="url("+imageprefix+"scrollarea-"+vh+".gif)";
+   // s.backgroundImage="url("+imageprefix+"scrollarea-"+vh+".gif)"; // Disabled for CSS styling
    if (scc.TCscrollareaClass) control.scrollarea.className = scc.TCscrollareaClass;
    AssignID(control.editor, control.scrollarea, "scrollarea"+vh);
 
@@ -13236,7 +13277,7 @@ SocialCalc.CreateTableControl = function(control) {
    s.overflow = "hidden"; // IE will make the DIV at least font-size height...so use this
    s.position = "absolute";
    setStyles(control.thumb, scc.TCthumbStyle);
-   control.thumb.style.backgroundImage="url("+imageprefix+"thumb-"+vh+"n.gif)";
+   // control.thumb.style.backgroundImage="url("+imageprefix+"thumb-"+vh+"n.gif)"; // Disabled for CSS styling
    if (scc.TCthumbClass) control.thumb.className = scc.TCthumbClass;
    AssignID(control.editor, control.thumb, "thumb"+vh);
 
@@ -13249,9 +13290,10 @@ SocialCalc.CreateTableControl = function(control) {
    // Drag pane slider - every thing but app view
    if (SocialCalc._app != true) SocialCalc.DragRegister(control.thumb, control.vertical, !control.vertical, functions, control.editor.toplevel);
 
-   params = {normalstyle: "backgroundImage:url("+imageprefix+"thumb-"+vh+"n.gif)", name:"Thumb",
-             downstyle:  "backgroundImage:url("+imageprefix+"thumb-"+vh+"d.gif)",
-             hoverstyle:  "backgroundImage:url("+imageprefix+"thumb-"+vh+"h.gif)"};
+   params = {name:"Thumb"}; // Background images disabled for CSS styling
+             // normalstyle: "backgroundImage:url("+imageprefix+"thumb-"+vh+"n.gif)",
+             // downstyle:  "backgroundImage:url("+imageprefix+"thumb-"+vh+"d.gif)",
+             // hoverstyle:  "backgroundImage:url("+imageprefix+"thumb-"+vh+"h.gif)"};
    SocialCalc.ButtonRegister(control.editor, control.thumb, params, null); // give it button-like visual behavior
 
    control.main.appendChild(control.thumb);

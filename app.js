@@ -61,6 +61,14 @@ This work is published from Taiwan.
       logger.error('Failed to initialize security middleware', { error: err.message });
     }
     
+    // AI Assistant API Proxy
+    try {
+      const aiProxy = require('./ai-proxy');
+      aiProxy(this.app, basepath);
+    } catch (err) {
+      logger.error('Failed to initialize AI proxy', { error: err.message });
+    }
+    
     this.KEY = key;
     this.BASEPATH = basepath;
     this.POLLING = polling;

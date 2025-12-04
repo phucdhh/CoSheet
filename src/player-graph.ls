@@ -694,11 +694,12 @@
   b3 = \8
   b4 = \9
   b5 = \8
-  #eddy
-  selectedbg = '404040'
-  unselectedbg = '808080'
-  cursorbg = \A6A6A6
-  hightLightForegoundColour = \FFF
+  #eddy - Updated to Google Sheets style colors
+  selectedbg = 'e8f0fe'  # Light blue for selected
+  unselectedbg = 'f8f9fa'  # Light gray for unselected
+  cursorbg = ''  # No background, use CSS border instead
+  hightLightForegoundColour = '212529'  # Dark text
+  selectedTextColor = '1a73e8'  # Google blue for selected text
   if SocialCalc.requestParams[\app]?  
     cursorbg = \FFF
     hightLightForegoundColour = \000
@@ -715,8 +716,9 @@
   scc.defaultImagePrefix = 'images/sc_'
   SocialCalc.Popup.LocalizeString = SocialCalc.LocalizeString
   #row and col header colours
-  scc.defaultColnameStyle = 'overflow:visible;font-size:small;text-align:center;color:#' + hightLightForegoundColour + ';background-color:#' + unselectedbg
-  scc.defaultSelectedColnameStyle = 'overflow:visible;font-size:small;text-align:center;color:#' + hightLightForegoundColour + ';background-color:#' + selectedbg
-  scc.defaultRownameStyle = 'position:relative;overflow:visible;font-size:small;text-align:center;vertical-align:middle;color:#' + hightLightForegoundColour + ';background-color:#' + unselectedbg + ';direction:rtl;'
-  scc.defaultSelectedRownameStyle = 'position:relative;overflow:visible;font-size:small;text-align:center;vertical-align:middle;color:#' + hightLightForegoundColour + ';background-color:#' + selectedbg + ';'
-  scc.defaultHighlightTypeCursorStyle = 'color:#' + hightLightForegoundColour + ';backgroundColor:#' + cursorbg + ';'
+  scc.defaultColnameStyle = 'overflow:visible;font-size:small;text-align:center;color:#' + hightLightForegoundColour + ';background-color:#' + unselectedbg + ';border-bottom:1px solid #dee2e6;font-weight:500;'
+  scc.defaultSelectedColnameStyle = 'overflow:visible;font-size:small;text-align:center;color:#' + selectedTextColor + ';background-color:#' + selectedbg + ';border-bottom:2px solid #' + selectedTextColor + ';font-weight:600;'
+  scc.defaultRownameStyle = 'position:relative;overflow:visible;font-size:small;text-align:center;vertical-align:middle;color:#' + hightLightForegoundColour + ';background-color:#' + unselectedbg + ';border-right:1px solid #dee2e6;direction:rtl;'
+  scc.defaultSelectedRownameStyle = 'position:relative;overflow:visible;font-size:small;text-align:center;vertical-align:middle;color:#' + selectedTextColor + ';background-color:#' + selectedbg + ';border-right:2px solid #' + selectedTextColor + ';font-weight:600;'
+  scc.defaultHighlightTypeCursorStyle = ''  # Let CSS handle cursor with border
+  scc.defaultHighlightTypeRangeStyle = 'color:#000;backgroundColor:#' + selectedbg + ';border:1px solid #c2daff;'

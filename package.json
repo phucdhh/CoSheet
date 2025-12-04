@@ -19,6 +19,7 @@
     "j": "0.4.5",
     "livescript": "1.5.x",
     "minimatch": "*",
+    "node-fetch": "^2.7.0",
     "puppeteer": "^24.31.0",
     "redis": "0.12.x",
     "socialcalc": "^2.3.0",
