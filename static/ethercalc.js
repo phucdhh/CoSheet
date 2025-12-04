@@ -2807,45 +2807,96 @@ SocialCalc.ExecuteSheetCommand = function(sheet, cmd, saveundo) {
          what = cmd.NextToken();
          rest = cmd.RestOfString();
          ParseRange();
-         function increment_amount(down) {
+         
+         // Detect pattern and get increment
+         var patternInfo = (function() {
             function valid_datatype(type) {
 		return type == "v" || type == "c";
             }
             var editor = SocialCalc.GetSpreadsheetControlObject().editor;
             var range = editor.range2;
-            var returnval = undefined;
+            var increment = undefined;
+            var patternEnd = null;
+            
             if (range.hasrange) {
-                var startcell, endcell;
-                if (down && (range.bottom - range.top == 1) && range.left == range.right) {
-                  startcell = sheet.GetAssuredCell(SocialCalc.crToCoord(range.left, range.top));
-                  endcell = sheet.GetAssuredCell(SocialCalc.crToCoord(range.left, range.bottom));
-                  if (valid_datatype(startcell.datatype) && valid_datatype(endcell.datatype)) {
-                      returnval =  endcell.datavalue - startcell.datavalue;
+                // Check for vertical pattern (fill down)
+                if (range.left == range.right) {
+                  var values = [];
+                  for (var r = range.top; r <= range.bottom; r++) {
+                    var cell = sheet.GetAssuredCell(SocialCalc.crToCoord(range.left, r));
+                    if (valid_datatype(cell.datatype)) {
+                      values.push(cell.datavalue);
+                    } else {
+                      values = [];
+                      break;
+                    }
                   }
-                } else if (!down && range.left != range.right) {
-                  startcell = sheet.GetAssuredCell(SocialCalc.crToCoord(range.left, range.top));
-                  endcell = sheet.GetAssuredCell(SocialCalc.crToCoord(range.right, range.top));
-                  if (valid_datatype(startcell.datatype) && valid_datatype(endcell.datatype)) {
-                      returnval =  endcell.datavalue - startcell.datavalue;
-		  }
+                  if (values.length >= 2) {
+                    var diffs = [];
+                    for (var i = 1; i < values.length; i++) {
+                      diffs.push(values[i] - values[i-1]);
+                    }
+                    var firstDiff = diffs[0];
+                    var isConsistent = diffs.every(function(d) { return Math.abs(d - firstDiff) < 0.0001; });
+                    if (isConsistent) {
+                      increment = firstDiff;
+                      patternEnd = {row: range.bottom, col: range.left};
+                    }
+                  }
+                }
+                // Check for horizontal pattern (fill right)  
+                else if (range.top == range.bottom) {
+                  var values = [];
+                  for (var c = range.left; c <= range.right; c++) {
+                    var cell = sheet.GetAssuredCell(SocialCalc.crToCoord(c, range.top));
+                    if (valid_datatype(cell.datatype)) {
+                      values.push(cell.datavalue);
+                    } else {
+                      values = [];
+                      break;
+                    }
+                  }
+                  if (values.length >= 2) {
+                    var diffs = [];
+                    for (var i = 1; i < values.length; i++) {
+                      diffs.push(values[i] - values[i-1]);
+                    }
+                    var firstDiff = diffs[0];
+                    var isConsistent = diffs.every(function(d) { return Math.abs(d - firstDiff) < 0.0001; });
+                    if (isConsistent) {
+                      increment = firstDiff;
+                      patternEnd = {row: range.top, col: range.right};
+                    }
+                  }
                 }
             }
-           editor.Range2Remove();
-           return returnval;
-         }
-	 var inc;
+            editor.Range2Remove();
+            return {increment: increment, patternEnd: patternEnd};
+         })();
+         
+	 var inc = patternInfo.increment;
+         var patternEnd = patternInfo.patternEnd;
+         var patternEndRow, patternEndCol;
+         
          if (cmd1 == "fillright") {
             fillright = true;
+            // If pattern detected, fill starts after pattern end
+            patternEndCol = (patternEnd !== null) ? patternEnd.col : cr1.col;
             rowstart = cr1.row;
-            colstart = cr1.col + 1;
-	    inc = increment_amount(false);
+            colstart = patternEndCol + 1;
             }
          else {
             fillright = false;
-            rowstart = cr1.row + 1;
+            // If pattern detected, fill starts after pattern end
+            patternEndRow = (patternEnd !== null) ? patternEnd.row : cr1.row;
+            rowstart = patternEndRow + 1;
             colstart = cr1.col;
-	    inc = increment_amount(true);
             }
+         
+         // If we have an increment pattern, use the last cell as base
+         var baseRow = (patternEnd !== null && !fillright) ? patternEnd.row : cr1.row;
+         var baseCol = (patternEnd !== null && fillright) ? patternEnd.col : cr1.col;
+         
          for (row = rowstart; row <= cr2.row; row++) {
             for (col = colstart; col <= cr2.col; col++) {
                cr = SocialCalc.crToCoord(col, row);
@@ -2853,14 +2904,14 @@ SocialCalc.ExecuteSheetCommand = function(sheet, cmd, saveundo) {
                if (cell.readonly) continue;
                if (saveundo) changes.AddUndo("set "+cr+" all", sheet.CellToString(cell));
                if (fillright) {
-                  crbase = SocialCalc.crToCoord(cr1.col, row);
-                  coloffset = col - colstart + 1;
+                  crbase = SocialCalc.crToCoord(baseCol, row);
+                  coloffset = col - baseCol;
                   rowoffset = 0;
                   }
                else {
-                  crbase = SocialCalc.crToCoord(col, cr1.row);
+                  crbase = SocialCalc.crToCoord(col, baseRow);
                   coloffset = 0;
-                  rowoffset = row - rowstart + 1;
+                  rowoffset = row - baseRow;
                   }
                basecell = sheet.GetAssuredCell(crbase);
                if (rest == "all" || rest == "formats") {
