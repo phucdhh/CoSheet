@@ -5917,6 +5917,13 @@ SocialCalc.RenderCell = function(context, rownum, colnum, rowpane, colpane, noEl
          result.className = (result.className ? result.className+" " : "") + context.highlightTypes[t].className;
          }
       SocialCalc.setStyles(result, context.highlightTypes[t].style);
+      // Force cursor border - Google Sheets style with inset shadow
+      if (t == "cursor") {
+         result.style.border = "1px solid #1a73e8";
+         result.style.boxShadow = "inset 0 0 0 1px #1a73e8";
+         result.style.position = "relative";
+         result.style.zIndex = "10";
+      }
       }
 
    // If hidden column, display: none.
@@ -6099,6 +6106,11 @@ SocialCalc.setStyles = function (element, cssText) {
 
    if (!cssText) return;
 
+   // Debug log for cursor style
+   if (cssText.indexOf('border:2px') !== -1) {
+      console.log('[DEBUG] Setting cursor styles:', cssText);
+   }
+
    parts = cssText.split(";");
    for (part=0; part<parts.length; part++) {
       pos = parts[part].indexOf(":"); // find first colon (could be one in url)
@@ -6107,6 +6119,9 @@ SocialCalc.setStyles = function (element, cssText) {
          value = parts[part].substring(pos+1);
          if (name && value) { // if non-null name and value, set style
             element.style[name] = value;
+            if (cssText.indexOf('border:2px') !== -1) {
+               console.log('[DEBUG] Set style', name, '=', value);
+            }
             }
          }
 //      namevalue = parts[part].split(":");
@@ -7344,7 +7359,7 @@ SocialCalc.Constants = {
    // For each of the following default sheet display values at least one of class and/or style are needed
 
    defaultHighlightTypeCursorClass: "",
-   defaultHighlightTypeCursorStyle: "color:#FFF;backgroundColor:#A6A6A6;",
+   defaultHighlightTypeCursorStyle: "border:1px solid #1a73e8;boxShadow:inset 0 0 0 1px #1a73e8;position:relative;zIndex:10;",
    defaultHighlightTypeRangeClass: "",
    defaultHighlightTypeRangeStyle: "color:#000;backgroundColor:#E5E5E5;",
 

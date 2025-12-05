@@ -42,7 +42,7 @@ class AIFormulaAssistant {
     }
     
     createSidebar() {
-        // Create sidebar HTML
+        // Create sidebar HTML - Messenger style
         const sidebar = document.createElement('div');
         sidebar.className = 'ai-assistant-sidebar';
         sidebar.innerHTML = `
@@ -51,45 +51,29 @@ class AIFormulaAssistant {
                 <button class="ai-assistant-close" onclick="aiAssistant.close()">×</button>
             </div>
             <div class="ai-assistant-body">
-                <div class="ai-input-section">
-                    <label class="ai-input-label">Nhập yêu cầu cho ô mà bạn đang chọn:</label>
+                <div id="ai-chat-container" class="ai-chat-container">
+                    <div id="ai-loading" class="ai-loading">
+                        <div class="ai-loading-spinner"></div>
+                        <span>Đang suy nghĩ...</span>
+                    </div>
+                    
+                    <div id="ai-error" class="ai-error"></div>
+                </div>
+            </div>
+            <div class="ai-input-section">
+                <label class="ai-input-label">Nhập yêu cầu cho ô mà bạn đang chọn:</label>
+                <div class="ai-input-row">
                     <textarea 
                         id="ai-input-box" 
                         class="ai-input-box" 
                         placeholder="Ví dụ: Tính trung bình cộng các điểm từ B2 đến B36"
+                        rows="2"
                     ></textarea>
-                    <button class="ai-send-button" onclick="aiAssistant.sendRequest()">Gửi</button>
-                </div>
-                
-                <div id="ai-loading" class="ai-loading">
-                    <div class="ai-loading-spinner"></div>
-                    <span>Đang suy nghĩ...</span>
-                </div>
-                
-                <div id="ai-error" class="ai-error"></div>
-                
-                <div id="ai-response-section" class="ai-response-section">
-                    <div class="ai-prompt-echo">
-                        <strong>Lệnh gợi ý:</strong> <span id="ai-prompt-text"></span>
-                    </div>
-                    
-                    <div class="ai-formula-box">
-                        <div id="ai-formula-code" class="ai-formula-code"></div>
-                    </div>
-                    
-                    <div class="ai-explanation-box">
-                        <div class="ai-formula-label">Giải thích:</div>
-                        <div id="ai-explanation-text" class="ai-explanation-text"></div>
-                    </div>
-                    
-                    <div class="ai-action-buttons">
-                        <button class="ai-button ai-button-secondary" onclick="aiAssistant.close()">
-                            Để tôi suy nghĩ đã
-                        </button>
-                        <button class="ai-button ai-button-primary" onclick="aiAssistant.insertFormula()">
-                            Chèn ngay
-                        </button>
-                    </div>
+                    <button class="ai-send-button" onclick="aiAssistant.sendRequest()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         `;
@@ -103,7 +87,13 @@ class AIFormulaAssistant {
         const inputBox = document.getElementById('ai-input-box');
         if (inputBox) {
             inputBox.addEventListener('keydown', (e) => {
-                // Prevent event from bubbling to spreadsheet
+                // Allow copy/cut/paste shortcuts
+                if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
+                    // Don't stop propagation for copy/cut/paste/select all
+                    return;
+                }
+                
+                // Prevent other events from bubbling to spreadsheet
                 e.stopPropagation();
                 
                 if (e.key === 'Enter' && e.ctrlKey) {
@@ -111,9 +101,20 @@ class AIFormulaAssistant {
                 }
             });
             
-            // Also stop propagation on keypress and keyup
-            inputBox.addEventListener('keypress', (e) => e.stopPropagation());
-            inputBox.addEventListener('keyup', (e) => e.stopPropagation());
+            // Allow copy/paste on keypress and keyup too
+            inputBox.addEventListener('keypress', (e) => {
+                if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
+                    return;
+                }
+                e.stopPropagation();
+            });
+            
+            inputBox.addEventListener('keyup', (e) => {
+                if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
+                    return;
+                }
+                e.stopPropagation();
+            });
         }
     }
     
@@ -125,6 +126,8 @@ class AIFormulaAssistant {
             const ecell = window.spreadsheet.editor.ecell;
             if (ecell) {
                 this.currentCell = ecell.coord;
+                // Update label with current cell
+                this.updateLabel(ecell.coord);
             }
         }
         
@@ -136,6 +139,13 @@ class AIFormulaAssistant {
             const input = document.getElementById('ai-input-box');
             if (input) input.focus();
         }, 300);
+    }
+    
+    updateLabel(cellCoord) {
+        const label = document.querySelector('.ai-input-label');
+        if (label && cellCoord) {
+            label.textContent = `Nhập yêu cầu cho ô ${cellCoord}:`;
+        }
     }
     
     close() {
@@ -234,7 +244,12 @@ CHÚ Ý:
             return;
         }
         
-        this.hideResponse();
+        // Add user message bubble
+        this.addUserMessage(userPrompt);
+        
+        // Clear input
+        inputBox.value = '';
+        
         this.showLoading(true);
         
         try {
@@ -284,10 +299,10 @@ CHÚ Ý:
             // Parse JSON response
             const result = JSON.parse(aiResponse);
             
-            this.showResponse(
-                userPrompt,
-                result.formula || '=ERROR()',
-                result.explanation || 'Không có giải thích'
+            // Add AI response bubble
+            this.addAIMessage(
+                result.explanation || 'Không có giải thích',
+                result.formula || '=ERROR()'
             );
             
         } catch (error) {
@@ -298,9 +313,65 @@ CHÚ Ý:
         }
     }
     
-    insertFormula() {
-        const formulaCode = document.getElementById('ai-formula-code');
-        let formula = formulaCode?.textContent;
+    addUserMessage(text) {
+        const chatContainer = document.getElementById('ai-chat-container');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'ai-message ai-message-user';
+        messageDiv.innerHTML = `
+            <div class="ai-message-bubble ai-bubble-user">
+                ${this.escapeHtml(text)}
+            </div>
+        `;
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    addAIMessage(explanation, formula) {
+        const chatContainer = document.getElementById('ai-chat-container');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'ai-message ai-message-ai';
+        
+        // Create elements programmatically to avoid HTML escaping issues
+        const bubble = document.createElement('div');
+        bubble.className = 'ai-message-bubble ai-bubble-ai';
+        bubble.textContent = explanation;
+        
+        const preview = document.createElement('div');
+        preview.className = 'ai-formula-preview';
+        
+        const codeDiv = document.createElement('div');
+        codeDiv.className = 'ai-formula-code';
+        codeDiv.textContent = formula;
+        
+        const insertBtn = document.createElement('button');
+        insertBtn.className = 'ai-insert-button';
+        insertBtn.setAttribute('data-formula', formula); // Store raw formula
+        insertBtn.onclick = () => this.insertFormulaFromButton(insertBtn);
+        insertBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+            </svg>
+            Insert
+        `;
+        
+        preview.appendChild(codeDiv);
+        preview.appendChild(insertBtn);
+        
+        messageDiv.appendChild(bubble);
+        messageDiv.appendChild(preview);
+        
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    insertFormulaFromButton(button) {
+        let formula = button.getAttribute('data-formula');
         
         if (!formula) {
             this.showError('Không có công thức để chèn');
@@ -318,8 +389,13 @@ CHÚ Ý:
             const editor = window.spreadsheet.editor;
             
             if (this.currentCell) {
-                // Set cell content
+                // Use text command for formulas with special characters
+                // Wrap formula in quotes to preserve spaces and special chars
                 const cmd = `set ${this.currentCell} formula ${formula}`;
+                
+                console.log('[AI Assistant] Inserting formula:', formula);
+                console.log('[AI Assistant] Command:', cmd);
+                
                 editor.EditorScheduleSheetCommands(cmd, true, false);
                 
                 // Success feedback

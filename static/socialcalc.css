@@ -44,7 +44,13 @@ body:last-child .defaultPeer {
 }
 .defaultComment {background-repeat:no-repeat;background-position:top right;background-image:url(images/sc-commentbg.gif);}
 .defaultCommentNoGridStyle {}
-.defaultHighlightTypeCursor {border:2px solid #1a73e8 !important;box-shadow:0 0 0 1px #1a73e8 inset;}
+.defaultHighlightTypeCursor {
+    border:3px solid #1a73e8 !important;
+    box-shadow:0 0 0 2px rgba(26, 115, 232, 0.2) inset, 0 0 8px rgba(26, 115, 232, 0.3) !important;
+    background-color:rgba(26, 115, 232, 0.02) !important;
+    position:relative !important;
+    z-index:10 !important;
+}
 .defaultHighlightTypeRange {background-color:#e8f0fe;border:1px solid #c2daff;}
 .defaultColname {font-size:small;text-align:center;color:#212529;background-color:#f8f9fa;border-bottom:1px solid #dee2e6;font-weight:500;}
 .defaultSelectedColname {font-size:small;text-align:center;color:#1a73e8;background-color:#e8f0fe;border-bottom:2px solid #1a73e8;font-weight:600;}
