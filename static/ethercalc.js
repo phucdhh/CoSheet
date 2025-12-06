@@ -15516,13 +15516,14 @@ SocialCalc.SpreadsheetControl = function(idPrefix) {
 
    this.formulabuttons = {
       formulafunctions: {image: "insertformula.png", tooltip: "Functions", // tooltips are localized when set below
-                         command: SocialCalc.SpreadsheetControl.DoFunctionList},
-      multilineinput: {image: "listbox.png", tooltip: "Multi-line Input Box",
-                         command: SocialCalc.SpreadsheetControl.DoMultiline},
-      link: {image: "inserthyperlink.png", tooltip: "Link Input Box",
-                         command: SocialCalc.SpreadsheetControl.DoLink},
-      sum: {image: "autosum.png", tooltip: "Auto Sum",
-                         command: SocialCalc.SpreadsheetControl.DoSum}
+                         command: SocialCalc.SpreadsheetControl.DoFunctionList}
+      // Hidden since AI Assistant now handles these features:
+      // multilineinput: {image: "listbox.png", tooltip: "Multi-line Input Box",
+      //                   command: SocialCalc.SpreadsheetControl.DoMultiline},
+      // link: {image: "inserthyperlink.png", tooltip: "Link Input Box",
+      //                   command: SocialCalc.SpreadsheetControl.DoLink},
+      // sum: {image: "autosum.png", tooltip: "Auto Sum",
+      //                   command: SocialCalc.SpreadsheetControl.DoSum}
       }
    
    // find buttons

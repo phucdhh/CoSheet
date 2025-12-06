@@ -12,7 +12,7 @@
 *   **Cộng tác thời gian thực**: Nhiều người dùng có thể chỉnh sửa cùng một bảng tính cùng lúc.
 *   **Giao diện Chart nâng cao**:
     *   Hỗ trợ nhiều loại biểu đồ: Bar, Line, Pie, Doughnut, Scatter, Radar, Polar Area.
-    *   **Mới**: Histogram (Biu đồ phân phối), Grouped Bar, Stacked Bar, và Box Plot.
+    *   **Mới**: Histogram (Biểu đồ phân phối), Grouped Bar, Stacked Bar, và Box Plot.
     *   Giao diện Ribbon trực quan với icons minh họa sinh động.
 *   **Tối ưu hóa cho Mobile**:
     *   Cuộn mượt mà (Smooth scrolling) với cơ chế giảm tốc (damping).

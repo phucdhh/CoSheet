@@ -196,13 +196,13 @@
 /* Formula preview below AI bubble */
 .ai-formula-preview {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* Stack vertically */
     gap: 8px;
     padding: 8px 12px;
     background: #e8f0fe;
     border-radius: 12px;
     border: 1px solid #d2e3fc;
-    max-width: 75%;
+    max-width: 100%; /* Full width */
 }
 
 .ai-formula-code {
@@ -211,6 +211,8 @@
     font-size: 13px;
     color: #1a73e8;
     font-weight: 600;
+    word-break: break-all; /* Break long formulas */
+    line-height: 1.4;
 }
 
 .ai-insert-button {
@@ -224,9 +226,11 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center; /* Center button content */
     gap: 4px;
     transition: background 0.2s;
     flex-shrink: 0;
+    align-self: flex-end; /* Align button to right */
 }
 
 .ai-insert-button:hover {
