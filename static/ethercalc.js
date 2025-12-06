@@ -8643,10 +8643,16 @@ SocialCalc.CreateTableEditor = function(editor, width, height) {
 
    editor.toplevel.appendChild(editor.layouttable);
 
+   // Enable InputEcho for in-cell editing
    if (!editor.noEdit) {
       editor.inputEcho = new SocialCalc.InputEcho(editor);
       AssignID(editor, editor.inputEcho.main, "inputecho");
-      }
+   }
+
+   // Create in-cell editor (deprecated - using InputEcho instead)
+   // if (!editor.noEdit && typeof SocialCalc.InCellEditor !== 'undefined') {
+   //    editor.inCellEditor = new SocialCalc.InCellEditor(editor);
+   // }
 
    editor.cellhandles = new SocialCalc.CellHandles(editor);
 
@@ -11984,12 +11990,18 @@ SocialCalc.InputBox = function(element, editor) {
 // Methods:
 
 SocialCalc.InputBox.prototype.DisplayCellContents = function(coord) {SocialCalc.InputBoxDisplayCellContents(this, coord);};
-SocialCalc.InputBox.prototype.ShowInputBox = function(show) {this.editor.inputEcho.ShowInputEcho(show);};
+SocialCalc.InputBox.prototype.ShowInputBox = function(show) {
+   if (this.editor.inputEcho) {
+      this.editor.inputEcho.ShowInputEcho(show);
+   }
+};
 SocialCalc.InputBox.prototype.GetText = function() {return this.element.value;};
 SocialCalc.InputBox.prototype.SetText = function(newtext) {
    if (!this.element) return;
    this.element.value=newtext;
-   this.editor.inputEcho.SetText(newtext+"_");
+   if (this.editor.inputEcho) {
+      this.editor.inputEcho.SetText(newtext+"_");
+   }
    };
 SocialCalc.InputBox.prototype.Focus = function() {SocialCalc.InputBoxFocus(this);};
 SocialCalc.InputBox.prototype.Blur = function() {return this.element.blur();};
@@ -12134,7 +12146,7 @@ SocialCalc.InputEcho = function(editor) {
    this.functionbox = null; // function chooser dialog
 
    this.container = document.createElement("div");
-   SocialCalc.setStyles(this.container, "display:none;position:absolute;zIndex:10;");
+   SocialCalc.setStyles(this.container, "display:none;position:absolute;z-index:1000;");
 
    this.main = document.createElement("div");
    if (scc.defaultInputEchoClass) this.main.className = scc.defaultInputEchoClass;
@@ -12185,9 +12197,13 @@ SocialCalc.ShowInputEcho = function(inputecho, show) {
       editor.cellhandles.ShowCellHandles(false);
       cell=SocialCalc.GetEditorCellElement(editor, editor.ecell.row, editor.ecell.col);
       if (cell) {
-         position = SocialCalc.GetElementPosition(cell.element);
-         inputecho.container.style.left = (position.left-1)+"px";
-         inputecho.container.style.top = (position.top-1)+"px";
+         // Get cell position relative to viewport
+         var cellRect = cell.element.getBoundingClientRect();
+         // Get toplevel position relative to viewport
+         var toplevelRect = editor.toplevel.getBoundingClientRect();
+         // Calculate position relative to toplevel
+         inputecho.container.style.left = (cellRect.left - toplevelRect.left - 1)+"px";
+         inputecho.container.style.top = (cellRect.top - toplevelRect.top - 1)+"px";
          }
       inputecho.hint.innerHTML = editor.ecell.coord;
       inputecho.container.style.display = "block";
@@ -12240,7 +12256,9 @@ SocialCalc.InputEchoHeartbeat = function() {
    var editor = SocialCalc.Keyboard.focusTable; // get TableEditor doing keyboard stuff
    if (!editor) return true; // we're not handling it -- let browser do default
 
-   editor.inputEcho.SetText(editor.inputBox.GetText()+"_");
+   if (editor.inputEcho) {
+      editor.inputEcho.SetText(editor.inputBox.GetText()+"_");
+   }
 
    }
 

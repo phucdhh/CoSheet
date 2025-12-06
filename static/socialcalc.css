@@ -60,8 +60,44 @@ body:last-child .defaultPeer {
 .defaultSkippedCell {font-size:small;background-color:#f8f9fa;}
 .defaultPaneDivider {font-size:small;background-color:#dee2e6;padding:0px;}
 .cteGriddiv {}
-.defaultInputEcho {background-color:#fff;border:2px solid #1a73e8;
-  font-size:small;padding:2px 10px 1px 2px;cursor:default;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+.defaultInputEcho {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  font-size: inherit;
+  padding: 4px 6px;
+  cursor: text;
+  z-index: 1000 !important;
+  position: absolute !important;
+  box-shadow: none !important;
+  font-family: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Blinking cursor effect */
+.defaultInputEcho::after {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background-color: #000;
+  margin-left: 1px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Hide cursor when not in input mode */
+.defaultInputEcho.inactive::after {
+  display: none;
+}
+
+
 .TCmain {background-color:#f8f9fa;}
 .TCendcap {background-color:#fff;}
 .TCpaneslider {background-color:#dee2e6;}
