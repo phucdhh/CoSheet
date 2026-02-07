@@ -8,6 +8,7 @@
     "url": "https://github.com/phucdhh/CoSheet"
   },
   "dependencies": {
+    "axios": "^1.13.3",
     "chrome-remote-interface": "^0.33.3",
     "cookie-parser": "^1.4.7",
     "cors": "*",

@@ -243,28 +243,22 @@
 }
 
 /* Loading spinner */
-.ai-loading {
-    display: none;
+/* Loading bubble - appears as AI message at bottom of chat */
+.ai-loading-bubble {
+    display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px;
-    background: #f8f9fa;
-    border-radius: 12px;
-    font-size: 12px;
-    color: #5f6368;
-}
-
-.ai-loading.visible {
-    display: flex;
+    min-height: 40px;
 }
 
 .ai-loading-spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #667eea;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e0e0e0;
+    border-top: 2px solid #667eea;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
 }
 
 @keyframes spin {

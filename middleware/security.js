@@ -122,6 +122,11 @@ function csrfProtection(req, res, next) {
   if (req.path.startsWith('/_/') || req.path.startsWith('/_save')) {
     return next();
   }
+  
+  // Skip CSRF for AI proxy endpoint (server-side proxy used by clients)
+  if (req.path.startsWith('/api/ai')) {
+    return next();
+  }
 
   // Check if cookies are available
   if (!req.cookies) {

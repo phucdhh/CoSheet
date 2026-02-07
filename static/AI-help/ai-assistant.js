@@ -32,7 +32,21 @@ class AIFormulaAssistant {
             const response = await fetch('./static/AI-help/ai.conf');
             if (response.ok) {
                 const config = await response.json();
-                if (config.enabled && config.apiKey && config.apiKey !== 'YOUR_GROQ_API_KEY_HERE') {
+                
+                // Support new format with models array
+                if (config.enabled && config.models && config.models.length > 0) {
+                    // Find default model or use first model
+                    const defaultModelId = config.defaultModel || config.models[0].id;
+                    const model = config.models.find(m => m.id === defaultModelId);
+                    
+                    if (model && model.apiKey && model.apiKey !== 'YOUR_GROQ_API_KEY_HERE') {
+                        this.configLoaded = true;
+                        console.log('[AI Assistant] Config loaded successfully, using model:', model.name);
+                    } else {
+                        console.warn('[AI Assistant] Config not properly configured - API key missing or invalid');
+                    }
+                } else if (config.enabled && config.apiKey && config.apiKey !== 'YOUR_GROQ_API_KEY_HERE') {
+                    // Support old flat format for backward compatibility
                     this.configLoaded = true;
                     console.log('[AI Assistant] Config loaded successfully');
                 } else {
@@ -55,11 +69,6 @@ class AIFormulaAssistant {
             </div>
             <div class="ai-assistant-body">
                 <div id="ai-chat-container" class="ai-chat-container">
-                    <div id="ai-loading" class="ai-loading">
-                        <div class="ai-loading-spinner"></div>
-                        <span>Đang suy nghĩ...</span>
-                    </div>
-                    
                     <div id="ai-error" class="ai-error"></div>
                 </div>
             </div>
@@ -86,36 +95,45 @@ class AIFormulaAssistant {
     }
     
     attachEventListeners() {
-        // Enter key to send
         const inputBox = document.getElementById('ai-input-box');
         if (inputBox) {
-            inputBox.addEventListener('keydown', (e) => {
-                // Allow copy/cut/paste shortcuts
-                if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
-                    // Don't stop propagation for copy/cut/paste/select all
+            // Handler for all keyboard events
+            const handleKeyEvent = (e) => {
+                // Ctrl/Cmd+Enter to send
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (e.type === 'keydown') {
+                        this.sendRequest();
+                    }
                     return;
                 }
                 
-                // Prevent other events from bubbling to spreadsheet
-                e.stopPropagation();
+                // For Ctrl/Cmd shortcuts, stop propagation but let browser handle them
+                if (e.ctrlKey || e.metaKey) {
+                    e.stopPropagation();
+                    // preventDefault would block copy/paste, so we don't call it
+                    return;
+                }
                 
-                if (e.key === 'Enter' && e.ctrlKey) {
-                    this.sendRequest();
-                }
-            });
-            
-            // Allow copy/paste on keypress and keyup too
-            inputBox.addEventListener('keypress', (e) => {
-                if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
-                    return;
-                }
+                // Stop ALL other events from reaching spreadsheet
                 e.stopPropagation();
+            };
+            
+            // Attach to all keyboard events, including capture phase
+            inputBox.addEventListener('keydown', handleKeyEvent, true);
+            inputBox.addEventListener('keypress', handleKeyEvent, true);
+            inputBox.addEventListener('keyup', handleKeyEvent, true);
+            inputBox.addEventListener('input', (e) => e.stopPropagation(), true);
+            
+            // Ensure focus when clicking inside textarea
+            inputBox.addEventListener('click', (e) => {
+                e.stopPropagation();
+                inputBox.focus();
             });
             
-            inputBox.addEventListener('keyup', (e) => {
-                if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
-                    return;
-                }
+            // Ensure focus when clicking the container
+            inputBox.addEventListener('focus', (e) => {
                 e.stopPropagation();
             });
         }
@@ -137,11 +155,15 @@ class AIFormulaAssistant {
         this.sidebar.classList.add('open');
         this.isOpen = true;
         
-        // Focus input
-        setTimeout(() => {
-            const input = document.getElementById('ai-input-box');
-            if (input) input.focus();
-        }, 300);
+        // Focus input immediately and after animation
+        const input = document.getElementById('ai-input-box');
+        if (input) {
+            input.focus();
+            // Focus again after animation completes
+            setTimeout(() => {
+                input.focus();
+            }, 350);
+        }
     }
     
     updateLabel(cellCoord) {
@@ -166,12 +188,30 @@ class AIFormulaAssistant {
     }
     
     showLoading(show) {
-        const loading = document.getElementById('ai-loading');
+        const chatContainer = document.getElementById('ai-chat-container');
         const sendBtn = document.querySelector('.ai-send-button');
         
-        if (loading) {
-            loading.className = show ? 'ai-loading visible' : 'ai-loading';
+        if (show) {
+            // Create and append loading bubble at the end of chat
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'ai-loading';
+            loadingDiv.className = 'ai-message ai-message-ai';
+            loadingDiv.innerHTML = `
+                <div class="ai-message-bubble ai-bubble-ai ai-loading-bubble">
+                    <div class="ai-loading-spinner"></div>
+                    <span>Đang suy nghĩ...</span>
+                </div>
+            `;
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        } else {
+            // Remove loading bubble
+            const loadingDiv = document.getElementById('ai-loading');
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
         }
+        
         if (sendBtn) {
             sendBtn.disabled = show;
         }
@@ -241,7 +281,8 @@ LOẠI 2 - DỮ LIỆU MẪU:
 QUY TẮC TẠO DỮ LIỆU:
 - Dòng đầu tiên là HEADER (tên cột)
 - Dữ liệu phải realistic, phù hợp giáo dục Việt Nam
-- Số lượng: 10-30 dòng dữ liệu (tùy yêu cầu)
+- Số lượng: 10-100 dòng dữ liệu (tùy yêu cầu)
+- Với số lượng lớn (>50), dùng tên ngắn gọn: "HS01", "HS02" thay vì tên đầy đủ
 - Phù hợp cho thực hành thống kê: trung bình, độ lệch chuẩn, biểu đồ
 - Ưu tiên số liệu về: điểm thi, dân số, kinh tế, khoa học
 
@@ -251,7 +292,8 @@ QUAN TRỌNG:
 - KHÔNG được có \`\`\`json hoặc \`\`\` trong response
 - KHÔNG được có bất kỳ text nào ngoài JSON object
 - CHỈ trả về JSON object duy nhất, bắt đầu bằng { và kết thúc bằng }
-- Phân tích yêu cầu: nếu hỏi về formula thì type="formula", nếu yêu cầu tạo/điền dữ liệu thì type="data"`;
+- Phân tích yêu cầu: nếu hỏi về formula thì type="formula", nếu yêu cầu tạo/điền dữ liệu thì type="data"
+- Với dữ liệu lớn, ưu tiên COMPLETE JSON object hơn là nhiều dữ liệu bị cắt giữa chừng`;
     }
     
     async summarizeOldConversations() {
@@ -343,7 +385,21 @@ Tóm tắt bằng tiếng Việt, ngắn gọn trong 3-5 câu.`;
             
             // Load config from server
             const configResponse = await fetch('./static/AI-help/ai.conf');
-            const config = await configResponse.json();
+            const fullConfig = await configResponse.json();
+            
+            // Get model config - support both new and old format
+            let config;
+            if (fullConfig.models && fullConfig.models.length > 0) {
+                // New format with models array
+                const defaultModelId = fullConfig.defaultModel || fullConfig.models[0].id;
+                config = fullConfig.models.find(m => m.id === defaultModelId);
+                if (!config) {
+                    throw new Error('Could not find configured model');
+                }
+            } else {
+                // Old flat format
+                config = fullConfig;
+            }
             
             if (!config.apiKey || config.apiKey === 'YOUR_GROQ_API_KEY_HERE') {
                 throw new Error('API key not configured');
@@ -376,18 +432,28 @@ Tóm tắt bằng tiếng Việt, ngắn gọn trong 3-5 câu.`;
                 content: userPrompt
             });
             
-            // Call Groq API directly (temporary - should use proxy in production)
-            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            // Call AI API (support both Groq and Ollama)
+            const apiEndpoint = config.apiEndpoint || 'https://api.groq.com/openai/v1/chat/completions';
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            // Only add Authorization header if apiKey exists (Ollama doesn't need it)
+            if (config.apiKey) {
+                headers['Authorization'] = `Bearer ${config.apiKey}`;
+            }
+            
+            // Use higher maxTokens for large data (8000 for 100+ rows)
+            const maxTokens = config.maxTokens || 8000;
+            
+            const response = await fetch(apiEndpoint, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${config.apiKey}`,
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify({
                     model: config.model || 'llama-3.3-70b-versatile',
                     messages: messages,
                     temperature: config.temperature || 0.3,
-                    max_tokens: config.maxTokens || 500
+                    max_tokens: maxTokens
                 })
             });
             
@@ -426,7 +492,43 @@ Tóm tắt bằng tiếng Việt, ngắn gọn trong 3-5 câu.`;
             } catch (parseError) {
                 console.error('[AI Assistant] JSON parse error:', parseError);
                 console.error('[AI Assistant] Response was:', aiResponse);
-                throw new Error('AI trả về format không đúng. Vui lòng thử lại.');
+                
+                // Try to auto-repair truncated JSON
+                if (aiResponse.includes('["') && !aiResponse.trim().endsWith('}')) {
+                    console.log('[AI Assistant] Attempting to repair truncated JSON...');
+                    
+                    let repairedResponse = aiResponse.trim();
+                    
+                    // Count opening brackets to determine how many closing brackets needed
+                    const openSquare = (repairedResponse.match(/\[/g) || []).length;
+                    const closeSquare = (repairedResponse.match(/\]/g) || []).length;
+                    const openCurly = (repairedResponse.match(/\{/g) || []).length;
+                    const closeCurly = (repairedResponse.match(/\}/g) || []).length;
+                    
+                    // Remove incomplete last element (anything after last complete comma)
+                    // Look for pattern like: [7.5, 7.0, 8.5, at the end
+                    repairedResponse = repairedResponse.replace(/,\s*[^,\]\}]*$/, '');
+                    
+                    // Add missing closing brackets
+                    for (let i = 0; i < openSquare - closeSquare; i++) {
+                        repairedResponse += ']';
+                    }
+                    for (let i = 0; i < openCurly - closeCurly; i++) {
+                        repairedResponse += '}';
+                    }
+                    
+                    console.log('[AI Assistant] Repaired response:', repairedResponse.substring(0, 200) + '...');
+                    
+                    try {
+                        result = JSON.parse(repairedResponse);
+                        console.log('[AI Assistant] Successfully repaired JSON! Got', result.data?.length - 1, 'rows');
+                    } catch (repairError) {
+                        console.error('[AI Assistant] Repair failed:', repairError);
+                        throw new Error('Dữ liệu quá lớn, AI chưa xuất ra hết. Vui lòng thử với số lượng nhỏ hơn (30-50 thay vì 100).');
+                    }
+                } else {
+                    throw new Error('AI trả về format không đúng. Vui lòng thử lại.');
+                }
             }
             
             // Save to conversation history

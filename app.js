@@ -53,6 +53,9 @@ This work is published from Taiwan.
     };
   }
   require('zappajs')(port, host, options, function(){
+    // Disable etag to prevent cache-related crashes
+    this.app.set('etag', false);
+    
     // Inject security middleware
     try {
       wrapZappaApp(this.app);
