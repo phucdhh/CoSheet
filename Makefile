@@ -7,10 +7,6 @@ ETHERCALC_FILES=\
 	static/jquery.js \
 	static/vex.combined.min.js
 
-LS_FILES=$(wildcard src/*.ls)
-
-JS_FILES=$(LS_FILES:src/%.ls=%.js)
-
 ifneq ("$(wildcard static/jquery-ui.min.js)","")
 	ETHERCALC_FILES += static/jquery-ui.min.js
 endif
@@ -29,10 +25,7 @@ vm: all
 expire: all
 	node app.js --expire 10 $(ETHERCALC_ARGS)
 
-all: depends $(JS_FILES)
-
-$(JS_FILES): %.js: src/%.ls
-	env PATH="$$PATH:./node_modules/livescript/bin" lsc -c -o . $<
+all: depends
 
 manifest ::
 	perl -pi -e 's/# [A-Z].*\n/# @{[`date`]}/m' manifest.appcache
@@ -73,7 +66,6 @@ endif
 	sass -t compressed $< > $@
 
 clean ::
-	@-rm $(JS_FILES)
 
 .SUFFIXES: .js .css .sass .ls
 .PHONY: run vm expire all clean depends

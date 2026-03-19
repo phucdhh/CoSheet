@@ -10,7 +10,6 @@
     this.app.use('/examples', this.express['static'](__dirname + '/CoSheet-examples'));
     this.app.use(this.express.json());
     this.use('json', this.app.router);
-    this.include('dotcloud');
     this.include('player-broadcast');
     this.include('player-graph');
     this.include('player');
@@ -767,6 +766,17 @@
         var id, ref$, key, i$, ref1$, len$, client, room, ref2$, val, isConnected, ref3$;
         console.log("on disconnect");
         id = this.socket.id;
+        // Notify other users that this user has left
+        if (this.socket._username && this.socket._room) {
+          var leavingUser = this.socket._username;
+          var leavingRoom = this.socket._room;
+          IO.sockets['in']("log-" + leavingRoom).emit('data', {
+            type: 'user.left',
+            user: leavingUser,
+            room: leavingRoom
+          });
+          DB.hdel("ecell-" + leavingRoom, leavingUser);
+        }
         if (((ref$ = IO.sockets.manager) != null ? ref$.roomClients : void 8) != null) {
           CleanRoomLegacy: for (key in IO.sockets.manager.roomClients[id]) {
             if (/^\/log-/.exec(key)) {
@@ -923,6 +933,8 @@
           console.log("join [log-" + room + "] [user-" + user + "]");
           this.socket.join("log-" + room);
           this.socket.join("user-" + user);
+          this.socket._username = user;
+          this.socket._room = room;
           DB.multi().get("snapshot-" + room).lrange("log-" + room, 0, -1).lrange("chat-" + room, 0, -1).exec(function(_, arg$){
             var snapshot, log, chat;
             snapshot = arg$[0], log = arg$[1], chat = arg$[2];

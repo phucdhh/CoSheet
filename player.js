@@ -390,11 +390,21 @@
                     ss.context.sheetobj.ScheduleSheetCommands("recalc\n", false, true);
                   }
                   break;
+                case 'user.left':
+                  if (window.UserAvatars) {
+                    window.UserAvatars.removeUser(this.data.user);
+                  }
+                  if (SocialCalc._userColors) {
+                    delete SocialCalc._userColors[this.data.user];
+                  }
+                  break;
                 case 'snapshot':
                   if (typeof vex != 'undefined' && vex !== null) {
                     vex.closeAll();
                   }
-                  SocialCalc.hadSnapshot = true;
+                  // NOTE: intentionally NOT setting hadSnapshot here, so that
+                  // a broadcast snapshot arriving before the personal 'log' reply
+                  // does not block the authoritative initial data load.
                   if (this.data.snapshot) {
                     parts = ss.DecodeSpreadsheetSave(this.data.snapshot);
                   }

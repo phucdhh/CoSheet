@@ -332,7 +332,11 @@
             spreadsheet.editorDiv.style.width = '100%';
             spreadsheet.editorDiv.style.height = '100%';
             spreadsheet.editorDiv.style.flex = '1';
-            spreadsheet.editorDiv.style.overflow = 'auto';
+            // Do NOT set overflow: auto here — SocialCalc uses its own custom
+            // scrollbar mechanism and a CSS scroll container on editorDiv
+            // intercepts wheel events before SocialCalc's handlers can run,
+            // breaking vertical scroll on the Chart tab.
+            spreadsheet.editorDiv.style.overflow = '';
 
             // Set up ResizeObserver to handle panel resizing
             if (!this.spreadsheetResizeObserver) {
